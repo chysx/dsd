@@ -1,6 +1,7 @@
 
 import 'package:dsd/init_single.dart';
 import 'package:dsd/test.dart';
+import 'package:dsd/ui/page/login.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
     );
   }
 }
