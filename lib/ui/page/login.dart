@@ -1,3 +1,7 @@
+import 'package:dsd/application.dart';
+import 'package:dsd/res/colors.dart';
+import 'package:dsd/ui/page/login_presenter.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -13,6 +17,32 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginState extends State<LoginPage> {
+  LoginPresenter presenter;
+
+  TextEditingController userCtrl = TextEditingController();
+  TextEditingController pwdCtrl = TextEditingController();
+
+  void login() {
+    print(presenter.userName + " " + presenter.password);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    presenter = new LoginPresenter();
+    presenter.initData();
+
+    userCtrl.text = presenter.userName;
+    userCtrl.addListener((){
+      presenter.userName = userCtrl.text;
+    });
+
+    pwdCtrl.text = presenter.password;
+    pwdCtrl.addListener((){
+      presenter.password = pwdCtrl.text;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,15 +68,15 @@ class _LoginState extends State<LoginPage> {
             Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.only(left: 50,right: 50),
+                padding: const EdgeInsets.only(left: 50, right: 50),
                 child: Column(
                   children: <Widget>[
                     TextField(
                       decoration: InputDecoration(
-                        labelText: "UserName",
-                        hintText: "UserName",
-                        prefixIcon: Icon(Icons.person)
-                      ),
+                          labelText: "UserName",
+                          hintText: "UserName",
+                          prefixIcon: Icon(Icons.person)),
+                      controller: userCtrl,
                     ),
                     TextField(
                       decoration: InputDecoration(
@@ -54,6 +84,7 @@ class _LoginState extends State<LoginPage> {
                         hintText: "Password",
                         prefixIcon: Icon(Icons.lock),
                       ),
+                      controller: pwdCtrl,
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20),
@@ -61,14 +92,14 @@ class _LoginState extends State<LoginPage> {
                         children: <Widget>[
                           Expanded(
                             child: RaisedButton(
-                              color: Color(0xFFA17A02),
+                              color: ColorsRes.brown_normal,
                               child: Text(
                                 "LOGIN",
-                                style: TextStyle(
-                                  color: Colors.white
-                                ),
+                                style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: (){},
+                              onPressed: (){
+                                Application.router.navigateTo(context, '/settings',transition: TransitionType.inFromLeft);
+                              },
                             ),
                           ),
                         ],
@@ -78,12 +109,30 @@ class _LoginState extends State<LoginPage> {
                       padding: EdgeInsets.only(top: 10),
                       child: Row(
                         children: <Widget>[
-                          Icon(Icons.settings),
-                          Text("Setting"),
+                          GestureDetector(
+                            onTap: (){Application.router.navigateTo(context, '/settings',transition: TransitionType.inFromLeft);},
+                            child: Container(
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.settings,
+                                    color: ColorsRes.brown_normal,
+                                  ),
+                                  Text(
+                                    "Setting",
+                                    style: TextStyle(color: ColorsRes.brown_normal),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                           Expanded(
                             child: Container(
                               alignment: Alignment.centerRight,
-                              child: Text("Version:0.1.71"),
+                              child: Text(
+                                "Version:0.1.71",
+                                style: TextStyle(color: ColorsRes.brown_normal),
+                              ),
                             ),
                           )
                         ],

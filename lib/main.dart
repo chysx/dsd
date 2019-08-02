@@ -1,11 +1,12 @@
 
-import 'package:dsd/init_single.dart';
+import 'package:dsd/application.dart';
+import 'package:dsd/routers.dart';
 import 'package:dsd/test.dart';
 import 'package:dsd/ui/page/login.dart';
 import 'package:flutter/material.dart';
 
 void main(){
-  InitSingle.init();
+  Routers.configRouters(Application.router);
   runApp(MyApp());
 }
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      onGenerateRoute: Application.router.generator,
     );
   }
 }

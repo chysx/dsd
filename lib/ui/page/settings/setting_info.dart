@@ -3,10 +3,11 @@
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/8/1 15:52
+///  Date:         2019/8/2 18:01
 
-class Dimens {
-  static const double space_normal = 15;
-
-  static const double font_normal = 16;
+class SettingInfo {
+  String host;
+  String port;
+  bool isSsl = false;
+  String env;
 }
