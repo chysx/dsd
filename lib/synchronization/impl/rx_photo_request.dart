@@ -1,4 +1,5 @@
 import 'package:dsd/synchronization/base/abstract_request.dart';
+import 'package:dsd/synchronization/base/abstract_sync_mode.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:rxdart/src/observables/observable.dart';
 
@@ -10,11 +11,13 @@ import 'package:rxdart/src/observables/observable.dart';
 ///  Date:         2019/7/29 16:14
 
  class RxPhotoRequest extends AbstractRequest<void> {
-   RxPhotoRequest() {
-     isShow = false;
-   }
+
+  RxPhotoRequest(AbstractSyncMode syncMode) : super(syncMode);
+
+
   @override
-  void execute(Observable<void> observable, SyncCallBack syncCallBack) {
+  void execute(Observable<void> observable, {onSuccessSync, onFailSync}) {
+    // TODO: implement execute
   }
 
 }

@@ -4,6 +4,7 @@ import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/exception/exception_type.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_parser.dart';
+import 'package:dsd/synchronization/base/i_parse_policy.dart';
 import 'package:dsd/synchronization/sync/sync_config.dart';
 import 'package:dsd/synchronization/sync/sync_response_status.dart';
 import 'package:dsd/synchronization/utils/sync_download_util.dart';
@@ -19,6 +20,8 @@ import 'package:dsd/synchronization/bean/sync_response_bean.dart';
 ///  Date:         2019/7/29 15:59
 
 class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
+  DownloadParser(IParsePolicy parsePolicy) : super(parsePolicy);
+
 
   void _printDataStr(String tag, Object value) {
     String da = value.toString();

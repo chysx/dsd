@@ -12,9 +12,7 @@ abstract class AbstractRequest<T> implements IRequest<T> {
   AbstractSyncMode syncMode;
   bool isShow;
 
-  void setSyncMode(AbstractSyncMode syncMode) {
-    this.syncMode = syncMode;
-  }
+  AbstractRequest(this.syncMode);
 
   void show() {}
 

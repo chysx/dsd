@@ -5,6 +5,7 @@ import 'package:dsd/synchronization/sync/sync_message.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'abstract_parser.dart';
@@ -23,65 +24,34 @@ import 'i_sync_flow.dart';
 abstract class AbstractSyncMode<RQ, RP> implements ISyncFlow<RP>, IParsePolicy {
   AbstractParser<RP> parser;
   AbstractRequestCreate<RQ> requestCreate;
-  AbstractRequest request = new RxRequest();
-  SyncCallBack callBack;
+  AbstractRequest request;
   SyncStatus syncStatus = SyncStatus.SYNC_INIT;
   SyncType syncType;
   SyncParameter syncParameter = new SyncParameter();
   SyncMessage syncMessage = new SyncMessage();
+  OnSuccessSync onSuccessSync;
+  OnFailSync onFailSync;
 
-  AbstractSyncMode(SyncType syncType) {
-    this.syncType = syncType;
-    if (syncType == SyncType.SYNC_UPLOAD_PHOTO) {
-      request = new RxPhotoRequest();
-    }
-    this.request.setSyncMode(this);
-  }
-
-  void setParameter(SyncParameter syncParameter) {
-    if (syncParameter != null) this.syncParameter = syncParameter;
-  }
-
-  SyncParameter getParameter() {
-    return this.syncParameter;
-  }
-
-  void setMessage(SyncMessage syncMessage) {
-    if (syncMessage != null) this.syncMessage = syncMessage;
-  }
-
-  SyncMessage getMessage() {
-    return this.syncMessage;
-  }
-
-  void setParser(AbstractParser parser) {
-    this.parser = parser;
-    this.parser.setParsePolicy(this);
-  }
-
-  AbstractParser getParser() {
-    return this.parser;
-  }
-
-  void setSyncCallBack(SyncCallBack callBack) {
-    this.callBack = callBack;
-  }
-
-  SyncStatus getSyncStatus() {
-    return this.syncStatus;
-  }
-
-  SyncType getSyncType() {
-    return this.syncType;
-  }
-
-  AbstractRequest getRequest() {
-    return this.request;
+  AbstractSyncMode(SyncType syncType,
+      {this.parser,
+      this.requestCreate,
+      this.request,
+      this.syncStatus = SyncStatus.SYNC_INIT,
+      @required this.syncParameter,
+      this.syncMessage,
+      this.onSuccessSync,
+      this.onFailSync}) {
+          this.syncType = syncType;
+          request = new RxRequest(this);
+          if (syncType == SyncType.SYNC_UPLOAD_PHOTO) {
+            request = new RxPhotoRequest(this);
+          }
   }
 
   Future start() async {
     Observable<RP> observable = await prepare();
-    request.execute(observable, callBack);
+    request.execute(observable,
+        onSuccessSync: onSuccessSync, onFailSync: onFailSync);
   }
 
   void onInit() {
@@ -101,7 +71,8 @@ abstract class AbstractSyncMode<RQ, RP> implements ISyncFlow<RP>, IParsePolicy {
   }
 
   void onFinish() {
-    callBack = null;
+    onSuccessSync = null;
+    onFailSync = null;
     request = null;
   }
 }

@@ -5,8 +5,11 @@
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/26 18:00
 
-abstract class SyncCallBack {
-  void onFail(Exception e);
+typedef OnFailSync = void Function(Exception e);
+typedef OnSuccessSync = void Function();
 
-  void onSuccess();
-}
+
+//abstract class SyncCallBack {
+//  OnFail onFail;
+//  OnSuccess onSuccess;
+//}

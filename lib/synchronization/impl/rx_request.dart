@@ -3,6 +3,7 @@ import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/exception/exception_type.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_request.dart';
+import 'package:dsd/synchronization/base/abstract_sync_mode.dart';
 import 'package:dsd/synchronization/bean/sync_response_bean.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
@@ -16,18 +17,16 @@ import 'package:rxdart/rxdart.dart';
 ///  Date:         2019/7/29 15:29
 
 class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
-  RxRequest() {
-    isShow = true;
-  }
+  RxRequest(AbstractSyncMode syncMode) : super(syncMode);
 
   @override
   void execute(
-      Observable<Response<Map<String, dynamic>>> observable, SyncCallBack syncCallBack) {
+      Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) {
     AppLogManager.insert(
-        ExceptionType.INFO.toString(), syncMode.getSyncType().toString());
+        ExceptionType.INFO.toString(), syncMode.syncType.toString());
 
     observable.flatMap((syncDataBean) {
-      return Observable.fromFuture(syncMode.getParser().parse(syncDataBean));
+      return Observable.fromFuture(syncMode.parser.parse(syncDataBean));
     }).map((isSuccess) {
       if (!isSuccess) {
 //        AppLogManager.insert(
@@ -38,22 +37,22 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
       if (isSuccess) {
         AppLogManager.insert(
             ExceptionType.INFO.toString(),
-            syncMode.getSyncType().toString() +
+            syncMode.syncType.toString() +
                 ":" +
                 SyncStatus.SYNC_SUCCESS.toString());
         syncMode.onSuccess();
-        if (syncCallBack != null) {
-          syncCallBack.onSuccess();
+        if (onSuccessSync != null) {
+          onSuccessSync();
         }
       } else {
         AppLogManager.insert(
             ExceptionType.INFO.toString(),
-            syncMode.getSyncType().toString() +
+            syncMode.syncType.toString() +
                 ":" +
                 SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
-        if (syncCallBack != null) {
-          syncCallBack.onFail(new Exception("False"));
+        if (onFailSync != null) {
+          onFailSync(new Exception("False"));
         }
       }
     }, onError: (e) {
@@ -62,7 +61,7 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
       try {
         AppLogManager.insert(
             ExceptionType.INFO.toString(),
-            syncMode.getSyncType().toString() +
+            syncMode.syncType.toString() +
                 ":" +
                 SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
@@ -72,8 +71,8 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
       }
 
       try {
-        if (syncCallBack != null) {
-          syncCallBack.onFail(e);
+        if (onFailSync != null) {
+          onFailSync(e);
         }
       } catch (ex) {
         Log().logger.e(e.toString());

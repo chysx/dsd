@@ -7,7 +7,9 @@ import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 import 'package:dsd/synchronization/impl/upload_parser.dart';
 import 'package:dsd/synchronization/impl/upload_request_create.dart';
+import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/utils/sync_sql_util.dart';
@@ -29,14 +31,19 @@ import 'i_sync_upload.dart';
 abstract class AbstractSyncUploadModel extends AbstractSyncMode<
     Future<SyncRequestBean>,
     Response<Map<String, dynamic>>> implements ISyncUpload {
-  AbstractSyncUploadModel(SyncType syncType) : super(syncType) {
-    parser = new UploadParser();
-    parser.setParsePolicy(this);
-    requestCreate = new UploadRequestCreate();
-    requestCreate.setSyncUploadModel(this);
+  AbstractSyncUploadModel(SyncType syncType,
+      {SyncParameter syncParameter,
+      OnSuccessSync onSuccessSync,
+      OnFailSync onFailSync})
+      : super(syncType,
+            syncParameter: syncParameter,
+            onSuccessSync: onSuccessSync,
+            onFailSync: onFailSync) {
+    parser = new UploadParser(this);
+    requestCreate = new UploadRequestCreate(this);
   }
 
-  Future<Observable<Response<Map<String, dynamic>>>> prepare() async{
+  Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
     return Observable.fromFuture(requestCreate.create())
         .flatMap((syncRequestBean) {
       return Observable.fromFuture(
@@ -78,7 +85,8 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<
     updateUploadDirty(getTableUploadList(), syncDirtyStatus);
   }
 
-  Future updateUploadDirty(List<TableUploadBean> uploadBeanList, String dirty) async {
+  Future updateUploadDirty(
+      List<TableUploadBean> uploadBeanList, String dirty) async {
     sqflite.DatabaseExecutor sqfliteDb = DbHelper().database.database;
     sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
     database.transaction((txn) async {

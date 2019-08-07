@@ -13,11 +13,6 @@ import 'i_create_flow.dart';
    AbstractSyncDownloadModel syncDownloadModel;
    AbstractSyncUploadModel syncUploadModel;
 
-   void setSyncDownloadModel(AbstractSyncDownloadModel syncDownloadModel){
-    this.syncDownloadModel = syncDownloadModel;
-  }
+   AbstractRequestCreate(this.syncDownloadModel,this.syncUploadModel);
 
-   void setSyncUploadModel(AbstractSyncUploadModel syncUploadModel){
-    this.syncUploadModel = syncUploadModel;
-  }
 }

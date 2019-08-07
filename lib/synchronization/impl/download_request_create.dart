@@ -1,12 +1,13 @@
 import 'package:dsd/db/dao/sync_download_logic_dao.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/db/table/sync_download_logic_entity.dart';
+import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
+import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/utils/sync_util.dart';
 import 'package:package_info/package_info.dart';
 import 'package:dsd/synchronization/base/abstract_request_create.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
-import 'package:sqflite/sqflite.dart' as sqflite;
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -17,6 +18,9 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 
 class DownloadRequestCreate
     extends AbstractRequestCreate<Future<SyncRequestBean>> {
+  DownloadRequestCreate(AbstractSyncDownloadModel syncDownloadModel) : super(syncDownloadModel, null);
+
+
   @override
   Future<SyncRequestBean> create() async {
     return createSyncDataRequestBean(syncDownloadModel.getTableDownloadList());
@@ -25,7 +29,7 @@ class DownloadRequestCreate
   Future<SyncRequestBean> createSyncDataRequestBean(List<String> tableList) async {
     SyncRequestBean syncDataRequestBean =
         await SyncUtil.createSyncDataRequestBean(
-            syncDownloadModel.getParameter());
+            syncDownloadModel.syncParameter);
 
     ReqContent syncContentBean = new ReqContent();
     if (tableList == null) {
@@ -33,7 +37,7 @@ class DownloadRequestCreate
       syncContentBean.tables = await createSyncTableBeanList();
     } else {
       //表示指定表请求
-      syncContentBean.tables = await createSyncTableBeanListByCon(tableList, syncDownloadModel.getParameter());
+      syncContentBean.tables = await createSyncTableBeanListByCon(tableList, syncDownloadModel.syncParameter);
     }
     syncDataRequestBean.reqContent = syncContentBean;
 

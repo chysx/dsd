@@ -14,8 +14,15 @@ import 'net/http_service.dart';
 ///  Date:         2019/8/2 14:28
 
 class Application {
-  static AppDatabase database = new DbHelper().database;
-  static Logger logger = new Log().logger;
-  static Dio httpService = new HttpService().dio;
-  static Router router = new Router();
+  static AppDatabase database;
+  static Logger logger;
+  static Dio httpService;
+  static Router router;
+
+  static void install() {
+    database = new DbHelper().database;
+    logger = new Log().logger;
+    httpService = new HttpService().dio;
+    router = new Router();
+  }
 }

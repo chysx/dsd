@@ -11,7 +11,5 @@ import 'i_parser_flow.dart';
 abstract class AbstractParser<T> implements IParserFlow<T> {
   IParsePolicy parsePolicy;
 
-  void setParsePolicy(IParsePolicy parsePolicy) {
-    this.parsePolicy = parsePolicy;
-  }
+  AbstractParser(this.parsePolicy);
 }

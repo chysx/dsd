@@ -1,4 +1,6 @@
 import 'package:dsd/synchronization/base/abstract_request_create.dart';
+import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
+import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/synchronization/sync/sync_config.dart';
@@ -15,12 +17,14 @@ import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 ///  Date:         2019/7/29 15:57
 
  class UploadRequestCreate extends AbstractRequestCreate<Future<SyncRequestBean>> {
+  UploadRequestCreate(AbstractSyncUploadModel syncUploadModel) : super(null, syncUploadModel);
+
    @override
    Future<SyncRequestBean> create() async {
      List<TableUploadBean> uploadBeanList = syncUploadModel.getTableUploadList();
      Map<String,List<String>> tableRowsMap = await getTableRowsMap(uploadBeanList);
      List<Tables> syncTableBeanList = createSyncTableBeanList(tableRowsMap);
-     return await createSyncDataRequestBean(syncTableBeanList,syncUploadModel.getParameter());
+     return await createSyncDataRequestBean(syncTableBeanList,syncUploadModel.syncParameter);
    }
 
    ///

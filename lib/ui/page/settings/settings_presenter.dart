@@ -1,5 +1,10 @@
 import 'package:dsd/net/http_config.dart';
+import 'package:dsd/synchronization/sync/sync_constant.dart';
+import 'package:dsd/synchronization/sync/sync_parameter.dart';
+import 'package:dsd/synchronization/sync/sync_type.dart';
+import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
+import 'package:flutter/cupertino.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -74,9 +79,33 @@ class SettingPresenter {
   void setCurSettingInfo(String env){
     for(SettingInfo info in settingList){
       if(info.env == env){
-        curSettingInfo = info;
+        curSettingInfo
+          ..host = info.host
+          ..port = info.port
+          ..isSsl = info.isSsl
+          ..env = info.env;
         break;
       }
     }
+  }
+
+  bool isDisable() => curSettingInfo.env != 'OTHER';
+
+  void uploadData(BuildContext context) {
+    SyncParameter syncParameter = new SyncParameter();
+    syncParameter
+        .putCommon(SyncConstant.USER_CODE, "D5096")
+        .putCommon(SyncConstant.PASSWORD, "11111111");
+    SyncManager.start(
+      SyncType.SYNC_INIT,
+      syncParameter: syncParameter,
+      onSuccessSync: () {
+
+      },
+      onFailSync: (e) {
+
+      },
+      context: context
+    );
   }
 }
