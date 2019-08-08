@@ -17,12 +17,11 @@ abstract class SyncUploadDao {
   Future<SyncUploadEntity> findEntityById(String id);
 
   @Query('SELECT * FROM sync_upload WHERE uniqueIdValues = :unique and type = :type')
-  Future<SyncUploadEntity> findEntityByUniqueIdAndType(String unique,String type);
+  Future<SyncUploadEntity> findEntityByUniqueIdAndType(String unique, String type);
 
   @insert
   Future<void> insertEntity(SyncUploadEntity entity);
 
   @delete
   Future<int> deleteEntity(List<SyncUploadEntity> entityList);
-
 }

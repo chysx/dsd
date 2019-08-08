@@ -27,8 +27,7 @@ class SyncParameter {
     return this.uploadUniqueIdValues;
   }
 
-  SyncParameter putDownloadParameterValues(
-      List<List<String>> downloadParameterValues) {
+  SyncParameter putDownloadParameterValues(List<List<String>> downloadParameterValues) {
     this.downloadParameterValues = downloadParameterValues;
     return this;
   }

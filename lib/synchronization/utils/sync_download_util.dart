@@ -16,8 +16,7 @@ class SyncDownloadUtil {
   /// @param tableName
   /// @return
   ///
-  static Map<String, String> createContentValue(
-      String tableName, bool isAddId) {
+  static Map<String, String> createContentValue(String tableName, bool isAddId) {
     Map<String, String> contentValues;
     Map<String, Map<String, String>> tableMap = getTableMap(isAddId);
     if (tableMap.containsKey(tableName)) {

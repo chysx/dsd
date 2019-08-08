@@ -3,5 +3,11 @@
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/7/29 14:38
+///  Date:         2019/8/7 15:40
 
+class LoginInputInfo {
+  String userCode;
+  String password;
+
+  LoginInputInfo([this.userCode, this.password]);
+}

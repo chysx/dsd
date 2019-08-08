@@ -2,7 +2,6 @@ import 'package:dsd/db/dao/sync_download_logic_dao.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/db/table/sync_download_logic_entity.dart';
 import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
-import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/utils/sync_util.dart';
 import 'package:package_info/package_info.dart';
@@ -16,10 +15,8 @@ import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 16:00
 
-class DownloadRequestCreate
-    extends AbstractRequestCreate<Future<SyncRequestBean>> {
+class DownloadRequestCreate extends AbstractRequestCreate<Future<SyncRequestBean>> {
   DownloadRequestCreate(AbstractSyncDownloadModel syncDownloadModel) : super(syncDownloadModel, null);
-
 
   @override
   Future<SyncRequestBean> create() async {
@@ -27,9 +24,7 @@ class DownloadRequestCreate
   }
 
   Future<SyncRequestBean> createSyncDataRequestBean(List<String> tableList) async {
-    SyncRequestBean syncDataRequestBean =
-        await SyncUtil.createSyncDataRequestBean(
-            syncDownloadModel.syncParameter);
+    SyncRequestBean syncDataRequestBean = await SyncUtil.createSyncDataRequestBean(syncDownloadModel.syncParameter);
 
     ReqContent syncContentBean = new ReqContent();
     if (tableList == null) {
@@ -75,7 +70,7 @@ class DownloadRequestCreate
     return syncTableBeanList;
   }
 
-   Future<List<Tables>> createSyncTableBeanList() async {
+  Future<List<Tables>> createSyncTableBeanList() async {
     List<SyncDownloadLogicEntity> entityList = await getSyncDownloadLogicList();
     print("length = ${entityList?.length}");
     List<Tables> syncTableBeanList = new List();
@@ -84,9 +79,9 @@ class DownloadRequestCreate
       Tables tableBean = new Tables();
       List<String> paramValues = new List();
       String timeStamp;
-      if (syncDownloadModel.isAllDataAndAllInsert(entity.tableName)){
+      if (syncDownloadModel.isAllDataAndAllInsert(entity.tableName)) {
         timeStamp = null;
-      }else{
+      } else {
         timeStamp = entity.timeStamp;
       }
       paramValues.add(timeStamp);
@@ -103,5 +98,4 @@ class DownloadRequestCreate
     SyncDownloadLogicDao dao = DbHelper().database.syncDownloadLogicDao;
     return await dao.findEntityByVersion(packageInfo.version, "1");
   }
-
 }

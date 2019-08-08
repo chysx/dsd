@@ -10,6 +10,7 @@ import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/dialog.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -71,8 +72,7 @@ class _SettingState extends State<SettingsPage> {
       ),
       body: StreamBuilder<SettingPresenter>(
         stream: bloc.settingStream,
-        builder:
-            (BuildContext context, AsyncSnapshot<SettingPresenter> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<SettingPresenter> snapshot) {
           SettingPresenter presenter = snapshot.data;
           print("***build:settingStream");
           if (presenter == null) {
@@ -182,7 +182,14 @@ class _SettingState extends State<SettingsPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            presenter.uploadData(context);
+//                            presenter.uploadData(context);
+                            String lastDateStr =
+                                DateUtil.getDateStrByTimeStr("2019-08-06 11:36:19", format: DateFormat.YEAR_MONTH_DAY);
+
+                            int lastS = DateUtil.getDateTime(lastDateStr).day;
+                            int nowS = new DateTime.now().day;
+                            print("lastDateStr = ${lastDateStr}");
+                            print("lastS = ${lastS},nowS = ${nowS}");
                           },
                         ),
                       ),

@@ -18,14 +18,8 @@ import 'package:sqflite/sqlite_api.dart' as sqlite_api;
 ///  Date:         2019/7/31 17:32
 
 class SyncInitModel extends AbstractSyncDownloadModel {
-  SyncInitModel(SyncType syncType,
-      {SyncParameter syncParameter,
-      OnSuccessSync onSuccessSync,
-      OnFailSync onFailSync})
-      : super(syncType,
-            syncParameter: syncParameter,
-            onSuccessSync: onSuccessSync,
-            onFailSync: onFailSync);
+  SyncInitModel(SyncType syncType, {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
+      : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync);
 
   List<TableKeyBean> _getTableKeyList() {
     List<TableKeyBean> tableKeyBeanList = new List();
@@ -51,8 +45,8 @@ class SyncInitModel extends AbstractSyncDownloadModel {
   Future clearDB() async {
     sqflite.DatabaseExecutor sqfliteDb = DbHelper().database.database;
     sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
-    List<Map<String, dynamic>> list = await database.rawQuery(
-        "select name from sqlite_master where type = 'table' and name not like '%metadata%'");
+    List<Map<String, dynamic>> list =
+        await database.rawQuery("select name from sqlite_master where type = 'table' and name not like '%metadata%'");
     await database.transaction((txn) async {
       List<String> tableNameNotClear = getTableNameNotClear();
       for (Map<String, dynamic> map in list) {

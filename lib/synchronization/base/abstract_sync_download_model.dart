@@ -19,26 +19,18 @@ import 'i_sync_download.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 11:54
 
-abstract class AbstractSyncDownloadModel extends AbstractSyncMode<
-    Future<SyncRequestBean>,
-    Response<Map<String, dynamic>>> implements ISyncDownload {
+abstract class AbstractSyncDownloadModel
+    extends AbstractSyncMode<Future<SyncRequestBean>, Response<Map<String, dynamic>>> implements ISyncDownload {
   AbstractSyncDownloadModel(SyncType syncType,
-      {SyncParameter syncParameter,
-      OnSuccessSync onSuccessSync,
-      OnFailSync onFailSync})
-      : super(syncType,
-            syncParameter: syncParameter,
-            onSuccessSync: onSuccessSync,
-            onFailSync: onFailSync) {
+      {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
+      : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync) {
     parser = new DownloadParser(this);
     requestCreate = new DownloadRequestCreate(this);
   }
 
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
-    return Observable.fromFuture(requestCreate.create())
-        .flatMap((syncRequestBean) {
-      return Observable.fromFuture(
-          ApiService.getSyncDataByDownload(syncRequestBean));
+    return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
+      return Observable.fromFuture(ApiService.getSyncDataByDownload(syncRequestBean));
     });
   }
 

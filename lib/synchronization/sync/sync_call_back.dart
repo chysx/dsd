@@ -7,9 +7,3 @@
 
 typedef OnFailSync = void Function(Exception e);
 typedef OnSuccessSync = void Function();
-
-
-//abstract class SyncCallBack {
-//  OnFail onFail;
-//  OnSuccess onSuccess;
-//}

@@ -6,6 +6,7 @@ import 'package:dsd/db/dao/sync_download_logic_dao.dart';
 import 'package:dsd/db/dao/sync_photo_upload_dao.dart';
 import 'package:dsd/db/dao/sync_upload_dao.dart';
 import 'package:dsd/db/table/app_log_entity.dart';
+import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/db/table/entity/md_person_entity.dart';
 import 'package:dsd/db/table/sync_download_logic_entity.dart';
 import 'package:dsd/db/table/sync_photo_upload_entity.dart';
@@ -13,6 +14,8 @@ import 'package:dsd/db/table/sync_upload_entity.dart';
 import 'package:floor/floor.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
+
+import 'dao/app_config_dao.dart';
 
 part 'database.g.dart'; // the generated code will be there
 
@@ -28,7 +31,8 @@ part 'database.g.dart'; // the generated code will be there
   SyncDownloadLogicEntity,
   SyncUploadEntity,
   SyncPhotoUploadEntity,
-  MD_Person_Entity
+  MD_Person_Entity,
+  AppConfigEntity
 ])
 abstract class AppDatabase extends FloorDatabase {
   AppLogDao get appLogDao;
@@ -40,6 +44,8 @@ abstract class AppDatabase extends FloorDatabase {
   SyncUploadDao get syncUploadDao;
 
   MdPersonDao get mdPersonDao;
+
+  AppConfigDao get appConfigDao;
 }
 
 class DbHelper {

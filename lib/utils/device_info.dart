@@ -10,9 +10,11 @@ import 'package:package_info/package_info.dart';
 class DeviceInfo {
   static DeviceInfo _instance;
   String versionName;
+
   DeviceInfo._();
+
   static DeviceInfo _getInstance() {
-    if(_instance == null){
+    if (_instance == null) {
       _instance = DeviceInfo._();
       _initDeviceInfo(_instance);
     }
@@ -23,5 +25,6 @@ class DeviceInfo {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     deviceInfo.versionName = packageInfo.version;
   }
+
   factory DeviceInfo() => _getInstance();
 }

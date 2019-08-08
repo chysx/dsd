@@ -12,7 +12,7 @@ class Routers {
   static const root = '/';
   static const settings = '/settings';
 
-  static configRouters(Router router){
+  static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
     router.define(root, handler: rootHandler);
     router.define(settings, handler: settingsHandler);

@@ -1,6 +1,6 @@
 import 'package:dsd/bloc/bloc_base.dart';
 import 'package:dsd/bloc/setting_bloc.dart';
-import 'package:dsd/ui/page/login.dart';
+import 'package:dsd/ui/page/login/login.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:fluro/fluro.dart';
 

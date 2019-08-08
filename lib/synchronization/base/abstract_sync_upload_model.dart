@@ -28,26 +28,18 @@ import 'i_sync_upload.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 12:06
 
-abstract class AbstractSyncUploadModel extends AbstractSyncMode<
-    Future<SyncRequestBean>,
-    Response<Map<String, dynamic>>> implements ISyncUpload {
+abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncRequestBean>, Response<Map<String, dynamic>>>
+    implements ISyncUpload {
   AbstractSyncUploadModel(SyncType syncType,
-      {SyncParameter syncParameter,
-      OnSuccessSync onSuccessSync,
-      OnFailSync onFailSync})
-      : super(syncType,
-            syncParameter: syncParameter,
-            onSuccessSync: onSuccessSync,
-            onFailSync: onFailSync) {
+      {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
+      : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync) {
     parser = new UploadParser(this);
     requestCreate = new UploadRequestCreate(this);
   }
 
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
-    return Observable.fromFuture(requestCreate.create())
-        .flatMap((syncRequestBean) {
-      return Observable.fromFuture(
-          ApiService.getSyncDataByUpload(syncRequestBean));
+    return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
+      return Observable.fromFuture(ApiService.getSyncDataByUpload(syncRequestBean));
     });
   }
 
@@ -85,8 +77,7 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<
     updateUploadDirty(getTableUploadList(), syncDirtyStatus);
   }
 
-  Future updateUploadDirty(
-      List<TableUploadBean> uploadBeanList, String dirty) async {
+  Future updateUploadDirty(List<TableUploadBean> uploadBeanList, String dirty) async {
     sqflite.DatabaseExecutor sqfliteDb = DbHelper().database.database;
     sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
     database.transaction((txn) async {
@@ -98,18 +89,15 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<
 
   void updateStatus(SyncStatus syncStatus) {
     SyncUploadEntity syncUploadEntity = new SyncUploadEntity();
-    if (syncParameter.getUploadUniqueIdValues() == null ||
-        syncParameter.getUploadUniqueIdValues().length == 0) {
+    if (syncParameter.getUploadUniqueIdValues() == null || syncParameter.getUploadUniqueIdValues().length == 0) {
       syncUploadEntity.uniqueIdValues = null;
     } else {
-      syncUploadEntity.uniqueIdValues = SyncSqlUtil.getStringByUniqueIdValues(
-          syncParameter.getUploadUniqueIdValues());
+      syncUploadEntity.uniqueIdValues = SyncSqlUtil.getStringByUniqueIdValues(syncParameter.getUploadUniqueIdValues());
     }
     syncUploadEntity.name = syncParameter.getUploadName();
     syncUploadEntity.status = syncStatus.toString();
     syncUploadEntity.type = syncType.toString();
-    syncUploadEntity.time = DateUtil.getDateStrByDateTime(DateTime.now(),
-        format: DateFormat.NORMAL);
+    syncUploadEntity.time = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.NORMAL);
     SyncUploadManager.deleteAndInsert(syncUploadEntity);
   }
 }

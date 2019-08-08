@@ -16,20 +16,16 @@ import 'model/sync_init_model.dart';
 
 class SyncManager {
   static void start(SyncType syncType,
-      {SyncParameter syncParameter,
-      OnSuccessSync onSuccessSync,
-      OnFailSync onFailSync,
-      BuildContext context}) {
-
-    if(context != null) LoadingDialog.showLoadingDialog(context);
-    new SyncInitModel(syncType, syncParameter: syncParameter,
-        onSuccessSync: () {
+      {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) {
+    if (context != null) LoadingDialog.showLoadingDialog(context);
+    if (syncParameter == null) syncParameter = new SyncParameter();
+    new SyncInitModel(syncType, syncParameter: syncParameter, onSuccessSync: () {
       print("onSuccessSync");
-      if(context != null) LoadingDialog.dismiss(context);
+      if (context != null) LoadingDialog.dismiss(context);
       onSuccessSync();
     }, onFailSync: (e) {
       print("onFailSync");
-      if(context != null) LoadingDialog.dismiss(context);
+      if (context != null) LoadingDialog.dismiss(context);
 
       onFailSync(e);
     }).start();

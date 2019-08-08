@@ -18,6 +18,4 @@ abstract class SyncPhotoUploadDao {
 
   @insert
   Future<void> insertEntity(SyncPhotoUploadEntity entity);
-
-
 }

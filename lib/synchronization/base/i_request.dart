@@ -9,5 +9,5 @@ import 'package:rxdart/rxdart.dart';
 ///  Date:         2019/7/29 11:46
 
 abstract class IRequest<T> {
-  void execute(Observable<T> observable, {OnSuccessSync onSuccessSync,OnFailSync onFailSync});
+  void execute(Observable<T> observable, {OnSuccessSync onSuccessSync, OnFailSync onFailSync});
 }

@@ -18,13 +18,11 @@ class SyncDownloadLogicEntity {
   String transferred;
   String keys;
 
-
-  SyncDownloadLogicEntity([this.tableName, this.tableOrder, this.timeStamp,
-      this.version, this.isActive, this.transferred, this.keys]);
+  SyncDownloadLogicEntity(
+      [this.tableName, this.tableOrder, this.timeStamp, this.version, this.isActive, this.transferred, this.keys]);
 
   @override
   String toString() {
     return 'SyncDownloadLogicEntity{tableName: $tableName, tableOrder: $tableOrder, timeStamp: $timeStamp, version: $version, isActive: $isActive, transferred: $transferred, keys: $keys}';
   }
-
 }

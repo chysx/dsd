@@ -16,9 +16,7 @@ import 'db/database.dart';
 ///  Date:         2019/7/31 17:30
 
 class Test {
-  static void testSyncInit() {
-
-  }
+  static void testSyncInit() {}
 
 //  static Future testFloor() async {
 //    SyncDownloadLogicDao dao = DbHelper().database.syncDownloadLogicDao;

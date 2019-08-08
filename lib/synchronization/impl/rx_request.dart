@@ -20,10 +20,8 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
   RxRequest(AbstractSyncMode syncMode) : super(syncMode);
 
   @override
-  void execute(
-      Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) {
-    AppLogManager.insert(
-        ExceptionType.INFO.toString(), syncMode.syncType.toString());
+  void execute(Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) {
+    AppLogManager.insert(ExceptionType.INFO.toString(), syncMode.syncType.toString());
 
     observable.flatMap((syncDataBean) {
       return Observable.fromFuture(syncMode.parser.parse(syncDataBean));
@@ -36,20 +34,14 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
     }).listen((isSuccess) {
       if (isSuccess) {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(),
-            syncMode.syncType.toString() +
-                ":" +
-                SyncStatus.SYNC_SUCCESS.toString());
+            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_SUCCESS.toString());
         syncMode.onSuccess();
         if (onSuccessSync != null) {
           onSuccessSync();
         }
       } else {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(),
-            syncMode.syncType.toString() +
-                ":" +
-                SyncStatus.SYNC_FAIL.toString());
+            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
         if (onFailSync != null) {
           onFailSync(new Exception("False"));
@@ -60,10 +52,7 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
       Log().logger.e(e.toString());
       try {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(),
-            syncMode.syncType.toString() +
-                ":" +
-                SyncStatus.SYNC_FAIL.toString());
+            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
       } catch (ex) {
         Log().logger.e(e.toString());
@@ -79,7 +68,8 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
         AppLogManager.insert(ExceptionType.WARN.toString(), ex);
       }
       syncMode.onFinish();
-    }, onDone: () {syncMode.onFinish();});
+    }, onDone: () {
+      syncMode.onFinish();
+    });
   }
 }
-

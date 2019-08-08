@@ -76,9 +76,9 @@ class SettingPresenter {
       ..env = UrlDev.ENV;
   }
 
-  void setCurSettingInfo(String env){
-    for(SettingInfo info in settingList){
-      if(info.env == env){
+  void setCurSettingInfo(String env) {
+    for (SettingInfo info in settingList) {
+      if (info.env == env) {
         curSettingInfo
           ..host = info.host
           ..port = info.port
@@ -93,19 +93,8 @@ class SettingPresenter {
 
   void uploadData(BuildContext context) {
     SyncParameter syncParameter = new SyncParameter();
-    syncParameter
-        .putCommon(SyncConstant.USER_CODE, "D5096")
-        .putCommon(SyncConstant.PASSWORD, "11111111");
-    SyncManager.start(
-      SyncType.SYNC_INIT,
-      syncParameter: syncParameter,
-      onSuccessSync: () {
-
-      },
-      onFailSync: (e) {
-
-      },
-      context: context
-    );
+    syncParameter.putCommon(SyncConstant.USER_CODE, "D5096").putCommon(SyncConstant.PASSWORD, "11111111");
+    SyncManager.start(SyncType.SYNC_INIT,
+        syncParameter: syncParameter, onSuccessSync: () {}, onFailSync: (e) {}, context: context);
   }
 }

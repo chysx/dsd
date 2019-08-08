@@ -41,17 +41,16 @@ abstract class AbstractSyncMode<RQ, RP> implements ISyncFlow<RP>, IParsePolicy {
       this.syncMessage,
       this.onSuccessSync,
       this.onFailSync}) {
-          this.syncType = syncType;
-          request = new RxRequest(this);
-          if (syncType == SyncType.SYNC_UPLOAD_PHOTO) {
-            request = new RxPhotoRequest(this);
-          }
+    this.syncType = syncType;
+    request = new RxRequest(this);
+    if (syncType == SyncType.SYNC_UPLOAD_PHOTO) {
+      request = new RxPhotoRequest(this);
+    }
   }
 
   Future start() async {
     Observable<RP> observable = await prepare();
-    request.execute(observable,
-        onSuccessSync: onSuccessSync, onFailSync: onFailSync);
+    request.execute(observable, onSuccessSync: onSuccessSync, onFailSync: onFailSync);
   }
 
   void onInit() {

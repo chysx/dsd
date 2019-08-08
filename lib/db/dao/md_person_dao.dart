@@ -15,5 +15,4 @@ abstract class MdPersonDao {
 
   @Query('SELECT * FROM MD_Person WHERE id = :id')
   Future<MD_Person_Entity> findEntityById(String id);
-
 }

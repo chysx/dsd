@@ -9,10 +9,9 @@ import 'i_create_flow.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 11:52
 
- abstract class AbstractRequestCreate<T> implements ICreateFlow<T> {
-   AbstractSyncDownloadModel syncDownloadModel;
-   AbstractSyncUploadModel syncUploadModel;
+abstract class AbstractRequestCreate<T> implements ICreateFlow<T> {
+  AbstractSyncDownloadModel syncDownloadModel;
+  AbstractSyncUploadModel syncUploadModel;
 
-   AbstractRequestCreate(this.syncDownloadModel,this.syncUploadModel);
-
+  AbstractRequestCreate(this.syncDownloadModel, this.syncUploadModel);
 }

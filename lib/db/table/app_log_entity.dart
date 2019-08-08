@@ -20,14 +20,19 @@ class AppLogEntity {
   String note;
   String dirty;
 
-
-  AppLogEntity([this.id, this.versionName, this.device, this.type, this.content,
-      this.stackTrace, this.time, this.note, this.dirty]);
+  AppLogEntity(
+      [this.id,
+      this.versionName,
+      this.device,
+      this.type,
+      this.content,
+      this.stackTrace,
+      this.time,
+      this.note,
+      this.dirty]);
 
   @override
   String toString() {
     return 'AppLogEntity{id: $id, versionName: $versionName, device: $device, type: $type, content: $content, stackTrace: $stackTrace, time: $time, note: $note, dirty: $dirty}';
   }
-
-
 }

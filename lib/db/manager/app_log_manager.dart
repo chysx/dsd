@@ -17,14 +17,13 @@ import 'dart:io';
 ///  Date:         2019/7/29 16:51
 
 class AppLogManager {
-
-   static Future insert(String type,[String msg,Error error]) async {
-     AppLogDao dao = new DbHelper().database.appLogDao;
-    if(error != null){
+  static Future insert(String type, [String msg, Error error]) async {
+    AppLogDao dao = new DbHelper().database.appLogDao;
+    if (error != null) {
       msg = msg + "  \n" + error.toString();
     }
-     AppLogEntity entity = await _createAppLogEntity(type,msg);
-     await dao.insertEntity(entity);
+    AppLogEntity entity = await _createAppLogEntity(type, msg);
+    await dao.insertEntity(entity);
   }
 
   static Future<AppLogEntity> _createAppLogEntity(String type, String content) async {
@@ -37,24 +36,24 @@ class AppLogManager {
       ..device = await _createDeviceInfo()
       ..content = content
       ..stackTrace = ""
-      ..time = DateUtil.getDateStrByDateTime(DateTime.now(),format: DateFormat.NORMAL)
+      ..time = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.NORMAL)
       ..dirty = SyncDirtyStatus.DEFAULT;
     return entity;
   }
 
-   static Future<String> _createDeviceInfo() async {
-     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  static Future<String> _createDeviceInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     StringBuffer sb = new StringBuffer();
-    if(Platform.isAndroid){
+    if (Platform.isAndroid) {
       sb..write("VersionName = ")..write(packageInfo.version)..write(";");
       sb..write("VersionCode = ")..write(packageInfo.buildNumber)..write(";");
       sb..write("SdkLevel = ")..write(androidInfo.version.sdkInt)..write(";");
       sb..write("SdkVersion = ")..write(androidInfo.version)..write(";");
       sb..write("Brand = ")..write(androidInfo.brand)..write(";");
       sb..write("Model = ")..write(androidInfo.model);
-    }else if(Platform.isIOS){
+    } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       sb..write("VersionName = ")..write(packageInfo.version)..write(";");
       sb..write("VersionCode = ")..write(packageInfo.buildNumber)..write(";");

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dsd/log/log_util.dart';
+import 'package:dsd/ui/page/login/user.dart';
 import 'package:fluro/fluro.dart';
 import 'package:logger/logger.dart';
 
@@ -18,11 +19,13 @@ class Application {
   static Logger logger;
   static Dio httpService;
   static Router router;
+  static User user;
 
   static void install() {
     database = new DbHelper().database;
     logger = new Log().logger;
     httpService = new HttpService().dio;
     router = new Router();
+    user = new User();
   }
 }

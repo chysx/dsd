@@ -1,5 +1,6 @@
 import 'package:dsd/db/table/sync_download_logic_entity.dart';
 import 'package:floor/floor.dart';
+
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
 ///
@@ -19,6 +20,5 @@ abstract class SyncDownloadLogicDao {
   Future<void> insertEntity(SyncDownloadLogicEntity entity);
 
   @Query('SELECT * FROM sync_download_logic WHERE version = :version AND isActive = :isActive ')
-  Future<List<SyncDownloadLogicEntity>> findEntityByVersion(String version,String isActive);
-
+  Future<List<SyncDownloadLogicEntity>> findEntityByVersion(String version, String isActive);
 }

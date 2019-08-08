@@ -1,6 +1,6 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/res/colors.dart';
-import 'package:dsd/ui/page/login_presenter.dart';
+import 'package:dsd/ui/page/login/login_presenter.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class _LoginState extends State<LoginPage> {
   TextEditingController pwdCtrl = TextEditingController();
 
   void login() {
-    print(presenter.userName + " " + presenter.password);
+    print(presenter.inputInfo.userCode + " " + presenter.inputInfo.password);
   }
 
   @override
@@ -32,14 +32,14 @@ class _LoginState extends State<LoginPage> {
     presenter = new LoginPresenter();
     presenter.initData();
 
-    userCtrl.text = presenter.userName;
-    userCtrl.addListener((){
-      presenter.userName = userCtrl.text;
+    userCtrl.text = presenter.inputInfo.userCode;
+    userCtrl.addListener(() {
+      presenter.inputInfo.userCode = userCtrl.text;
     });
 
-    pwdCtrl.text = presenter.password;
-    pwdCtrl.addListener((){
-      presenter.password = pwdCtrl.text;
+    pwdCtrl.text = presenter.inputInfo.password;
+    pwdCtrl.addListener(() {
+      presenter.inputInfo.password = pwdCtrl.text;
     });
   }
 
@@ -72,10 +72,8 @@ class _LoginState extends State<LoginPage> {
                 child: Column(
                   children: <Widget>[
                     TextField(
-                      decoration: InputDecoration(
-                          labelText: "UserName",
-                          hintText: "UserName",
-                          prefixIcon: Icon(Icons.person)),
+                      decoration:
+                          InputDecoration(labelText: "UserName", hintText: "UserName", prefixIcon: Icon(Icons.person)),
                       controller: userCtrl,
                     ),
                     TextField(
@@ -97,8 +95,9 @@ class _LoginState extends State<LoginPage> {
                                 "LOGIN",
                                 style: TextStyle(color: Colors.white),
                               ),
-                              onPressed: (){
-                                Application.router.navigateTo(context, '/settings',transition: TransitionType.inFromLeft);
+                              onPressed: () {
+                                Application.router
+                                    .navigateTo(context, '/settings', transition: TransitionType.inFromLeft);
                               },
                             ),
                           ),
@@ -110,7 +109,10 @@ class _LoginState extends State<LoginPage> {
                       child: Row(
                         children: <Widget>[
                           GestureDetector(
-                            onTap: (){Application.router.navigateTo(context, '/settings',transition: TransitionType.inFromLeft);},
+                            onTap: () {
+                              Application.router
+                                  .navigateTo(context, '/settings', transition: TransitionType.inFromLeft);
+                            },
                             child: Container(
                               child: Row(
                                 children: <Widget>[

@@ -31,8 +31,7 @@ class SyncSqlUtil {
 
   static String buildSql(String resSql, List<String> uniqueIdValues) {
     if (!resSql.contains(MARK)) return resSql;
-    if (uniqueIdValues == null || uniqueIdValues.length == 0)
-      throw new Exception("SQL里面主键指定了，但是没有传值");
+    if (uniqueIdValues == null || uniqueIdValues.length == 0) throw new Exception("SQL里面主键指定了，但是没有传值");
     StringBuffer replace = new StringBuffer();
     if (uniqueIdValues.length == 1) {
       replace..write(EQ)..write("'")..write(uniqueIdValues[0])..write("'");
@@ -52,8 +51,7 @@ class SyncSqlUtil {
     return buildSql;
   }
 
-  static List<String> addSelectionArgs(
-      List<String> uniqueIdValues, String arg) {
+  static List<String> addSelectionArgs(List<String> uniqueIdValues, String arg) {
     if (uniqueIdValues == null || uniqueIdValues.length == 0) {
       return [arg];
     }

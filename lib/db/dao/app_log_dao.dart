@@ -8,7 +8,6 @@ import 'package:floor/floor.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 16:25
 
-
 @dao
 abstract class AppLogDao {
   @Query('SELECT * FROM app_log')
@@ -19,6 +18,4 @@ abstract class AppLogDao {
 
   @insert
   Future<void> insertEntity(AppLogEntity entity);
-
-
 }

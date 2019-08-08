@@ -3,16 +3,12 @@
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/8/2 11:00
+///  Date:         2019/8/8 16:14
 
-class LoginPresenter {
+class User {
+  String userCode;
   String userName;
-  String password;
-  String version;
+  String passWord;
 
-  void initData() {
-    userName = "zhang";
-    password = "111111";
-    version = "0.1.71";
-  }
+  User([this.userCode, this.userName, this.passWord]);
 }

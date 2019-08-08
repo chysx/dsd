@@ -10,14 +10,11 @@ import 'package:rxdart/src/observables/observable.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/29 16:14
 
- class RxPhotoRequest extends AbstractRequest<void> {
-
+class RxPhotoRequest extends AbstractRequest<void> {
   RxPhotoRequest(AbstractSyncMode syncMode) : super(syncMode);
-
 
   @override
   void execute(Observable<void> observable, {onSuccessSync, onFailSync}) {
     // TODO: implement execute
   }
-
 }

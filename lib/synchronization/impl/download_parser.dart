@@ -22,7 +22,6 @@ import 'package:dsd/synchronization/bean/sync_response_bean.dart';
 class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   DownloadParser(IParsePolicy parsePolicy) : super(parsePolicy);
 
-
   void _printDataStr(String tag, Object value) {
     String da = value.toString();
     while (da.isNotEmpty) {
@@ -39,22 +38,21 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   @override
   Future<bool> parse(Response<Map<String, dynamic>> response) async {
     print("**********************Request*****************************");
-    _printDataStr("request",response.request.data);
+    _printDataStr("request", response.request.data);
     print("**********************Request*****************************");
 
 //    print("**********************Response*****************************");
 //    _printDataStr("request",response.data);
 //    print("**********************Response*****************************");
 
-
     bool result = true;
-    try{
+    try {
       sqflite.DatabaseExecutor sqfliteDb = DbHelper().database.database;
       sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
       await database.transaction((txn) async {
         SyncResponseBean syncDataResponseBean = SyncResponseBean.fromJson(response.data);
         print(syncDataResponseBean.status);
-        if(syncDataResponseBean.status != SyncResponseStatus.SUCCESS){
+        if (syncDataResponseBean.status != SyncResponseStatus.SUCCESS) {
           result = false;
           return;
         }
@@ -63,29 +61,29 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
         for (Tables table in syncTableBeanList) {
           print("111111111111111");
           String tableName = table.name;
-          if(! await _isTableInDb(txn,tableName)){
+          if (!await _isTableInDb(txn, tableName)) {
             result = false;
             return;
           }
           String fields = table.fields;
-          if(! await _isColumnInTable(txn,_getFieldNames(fields),tableName)){
+          if (!await _isColumnInTable(txn, _getFieldNames(fields), tableName)) {
             result = false;
             return;
           }
-          List<String> primaryKeys = await _getTablePrimaryKeys(txn,tableName);
-          if(! await _isColumnInTable(txn,primaryKeys,tableName)){
+          List<String> primaryKeys = await _getTablePrimaryKeys(txn, tableName);
+          if (!await _isColumnInTable(txn, primaryKeys, tableName)) {
             result = false;
             return;
           }
           List<String> rows = table.rows;
-          if(rows != null && rows.length > 0){
-            await _parseRows(txn,primaryKeys,_getFieldNames(fields),rows,tableName);
+          if (rows != null && rows.length > 0) {
+            await _parseRows(txn, primaryKeys, _getFieldNames(fields), rows, tableName);
           }
           String timeStamp = table.paramValues[0];
-          await _updateTimeStamp(txn,tableName,timeStamp);
+          await _updateTimeStamp(txn, tableName, timeStamp);
         }
       });
-    }catch(e){
+    } catch (e) {
       result = false;
       Log().logger.e(e.toString());
       AppLogManager.insert(ExceptionType.ERROR.toString(), e);
@@ -102,34 +100,35 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param rows 服务端返回的该表所有的行
   /// @param tableName 表名
   ///
-   Future _parseRows(sqlite_api.Transaction transaction,List<String> primaryKeys , List<String> fieldNames, List<String> rows, String tableName) async {
-     String tempRow = "";
-     try{
-       if(parsePolicy.isAllDataAndAllInsert(tableName)){
-         String sql = "delete from " + tableName;
-         await transaction.execute(sql);
-         for(String row in rows){
-           tempRow = row;
-           await transaction.insert(tableName, _createContentValues(tableName,fieldNames,_getRowValue(row),true));
-         }
-       }else{
-         for(String row in rows){
-           tempRow = row;
-           List<String> rowValue = _getRowValue(row);
-           if(await _isRowValueInDb(transaction,primaryKeys,fieldNames,rowValue,tableName)){
-             transaction.update(tableName,_createContentValues(tableName,fieldNames,rowValue,false),
-                 where:_getTableWhereCondition(primaryKeys),whereArgs:_getPrimaryKeyValues(primaryKeys,fieldNames,rowValue));
-           }else{
-             transaction.insert(tableName, _createContentValues(tableName,fieldNames,rowValue,true));
-           }
-         }
-       }
-     }catch(e){
-       Log().logger.e("tableName = $tableName row = $tempRow \n" + e.toString());
-       AppLogManager.insert(ExceptionType.ERROR.toString(), "tableName = $tableName row = $tempRow");
-       throw e;
-     }
-
+  Future _parseRows(sqlite_api.Transaction transaction, List<String> primaryKeys, List<String> fieldNames,
+      List<String> rows, String tableName) async {
+    String tempRow = "";
+    try {
+      if (parsePolicy.isAllDataAndAllInsert(tableName)) {
+        String sql = "delete from " + tableName;
+        await transaction.execute(sql);
+        for (String row in rows) {
+          tempRow = row;
+          await transaction.insert(tableName, _createContentValues(tableName, fieldNames, _getRowValue(row), true));
+        }
+      } else {
+        for (String row in rows) {
+          tempRow = row;
+          List<String> rowValue = _getRowValue(row);
+          if (await _isRowValueInDb(transaction, primaryKeys, fieldNames, rowValue, tableName)) {
+            transaction.update(tableName, _createContentValues(tableName, fieldNames, rowValue, false),
+                where: _getTableWhereCondition(primaryKeys),
+                whereArgs: _getPrimaryKeyValues(primaryKeys, fieldNames, rowValue));
+          } else {
+            transaction.insert(tableName, _createContentValues(tableName, fieldNames, rowValue, true));
+          }
+        }
+      }
+    } catch (e) {
+      Log().logger.e("tableName = $tableName row = $tempRow \n" + e.toString());
+      AppLogManager.insert(ExceptionType.ERROR.toString(), "tableName = $tableName row = $tempRow");
+      throw e;
+    }
   }
 
   ///
@@ -138,17 +137,18 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param rowValue 服务端返回的某行
   /// @return
   ///
-   Map<String,String> _createContentValues(String tableName,List<String> fieldNames,List<String> rowValue,bool isAddId){
-      Map<String,String> contentValues = new Map();
-      int index = 0;
-      for(String fieldName in fieldNames){
-        contentValues[fieldName] = rowValue[index++];
-      }
-      Map<String,String> uuidContentValues = SyncDownloadUtil.createContentValue(tableName,isAddId);
-      if(uuidContentValues != null){
-        contentValues.addAll(uuidContentValues);
-      }
-      return contentValues;
+  Map<String, String> _createContentValues(
+      String tableName, List<String> fieldNames, List<String> rowValue, bool isAddId) {
+    Map<String, String> contentValues = new Map();
+    int index = 0;
+    for (String fieldName in fieldNames) {
+      contentValues[fieldName] = rowValue[index++];
+    }
+    Map<String, String> uuidContentValues = SyncDownloadUtil.createContentValue(tableName, isAddId);
+    if (uuidContentValues != null) {
+      contentValues.addAll(uuidContentValues);
+    }
+    return contentValues;
   }
 
   ///
@@ -159,20 +159,15 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param tableName 表名
   /// @return
   ///
-  Future<bool> _isRowValueInDb(
-      sqlite_api.Transaction transaction,
-      List<String> primaryKeys,
-      List<String> fieldNames,
-      List<String> rowValue,
-      String tableName) async {
+  Future<bool> _isRowValueInDb(sqlite_api.Transaction transaction, List<String> primaryKeys, List<String> fieldNames,
+      List<String> rowValue, String tableName) async {
     try {
-      List<String> values =
-          _getPrimaryKeyValues(primaryKeys, fieldNames, rowValue);
+      List<String> values = _getPrimaryKeyValues(primaryKeys, fieldNames, rowValue);
       if (values.length == 0) return false; //没有指定跟新的主键
       if (values[0] == null) return false; //指定跟新的主键不在服务端返回的列名数组中
       String selection = _getTableWhereCondition(primaryKeys);
-      List<Map<String, dynamic>> list = await transaction.query(tableName,
-          columns: primaryKeys, where: selection, whereArgs: values);
+      List<Map<String, dynamic>> list =
+          await transaction.query(tableName, columns: primaryKeys, where: selection, whereArgs: values);
       if (list != null && list.length > 0) return true;
     } catch (e) {
       Log().logger.e(e.toString());
@@ -190,8 +185,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param rowValue 服务端返回的某行
   /// @return
   ///
-  List<String> _getPrimaryKeyValues(List<String> primaryKeys,
-      List<String> fieldNames, List<String> rowValue) {
+  List<String> _getPrimaryKeyValues(List<String> primaryKeys, List<String> fieldNames, List<String> rowValue) {
     List<String> primaryKeyValues = new List(primaryKeys.length);
     int index = 0;
     int position = 0;
@@ -231,12 +225,10 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param tableName 表名
   /// @return
   ///
-  Future<List<String>> _getTablePrimaryKeys(
-      sqlite_api.Transaction transaction, String tableName) async {
+  Future<List<String>> _getTablePrimaryKeys(sqlite_api.Transaction transaction, String tableName) async {
     try {
-      List<Map<String, dynamic>> list = await transaction.rawQuery(
-          "SELECT keys FROM sync_download_logic WHERE tableName = ?",
-          [tableName]);
+      List<Map<String, dynamic>> list =
+          await transaction.rawQuery("SELECT keys FROM sync_download_logic WHERE tableName = ?", [tableName]);
       if (list != null && list.length > 0) {
         return _getPrimaryKeys(list[0]["keys"]);
       }
@@ -280,17 +272,14 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param tableName 表名
   /// @return
   ///
-  Future<bool> _isTableInDb(
-      sqlite_api.Transaction transaction, String tableName) async {
+  Future<bool> _isTableInDb(sqlite_api.Transaction transaction, String tableName) async {
     try {
-      List<Map<String, dynamic>> list = await transaction.rawQuery(
-          "select * from sqlite_master where type = 'table' and name = ?",
-          [tableName]);
+      List<Map<String, dynamic>> list =
+          await transaction.rawQuery("select * from sqlite_master where type = 'table' and name = ?", [tableName]);
 
       if (list == null || list.length <= 0) {
         Log().logger.e("表不存在:$tableName");
-        AppLogManager.insert(
-            ExceptionType.ERROR.toString(), "表不存在:" + tableName);
+        AppLogManager.insert(ExceptionType.ERROR.toString(), "表不存在:" + tableName);
         return false;
       }
     } catch (e) {
@@ -307,19 +296,16 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @param tableName 表名
   /// @return
   ///
-  Future<bool> _isColumnInTable(sqlite_api.Transaction transaction,
-      List<String> fieldNames, String tableName) async {
+  Future<bool> _isColumnInTable(sqlite_api.Transaction transaction, List<String> fieldNames, String tableName) async {
     try {
-      List<Map<String, dynamic>> list = await transaction.rawQuery(
-          "select sql from sqlite_master where type = 'table' and name = ?",
-          [tableName]);
+      List<Map<String, dynamic>> list =
+          await transaction.rawQuery("select sql from sqlite_master where type = 'table' and name = ?", [tableName]);
       if (list != null && list.length > 0) {
         String sqlStr = list[0]["sql"] as String;
         for (String fieldName in fieldNames) {
           if (!sqlStr.contains(fieldName)) {
             Log().logger.e("表:$tableName 不存在字段:$fieldName");
-            AppLogManager.insert(ExceptionType.ERROR.toString(),
-                "表:$tableName 不存在字段:$fieldName");
+            AppLogManager.insert(ExceptionType.ERROR.toString(), "表:$tableName 不存在字段:$fieldName");
             return false;
           }
         }
@@ -338,10 +324,8 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   ///  @param tableName 表名
   ///  @param timeStamp 时间戳
   ///
-  Future _updateTimeStamp(sqlite_api.Transaction transaction, String tableName,
-      String timeStamp) async {
-    await transaction.update(
-        "sync_download_logic", {"TimeStamp": timeStamp, "Transferred": 1},
+  Future _updateTimeStamp(sqlite_api.Transaction transaction, String tableName, String timeStamp) async {
+    await transaction.update("sync_download_logic", {"TimeStamp": timeStamp, "Transferred": 1},
         where: "TableName = ?", whereArgs: [tableName]);
   }
 }

@@ -55,6 +55,8 @@ class _$AppDatabase extends AppDatabase {
 
   MdPersonDao _mdPersonDaoInstance;
 
+  AppConfigDao _appConfigDaoInstance;
+
   Future<sqflite.Database> open(String name, List<Migration> migrations) async {
     final path = join(await sqflite.getDatabasesPath(), name);
 
@@ -79,6 +81,8 @@ class _$AppDatabase extends AppDatabase {
             'CREATE TABLE IF NOT EXISTS `sync_photo_upload` (`id` TEXT, `filePath` TEXT, `name` TEXT, `type` TEXT, `status` TEXT, `time` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `MD_Person` (`id` TEXT, `UserCode` TEXT, `Password` TEXT, `FirstName` TEXT, `LastName` TEXT, `Type` TEXT, `RouteNumber` TEXT, PRIMARY KEY (`id`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `app_config` (`userCode` TEXT, `userName` TEXT, `password` TEXT, `env` TEXT, `host` TEXT, `port` TEXT, `isSsl` TEXT, `syncInitFlag` TEXT, `version` TEXT, `lastUpdateTime` TEXT, PRIMARY KEY (`userCode`))');
       },
     );
   }
@@ -108,6 +112,11 @@ class _$AppDatabase extends AppDatabase {
   @override
   MdPersonDao get mdPersonDao {
     return _mdPersonDaoInstance ??= _$MdPersonDao(database, changeListener);
+  }
+
+  @override
+  AppConfigDao get appConfigDao {
+    return _appConfigDaoInstance ??= _$AppConfigDao(database, changeListener);
   }
 }
 
@@ -380,5 +389,122 @@ class _$MdPersonDao extends MdPersonDao {
   Future<MD_Person_Entity> findEntityById(String id) async {
     return _queryAdapter.query('SELECT * FROM MD_Person WHERE id = ?',
         arguments: <dynamic>[id], mapper: _mD_PersonMapper);
+  }
+}
+
+class _$AppConfigDao extends AppConfigDao {
+  _$AppConfigDao(this.database, this.changeListener)
+      : _queryAdapter = QueryAdapter(database),
+        _appConfigEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'app_config',
+            (AppConfigEntity item) => <String, dynamic>{
+                  'userCode': item.userCode,
+                  'userName': item.userName,
+                  'password': item.password,
+                  'env': item.env,
+                  'host': item.host,
+                  'port': item.port,
+                  'isSsl': item.isSsl,
+                  'syncInitFlag': item.syncInitFlag,
+                  'version': item.version,
+                  'lastUpdateTime': item.lastUpdateTime
+                }),
+        _appConfigEntityUpdateAdapter = UpdateAdapter(
+            database,
+            'app_config',
+            'userCode',
+            (AppConfigEntity item) => <String, dynamic>{
+                  'userCode': item.userCode,
+                  'userName': item.userName,
+                  'password': item.password,
+                  'env': item.env,
+                  'host': item.host,
+                  'port': item.port,
+                  'isSsl': item.isSsl,
+                  'syncInitFlag': item.syncInitFlag,
+                  'version': item.version,
+                  'lastUpdateTime': item.lastUpdateTime
+                }),
+        _appConfigEntityDeletionAdapter = DeletionAdapter(
+            database,
+            'app_config',
+            'userCode',
+            (AppConfigEntity item) => <String, dynamic>{
+                  'userCode': item.userCode,
+                  'userName': item.userName,
+                  'password': item.password,
+                  'env': item.env,
+                  'host': item.host,
+                  'port': item.port,
+                  'isSsl': item.isSsl,
+                  'syncInitFlag': item.syncInitFlag,
+                  'version': item.version,
+                  'lastUpdateTime': item.lastUpdateTime
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final _app_configMapper = (Map<String, dynamic> row) => AppConfigEntity(
+      row['userCode'] as String,
+      row['userName'] as String,
+      row['password'] as String,
+      row['env'] as String,
+      row['host'] as String,
+      row['port'] as String,
+      row['isSsl'] as String,
+      row['syncInitFlag'] as String,
+      row['version'] as String,
+      row['lastUpdateTime'] as String);
+
+  final InsertionAdapter<AppConfigEntity> _appConfigEntityInsertionAdapter;
+
+  final UpdateAdapter<AppConfigEntity> _appConfigEntityUpdateAdapter;
+
+  final DeletionAdapter<AppConfigEntity> _appConfigEntityDeletionAdapter;
+
+  @override
+  Future<List<AppConfigEntity>> findAll() async {
+    return _queryAdapter.queryList('SELECT * FROM app_config',
+        mapper: _app_configMapper);
+  }
+
+  @override
+  Future<AppConfigEntity> findEntityById(String id) async {
+    return _queryAdapter.query('SELECT * FROM app_config WHERE userCode = ?',
+        arguments: <dynamic>[id], mapper: _app_configMapper);
+  }
+
+  @override
+  Future<void> deleteById(String id) async {
+    await _queryAdapter.queryNoReturn('DELETE FROM app_config WHERE key = ?',
+        arguments: <dynamic>[id]);
+  }
+
+  @override
+  Future<void> deleteAll() async {
+    await _queryAdapter.queryNoReturn('DELETE FROM app_config');
+  }
+
+  @override
+  Future<void> insertEntity(AppConfigEntity entity) async {
+    await _appConfigEntityInsertionAdapter.insert(
+        entity, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> updateEntity(AppConfigEntity entity) {
+    return _appConfigEntityUpdateAdapter.updateAndReturnChangedRows(
+        entity, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
+  Future<int> deleteEntity(List<AppConfigEntity> entityList) {
+    return _appConfigEntityDeletionAdapter
+        .deleteListAndReturnChangedRows(entityList);
   }
 }
