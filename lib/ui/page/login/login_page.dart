@@ -1,6 +1,8 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/res/colors.dart';
+import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
@@ -73,7 +75,7 @@ class _LoginState extends State<LoginPage> {
                   children: <Widget>[
                     TextField(
                       decoration:
-                          InputDecoration(labelText: "UserName", hintText: "UserName", prefixIcon: Icon(Icons.person)),
+                          InputDecoration(labelText: IntlUtil.getString(context, Ids.userName), hintText: IntlUtil.getString(context, Ids.userName), prefixIcon: Icon(Icons.person)),
                       controller: userCtrl,
                     ),
                     TextField(

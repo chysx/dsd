@@ -6,8 +6,8 @@
 ///  Date:         2019/8/7 15:40
 
 class LoginInputInfo {
-  String userCode;
-  String password;
+  String userCode = "zhang";
+  String password = "11111111";
 
   LoginInputInfo([this.userCode, this.password]);
 }

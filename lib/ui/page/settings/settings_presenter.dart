@@ -13,7 +13,7 @@ import 'package:flutter/cupertino.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/2 17:54
 
-class SettingPresenter {
+class SettingPresenter with ChangeNotifier{
   List<SettingInfo> settingList = new List();
   SettingInfo curSettingInfo;
 
@@ -87,6 +87,12 @@ class SettingPresenter {
         break;
       }
     }
+    notifyListeners();
+  }
+
+  void setCurSsl(bool isSsl){
+    curSettingInfo.isSsl = isSsl;
+    notifyListeners();
   }
 
   bool isDisable() => curSettingInfo.env != 'OTHER';

@@ -1,18 +1,11 @@
-import 'package:dsd/bloc/bloc_base.dart';
-import 'package:dsd/bloc/setting_bloc.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/synchronization/model/sync_init_model.dart';
-import 'package:dsd/synchronization/sync/sync_constant.dart';
-import 'package:dsd/synchronization/sync/sync_parameter.dart';
-import 'package:dsd/synchronization/sync/sync_type.dart';
-import 'package:dsd/synchronization/sync_manager.dart';
-import 'package:dsd/ui/dialog/dialog.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:provider/provider.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -65,19 +58,13 @@ class _SettingState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    SettingBloc bloc = BlocProvider.of<SettingBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Setting'),
       ),
-      body: StreamBuilder<SettingPresenter>(
-        stream: bloc.settingStream,
-        builder: (BuildContext context, AsyncSnapshot<SettingPresenter> snapshot) {
-          SettingPresenter presenter = snapshot.data;
+      body: Consumer<SettingPresenter>(
+        builder: (context, presenter, _) {
           print("***build:settingStream");
-          if (presenter == null) {
-            presenter = bloc.presenter;
-          }
           print("cur is ssl = ${presenter.curSettingInfo.isSsl}");
           ctrlHost(presenter);
           ctrlPort(presenter);
@@ -99,8 +86,7 @@ class _SettingState extends State<SettingsPage> {
                       Checkbox(
                         value: presenter.curSettingInfo.isSsl,
                         onChanged: (value) {
-                          presenter.curSettingInfo.isSsl = value;
-                          bloc.notify();
+                          presenter.setCurSsl(value);
                         },
                       ),
                     ],
@@ -123,7 +109,6 @@ class _SettingState extends State<SettingsPage> {
                             isExpanded: true,
                             onChanged: (newValue) {
                               presenter.setCurSettingInfo(newValue);
-                              bloc.notify();
                             },
                             items: makeDropList(presenter)),
                       ),

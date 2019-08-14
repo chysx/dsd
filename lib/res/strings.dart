@@ -6,7 +6,7 @@
 ///  Date:         2019/8/1 15:53
 
 class Ids {
-  static String userName = 'userName';
+  static String userName = '';
 }
 
 ///简单多语言资源.

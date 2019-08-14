@@ -24,7 +24,7 @@ import 'login_response_bean.dart';
 ///  Date:         2019/8/2 11:00
 
 class LoginPresenter {
-  LoginInputInfo inputInfo;
+  LoginInputInfo inputInfo = new LoginInputInfo();
   AppConfigEntity appConfigEntity;
 
   void initData() {

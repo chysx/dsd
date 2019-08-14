@@ -1,11 +1,13 @@
+
 import 'package:dsd/application.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'res/strings.dart';
 
-void main() {
+void main(){
   Application.install();
   Routers.configRouters(Application.router);
   runApp(MyApp());
@@ -28,7 +30,11 @@ class MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       onGenerateRoute: Application.router.generator,
-      localizationsDelegates: [CustomLocalizations.delegate],
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CustomLocalizations.delegate
+      ],
       supportedLocales: CustomLocalizations.supportedLocales,
     );
   }

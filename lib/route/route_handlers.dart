@@ -1,10 +1,12 @@
-import 'package:dsd/bloc/bloc_base.dart';
-import 'package:dsd/bloc/setting_bloc.dart';
-import 'package:dsd/ui/page/login/login.dart';
+
+import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
+import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../application.dart';
+import 'package:provider/provider.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -21,8 +23,10 @@ Handler notFoundHandler = Handler(handlerFunc: (_, params) {
 Handler rootHandler = Handler(handlerFunc: (_, params) => LoginPage());
 
 Handler settingsHandler = Handler(handlerFunc: (_, params) {
-  return BlocProvider(
-    bloc: new SettingBloc(),
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(builder: (context) => new SettingPresenter()..initData()),
+    ],
     child: SettingsPage(),
   );
 });
