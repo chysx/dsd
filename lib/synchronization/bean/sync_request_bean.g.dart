@@ -8,7 +8,9 @@ part of 'sync_request_bean.dart';
 
 SyncRequestBean _$SyncRequestBeanFromJson(Map<String, dynamic> json) {
   return SyncRequestBean(
-    json['ReqContent'] == null ? null : ReqContent.fromJson(json['ReqContent'] as Map<String, dynamic>),
+    json['ReqContent'] == null
+        ? null
+        : ReqContent.fromJson(json['ReqContent'] as Map<String, dynamic>),
     json['DomainId'] as String,
     json['IsGzip'] as String,
     json['LoginName'] as String,
@@ -17,8 +19,9 @@ SyncRequestBean _$SyncRequestBeanFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$SyncRequestBeanToJson(SyncRequestBean instance) => <String, dynamic>{
-      'ReqContent': instance.reqContent == null ? null : instance.reqContent.toJson(),
+Map<String, dynamic> _$SyncRequestBeanToJson(SyncRequestBean instance) =>
+    <String, dynamic>{
+      'ReqContent': instance.reqContent,
       'DomainId': instance.domainId,
       'IsGzip': instance.isGzip,
       'LoginName': instance.loginName,
@@ -28,19 +31,17 @@ Map<String, dynamic> _$SyncRequestBeanToJson(SyncRequestBean instance) => <Strin
 
 ReqContent _$ReqContentFromJson(Map<String, dynamic> json) {
   return ReqContent(
-    (json['Tables'] as List)?.map((e) => e == null ? null : Tables.fromJson(e as Map<String, dynamic>))?.toList(),
+    (json['Tables'] as List)
+        ?.map((e) =>
+            e == null ? null : Tables.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
-Map<String, dynamic> _$ReqContentToJson(ReqContent instance) {
-  List<Map<String, dynamic>> list = new List();
-  for (Tables table in instance.tables) {
-    list.add(table.toJson());
-  }
-  return <String, dynamic>{
-    'Tables': list,
-  };
-}
+Map<String, dynamic> _$ReqContentToJson(ReqContent instance) =>
+    <String, dynamic>{
+      'Tables': instance.tables,
+    };
 
 Tables _$TablesFromJson(Map<String, dynamic> json) {
   return Tables(
@@ -51,15 +52,9 @@ Tables _$TablesFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$TablesToJson(Tables instance) {
-  List<dynamic> list = new List();
-  for (dynamic value in instance.paramValues) {
-    list.add(value);
-  }
-  return <String, dynamic>{
-    'Name': instance.name,
-    'ParamValues': list,
-    'Fields': instance.fields,
-    'Rows': instance.rows,
-  };
-}
+Map<String, dynamic> _$TablesToJson(Tables instance) => <String, dynamic>{
+      'Name': instance.name,
+      'ParamValues': instance.paramValues,
+      'Fields': instance.fields,
+      'Rows': instance.rows,
+    };

@@ -22,7 +22,11 @@ class Application {
   static User user;
 
   static void install() {
-    database = new DbHelper().database;
+    new DbHelper();
+    Future.delayed(new Duration(seconds: 3),(){
+      database = new DbHelper().database;
+      print('database = $database');
+    });
     logger = new Log().logger;
     httpService = new HttpService().dio;
     router = new Router();

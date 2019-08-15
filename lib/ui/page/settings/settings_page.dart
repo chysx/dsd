@@ -1,8 +1,8 @@
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingState extends State<SettingsPage> {
   TextEditingController hostCtrl;
   TextEditingController portCtrl;
-  bool isSelect = false;
 
   void ctrlHost(SettingPresenter presenter) {
     if (hostCtrl == null) {
@@ -64,8 +63,6 @@ class _SettingState extends State<SettingsPage> {
       ),
       body: Consumer<SettingPresenter>(
         builder: (context, presenter, _) {
-          print("***build:settingStream");
-          print("cur is ssl = ${presenter.curSettingInfo.isSsl}");
           ctrlHost(presenter);
           ctrlPort(presenter);
           return Padding(
@@ -86,7 +83,7 @@ class _SettingState extends State<SettingsPage> {
                       Checkbox(
                         value: presenter.curSettingInfo.isSsl,
                         onChanged: (value) {
-                          presenter.setCurSsl(value);
+                          presenter.onEvent(SettingEvent.ChangeCheckBox, value);
                         },
                       ),
                     ],
@@ -108,7 +105,7 @@ class _SettingState extends State<SettingsPage> {
                             value: presenter.curSettingInfo.env,
                             isExpanded: true,
                             onChanged: (newValue) {
-                              presenter.setCurSettingInfo(newValue);
+                              presenter.onEvent(SettingEvent.SelectEnv, newValue);
                             },
                             items: makeDropList(presenter)),
                       ),
@@ -167,14 +164,10 @@ class _SettingState extends State<SettingsPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-//                            presenter.uploadData(context);
-                            String lastDateStr =
-                                DateUtil.getDateStrByTimeStr("2019-08-06 11:36:19", format: DateFormat.YEAR_MONTH_DAY);
-
-                            int lastS = DateUtil.getDateTime(lastDateStr).day;
-                            int nowS = new DateTime.now().day;
-                            print("lastDateStr = ${lastDateStr}");
-                            print("lastS = ${lastS},nowS = ${nowS}");
+                            presenter.onEvent(SettingEvent.Save);
+                            CustomerDialog.showCustomerDialog(context, onConfirm: () {
+                              Navigator.of(context).pop();
+                            });
                           },
                         ),
                       ),

@@ -82,7 +82,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `MD_Person` (`id` TEXT, `UserCode` TEXT, `Password` TEXT, `FirstName` TEXT, `LastName` TEXT, `Type` TEXT, `RouteNumber` TEXT, PRIMARY KEY (`id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `app_config` (`userCode` TEXT, `userName` TEXT, `password` TEXT, `env` TEXT, `host` TEXT, `port` TEXT, `isSsl` TEXT, `syncInitFlag` TEXT, `version` TEXT, `lastUpdateTime` TEXT, PRIMARY KEY (`userCode`))');
+            'CREATE TABLE IF NOT EXISTS `app_config` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `userCode` TEXT, `userName` TEXT, `password` TEXT, `env` TEXT, `host` TEXT, `port` TEXT, `isSsl` TEXT, `syncInitFlag` TEXT, `version` TEXT, `lastUpdateTime` TEXT)');
       },
     );
   }
@@ -399,6 +399,7 @@ class _$AppConfigDao extends AppConfigDao {
             database,
             'app_config',
             (AppConfigEntity item) => <String, dynamic>{
+                  'id': item.id,
                   'userCode': item.userCode,
                   'userName': item.userName,
                   'password': item.password,
@@ -413,8 +414,9 @@ class _$AppConfigDao extends AppConfigDao {
         _appConfigEntityUpdateAdapter = UpdateAdapter(
             database,
             'app_config',
-            'userCode',
+            'id',
             (AppConfigEntity item) => <String, dynamic>{
+                  'id': item.id,
                   'userCode': item.userCode,
                   'userName': item.userName,
                   'password': item.password,
@@ -429,8 +431,9 @@ class _$AppConfigDao extends AppConfigDao {
         _appConfigEntityDeletionAdapter = DeletionAdapter(
             database,
             'app_config',
-            'userCode',
+            'id',
             (AppConfigEntity item) => <String, dynamic>{
+                  'id': item.id,
                   'userCode': item.userCode,
                   'userName': item.userName,
                   'password': item.password,
@@ -450,6 +453,7 @@ class _$AppConfigDao extends AppConfigDao {
   final QueryAdapter _queryAdapter;
 
   final _app_configMapper = (Map<String, dynamic> row) => AppConfigEntity(
+      row['id'] as int,
       row['userCode'] as String,
       row['userName'] as String,
       row['password'] as String,
@@ -474,14 +478,14 @@ class _$AppConfigDao extends AppConfigDao {
   }
 
   @override
-  Future<AppConfigEntity> findEntityById(String id) async {
+  Future<AppConfigEntity> findEntityByUserCode(String userCode) async {
     return _queryAdapter.query('SELECT * FROM app_config WHERE userCode = ?',
-        arguments: <dynamic>[id], mapper: _app_configMapper);
+        arguments: <dynamic>[userCode], mapper: _app_configMapper);
   }
 
   @override
   Future<void> deleteById(String id) async {
-    await _queryAdapter.queryNoReturn('DELETE FROM app_config WHERE key = ?',
+    await _queryAdapter.queryNoReturn('DELETE FROM app_config WHERE id = ?',
         arguments: <dynamic>[id]);
   }
 

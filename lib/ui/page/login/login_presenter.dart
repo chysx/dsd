@@ -13,6 +13,7 @@ import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:uuid/uuid.dart';
 
 import 'login_response_bean.dart';
 
@@ -28,10 +29,11 @@ class LoginPresenter {
   AppConfigEntity appConfigEntity;
 
   void initData() {
-    initAppConfigEntity();
+
   }
 
   void login(BuildContext context, LoginInputInfo loginInputInfo) {
+    initAppConfigEntity();
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
@@ -51,11 +53,10 @@ class LoginPresenter {
   }
 
   void initAppConfigEntity() {
-    Observable.just(1).delay(new Duration(milliseconds: 2000)).flatMap((data) {
-      return Observable.fromFuture(Application.database.appConfigDao.findAll());
-    }).listen((data) {
-      if (data != null && data.length > 0) {
-        appConfigEntity = data[0];
+    Future.delayed(new Duration(seconds: 2),() async {
+      List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
+      if (!ObjectUtil.isEmptyList(list)) {
+        appConfigEntity = list[0];
       }
     });
   }
@@ -187,7 +188,7 @@ class LoginPresenter {
   Future updateUserToDb(SyncType syncType, LoginInputInfo inputInfo) async {
     AppConfigEntity entity = await AppConfigManager.queryByUserCode(inputInfo.userCode);
     entity.syncInitFlag = syncType.toString();
-    await AppConfigManager.updateByUserCode(entity);
+    await AppConfigManager.update(entity);
   }
 
   void saveUserToApp(LoginResponseBean responseBean, LoginInputInfo inputInfo) {

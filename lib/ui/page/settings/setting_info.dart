@@ -10,4 +10,22 @@ class SettingInfo {
   String port;
   bool isSsl = false;
   String env;
+
+  static const String IS_SSL = 'True';
+  static const String IS_NOT_SSL = 'False';
+
+  static String boolToStr(bool isSsl){
+    return isSsl ? IS_SSL : IS_NOT_SSL;
+  }
+
+  static bool strToBool(String isSsl){
+    return isSsl == IS_SSL ? true : false;
+  }
+
+  @override
+  String toString() {
+    return 'SettingInfo{host: $host, port: $port, isSsl: $isSsl, env: $env}';
+  }
+
+
 }

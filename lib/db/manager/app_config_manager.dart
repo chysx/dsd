@@ -1,4 +1,5 @@
 import 'package:dsd/application.dart';
+import 'package:dsd/db/database.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -17,15 +18,19 @@ class AppConfigManager {
     await Application.database.appConfigDao.deleteAll();
   }
 
-  static queryByUserCode(String userCode) async {
-    await Application.database.appConfigDao.findEntityById(userCode);
+  static Future<AppConfigEntity> queryByUserCode(String userCode) async {
+    return await Application.database.appConfigDao.findEntityByUserCode(userCode);
   }
 
-  static deleteByUserCode(String userCode) async {
-    await Application.database.appConfigDao.deleteById(userCode);
+  static Future<List<AppConfigEntity>> queryAll() async {
+    return await Application.database.appConfigDao.findAll();
   }
 
-  static updateByUserCode(AppConfigEntity entity) async {
+  static deleteById(String id) async {
+    await Application.database.appConfigDao.deleteById(id);
+  }
+
+  static update(AppConfigEntity entity) async {
     await Application.database.appConfigDao.updateEntity(entity);
   }
 }

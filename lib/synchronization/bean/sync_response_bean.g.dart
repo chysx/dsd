@@ -11,11 +11,14 @@ SyncResponseBean _$SyncResponseBeanFromJson(Map<String, dynamic> json) {
     json['LoginName'] as String,
     json['Status'] as int,
     json['SyncType'] as int,
-    json['Result'] == null ? null : Result.fromJson(json['Result'] as Map<String, dynamic>),
+    json['Result'] == null
+        ? null
+        : Result.fromJson(json['Result'] as Map<String, dynamic>),
   );
 }
 
-Map<String, dynamic> _$SyncResponseBeanToJson(SyncResponseBean instance) => <String, dynamic>{
+Map<String, dynamic> _$SyncResponseBeanToJson(SyncResponseBean instance) =>
+    <String, dynamic>{
       'LoginName': instance.loginName,
       'Status': instance.status,
       'SyncType': instance.syncType,
@@ -24,7 +27,10 @@ Map<String, dynamic> _$SyncResponseBeanToJson(SyncResponseBean instance) => <Str
 
 Result _$ResultFromJson(Map<String, dynamic> json) {
   return Result(
-    (json['Tables'] as List)?.map((e) => e == null ? null : Tables.fromJson(e as Map<String, dynamic>))?.toList(),
+    (json['Tables'] as List)
+        ?.map((e) =>
+            e == null ? null : Tables.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 

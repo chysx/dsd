@@ -13,8 +13,8 @@ abstract class AppConfigDao {
   @Query('SELECT * FROM app_config')
   Future<List<AppConfigEntity>> findAll();
 
-  @Query('SELECT * FROM app_config WHERE userCode = :id')
-  Future<AppConfigEntity> findEntityById(String id);
+  @Query('SELECT * FROM app_config WHERE userCode = :userCode')
+  Future<AppConfigEntity> findEntityByUserCode(String userCode);
 
   @insert
   Future<void> insertEntity(AppConfigEntity entity);
@@ -22,7 +22,7 @@ abstract class AppConfigDao {
   @delete
   Future<int> deleteEntity(List<AppConfigEntity> entityList);
 
-  @Query('DELETE FROM app_config WHERE key = :id')
+  @Query('DELETE FROM app_config WHERE id = :id')
   Future<void> deleteById(String id);
 
   @Query('DELETE FROM app_config')

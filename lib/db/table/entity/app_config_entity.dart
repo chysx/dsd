@@ -9,7 +9,8 @@ import 'package:floor/floor.dart';
 
 @Entity(tableName: "app_config")
 class AppConfigEntity {
-  @primaryKey
+  @PrimaryKey(autoGenerate: true)
+  int id;
   String userCode;
   String userName;
   String password;
@@ -22,7 +23,8 @@ class AppConfigEntity {
   String lastUpdateTime;
 
   AppConfigEntity(
-      [this.userCode,
+      [this.id,
+      this.userCode,
       this.userName,
       this.password,
       this.env,
