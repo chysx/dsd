@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/ui/page/login/user.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flustars/flustars.dart';
 import 'package:logger/logger.dart';
 
 import 'db/database.dart';
@@ -23,13 +24,14 @@ class Application {
 
   static void install() {
     new DbHelper();
-    Future.delayed(new Duration(seconds: 3),(){
+    Future.delayed(new Duration(seconds: 8),(){
       database = new DbHelper().database;
       print('database = $database');
     });
     logger = new Log().logger;
     httpService = new HttpService().dio;
     router = new Router();
+    DirectoryUtil.getInstance();
     user = new User();
   }
 }

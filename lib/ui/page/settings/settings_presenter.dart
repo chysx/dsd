@@ -4,7 +4,6 @@ import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/net/http_config.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:flustars/flustars.dart';
-import 'package:uuid/uuid.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.

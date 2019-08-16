@@ -6,5 +6,5 @@
 ///  Date:         2019/7/29 17:10
 
 class Constant {
-  static const String DB_NAME = "iDelivery.db";
+  static const String DB_NAME = "dsd.db";
 }

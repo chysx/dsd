@@ -1,3 +1,4 @@
+import 'package:dsd/db/util.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
@@ -57,9 +58,15 @@ class _SettingState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Setting'),
+        title: GestureDetector(
+          child:Text('Setting'),
+          onLongPress: (){
+            DbUtil.copyDb();
+          },
+        ),
       ),
       body: Consumer<SettingPresenter>(
         builder: (context, presenter, _) {
