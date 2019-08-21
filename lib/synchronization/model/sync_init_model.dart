@@ -29,16 +29,14 @@ class SyncInitModel extends AbstractSyncDownloadModel {
 
   @override
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
-    print("11111111111111111111111111");
     await clearDB();
-    print("22222222222222222222222222222222");
     await initDownloadLogic();
-    print("333333333333333333333333333333");
     return super.prepare();
   }
 
   List<String> getTableNameNotClear() {
     List<String> tableList = new List();
+    tableList.add('app_config');
     return tableList;
   }
 

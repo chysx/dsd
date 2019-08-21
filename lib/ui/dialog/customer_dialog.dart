@@ -1,3 +1,5 @@
+import 'package:dsd/res/strings.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -14,14 +16,16 @@ typedef OnCancel= void Function();
 class CustomerDialog extends StatelessWidget {
   final OnConfirm onConfirm;
   final OnCancel onCancel;
+  final String title;
+  final String msg;
 
-  CustomerDialog({this.onConfirm,this.onCancel,Key key}) : super(key: key);
+  CustomerDialog({this.title,this.msg,this.onConfirm,this.onCancel,Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Title'),
-      content: Text('zhang guo peng'),
+      title: Text(title),
+      content: Text(msg),
       actions: <Widget>[
         FlatButton(
           child: Text('ok'),
@@ -41,12 +45,13 @@ class CustomerDialog extends StatelessWidget {
     );
   }
 
-  static showCustomerDialog(BuildContext context,{OnConfirm onConfirm,OnCancel onCancel}) {
+  static showCustomerDialog(BuildContext context,{String title,String msg,OnConfirm onConfirm,OnCancel onCancel}) {
+    if(title == null) title = IntlUtil.getString(context, Ids.general_warning);
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          return new CustomerDialog(onConfirm: onConfirm,onCancel: onCancel);
+          return new CustomerDialog(title:title,msg:msg,onConfirm: onConfirm,onCancel: onCancel);
         });
   }
 

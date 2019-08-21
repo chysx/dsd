@@ -34,4 +34,11 @@ class AppConfigEntity {
       this.syncInitFlag,
       this.version,
       this.lastUpdateTime]);
+
+  @override
+  String toString() {
+    return 'AppConfigEntity{id: $id, userCode: $userCode, userName: $userName, password: $password, env: $env, host: $host, port: $port, isSsl: $isSsl, syncInitFlag: $syncInitFlag, version: $version, lastUpdateTime: $lastUpdateTime}';
+  }
+
+
 }

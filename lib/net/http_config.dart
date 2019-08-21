@@ -91,7 +91,7 @@ enum UrlConfig { PRD, UAT, QAS, DEV }
 
 class UrlDev {
   static const String HOST = "180.166.98.86";
-  static const String PORT = "1090";
+  static const String PORT = "1089";
   static const bool IS_SSL = false;
   static const String ENV = "DEV";
 }
@@ -123,6 +123,9 @@ class Url {
   static String PORT = HttpConfig.getPort();
 
   static String API() {
+    SCHEME = HttpConfig.getScheme();
+    HOST = HttpConfig.getHost();
+    PORT = HttpConfig.getPort();
     return SCHEME + HOST + ":" + PORT;
   }
 }

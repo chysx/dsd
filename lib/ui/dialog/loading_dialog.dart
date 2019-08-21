@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoadingDialog extends Dialog {
-  String msg;
+  final String msg;
 
   LoadingDialog({Key key, @required this.msg}) : super(key: key);
 
@@ -38,12 +38,12 @@ class LoadingDialog extends Dialog {
     );
   }
 
-  static showLoadingDialog(BuildContext context) {
+  static showLoadingDialog(BuildContext context,{String msg = 'sync data...'}) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          return new LoadingDialog(msg: '正在获取详情');
+          return new LoadingDialog(msg: msg);
         });
   }
 

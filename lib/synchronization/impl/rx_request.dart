@@ -21,7 +21,7 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
 
   @override
   void execute(Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) {
-    AppLogManager.insert(ExceptionType.INFO.toString(), syncMode.syncType.toString());
+    AppLogManager.insert(ExceptionType.INFO.toString(), msg: syncMode.syncType.toString());
 
     observable.flatMap((syncDataBean) {
       return Observable.fromFuture(syncMode.parser.parse(syncDataBean));
@@ -34,29 +34,29 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
     }).listen((isSuccess) {
       if (isSuccess) {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_SUCCESS.toString());
+            ExceptionType.INFO.toString(), msg: syncMode.syncType.toString() + ":" + SyncStatus.SYNC_SUCCESS.toString());
         syncMode.onSuccess();
         if (onSuccessSync != null) {
           onSuccessSync();
         }
       } else {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
+            ExceptionType.INFO.toString(), msg: syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
         if (onFailSync != null) {
           onFailSync(new Exception("False"));
         }
       }
     }, onError: (e) {
-      AppLogManager.insert(ExceptionType.WARN.toString(), e);
+      AppLogManager.insert(ExceptionType.WARN.toString(), error: e);
       Log().logger.e(e.toString());
       try {
         AppLogManager.insert(
-            ExceptionType.INFO.toString(), syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
+            ExceptionType.INFO.toString(), msg: syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
       } catch (ex) {
         Log().logger.e(e.toString());
-        AppLogManager.insert(ExceptionType.WARN.toString(), ex);
+        AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
       }
 
       try {
@@ -65,7 +65,7 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
         }
       } catch (ex) {
         Log().logger.e(e.toString());
-        AppLogManager.insert(ExceptionType.WARN.toString(), ex);
+        AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
       }
       syncMode.onFinish();
     }, onDone: () {

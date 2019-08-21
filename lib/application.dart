@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 
 import 'db/database.dart';
 import 'net/http_service.dart';
+import 'utils/device_info.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -20,11 +21,13 @@ class Application {
   static Logger logger;
   static Dio httpService;
   static Router router;
+  static DeviceInfo deviceInfo;
   static User user;
 
   static void install() {
     new DbHelper();
-    Future.delayed(new Duration(seconds: 8),(){
+    deviceInfo = new DeviceInfo();
+    Future.delayed(new Duration(seconds: 3),(){
       database = new DbHelper().database;
       print('database = $database');
     });

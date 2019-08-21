@@ -1,7 +1,9 @@
+import 'package:dsd/application.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/net/http_config.dart';
+import 'package:dsd/net/http_service.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:flustars/flustars.dart';
 
@@ -22,7 +24,7 @@ enum SettingEvent{
 
 class SettingPresenter extends EventNotifier<SettingEvent>{
   List<SettingInfo> settingList = new List();
-  SettingInfo curSettingInfo;
+  SettingInfo curSettingInfo = new SettingInfo();
 
 
   @override
@@ -43,7 +45,7 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
     super.onEvent(event,data);
   }
 
-  void initData() {
+  Future initData() {
     initSettingList();
     initCurSettingInfo();
   }
@@ -95,7 +97,12 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
   }
 
   Future initCurSettingInfo() async {
-    curSettingInfo = new SettingInfo();
+    curSettingInfo = await getCurSettingInfo();
+    onEvent(SettingEvent.InitData);
+  }
+
+  static Future<SettingInfo> getCurSettingInfo() async {
+    SettingInfo curSettingInfo = new SettingInfo();
     List<AppConfigEntity> list = await AppConfigManager.queryAll();
     if(ObjectUtil.isEmptyList(list)){
       UrlConfig config = HttpConfig.urlConfig;
@@ -145,10 +152,7 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
         ..env = entity.env;
     }
 
-    onEvent(SettingEvent.InitData);
-
-    print("0000000000:$curSettingInfo");
-
+    return curSettingInfo;
   }
 
   void setCurSettingInfo(String env) {
@@ -196,6 +200,21 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
       await AppConfigManager.update(entity);
     }
 
+    resetUrlConfig(curSettingInfo);
+
+  }
+
+  static void resetUrlConfig(SettingInfo settingInfo){
+    if(settingInfo.env == UrlDev.ENV){
+      HttpConfig.urlConfig = UrlConfig.DEV;
+    }else if(settingInfo.env == UrlQas.ENV){
+      HttpConfig.urlConfig = UrlConfig.QAS;
+    }else if(settingInfo.env == UrlUat.ENV){
+      HttpConfig.urlConfig = UrlConfig.UAT;
+    }else if(settingInfo.env == UrlPrd.ENV){
+      HttpConfig.urlConfig = UrlConfig.PRD;
+    }
+    HttpService().resetConfigDio();
   }
 
 }

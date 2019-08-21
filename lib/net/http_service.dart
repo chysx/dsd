@@ -23,8 +23,13 @@ class HttpService {
   }
 
   static BaseOptions configDio() {
-    return new BaseOptions(baseUrl: new HttpConfig().api(), connectTimeout: 5000, receiveTimeout: 3000);
+    return new BaseOptions(baseUrl: new HttpConfig().api(), connectTimeout: TimeOut.CONNECT_TIMEOUT,
+        receiveTimeout: TimeOut.READ_TIMEOUT);
   }
 
   factory HttpService() => _getInstance();
+
+  void resetConfigDio(){
+    dio.options = configDio();
+  }
 }

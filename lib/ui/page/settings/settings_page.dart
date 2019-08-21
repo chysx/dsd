@@ -58,12 +58,11 @@ class _SettingState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          child:Text('Setting'),
-          onLongPress: (){
+          child: Text('Setting'),
+          onLongPress: () {
             DbUtil.copyDb();
           },
         ),
@@ -172,7 +171,7 @@ class _SettingState extends State<SettingsPage> {
                           ),
                           onPressed: () {
                             presenter.onEvent(SettingEvent.Save);
-                            CustomerDialog.showCustomerDialog(context, onConfirm: () {
+                            CustomerDialog.showCustomerDialog(context, msg:'save success',onConfirm: () {
                               Navigator.of(context).pop();
                             });
                           },

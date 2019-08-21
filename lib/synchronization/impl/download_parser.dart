@@ -86,7 +86,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
     } catch (e) {
       result = false;
       Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), e);
+      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
       throw e;
     }
 
@@ -126,7 +126,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
       }
     } catch (e) {
       Log().logger.e("tableName = $tableName row = $tempRow \n" + e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), "tableName = $tableName row = $tempRow");
+      AppLogManager.insert(ExceptionType.ERROR.toString(), msg: "tableName = $tableName row = $tempRow");
       throw e;
     }
   }
@@ -171,7 +171,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
       if (list != null && list.length > 0) return true;
     } catch (e) {
       Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), e);
+      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
       throw e;
     }
 
@@ -234,7 +234,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
       }
     } catch (e) {
       Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), e);
+      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
       throw e;
     }
     return null;
@@ -279,12 +279,12 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
 
       if (list == null || list.length <= 0) {
         Log().logger.e("表不存在:$tableName");
-        AppLogManager.insert(ExceptionType.ERROR.toString(), "表不存在:" + tableName);
+        AppLogManager.insert(ExceptionType.ERROR.toString(), msg: "表不存在:" + tableName);
         return false;
       }
     } catch (e) {
       Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), e);
+      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
       throw e;
     }
     return true;
@@ -305,14 +305,14 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
         for (String fieldName in fieldNames) {
           if (!sqlStr.contains(fieldName)) {
             Log().logger.e("表:$tableName 不存在字段:$fieldName");
-            AppLogManager.insert(ExceptionType.ERROR.toString(), "表:$tableName 不存在字段:$fieldName");
+            AppLogManager.insert(ExceptionType.ERROR.toString(), msg: "表:$tableName 不存在字段:$fieldName");
             return false;
           }
         }
       }
     } catch (e) {
       Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), e);
+      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
       throw e;
     }
     return true;

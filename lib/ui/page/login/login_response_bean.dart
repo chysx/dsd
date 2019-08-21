@@ -1,6 +1,6 @@
 class LoginResponseBean {
   String loginName;
-  String exceptionCode;
+  int exceptionCode;
   String exception;
   int status;
   int syncType;

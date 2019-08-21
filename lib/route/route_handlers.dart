@@ -1,5 +1,7 @@
 
 import 'package:dsd/ui/page/login/login_page.dart';
+import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/page/route/route_page.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:fluro/fluro.dart';
@@ -20,7 +22,14 @@ Handler notFoundHandler = Handler(handlerFunc: (_, params) {
   return null;
 });
 
-Handler rootHandler = Handler(handlerFunc: (_, params) => LoginPage());
+Handler rootHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(builder: (context) => new LoginPresenter()..initData()),
+    ],
+    child: LoginPage(),
+  );
+});
 
 Handler settingsHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
@@ -29,4 +38,8 @@ Handler settingsHandler = Handler(handlerFunc: (_, params) {
     ],
     child: SettingsPage(),
   );
+});
+
+Handler routeHandler = Handler(handlerFunc: (_,params) {
+  return RoutePage();
 });

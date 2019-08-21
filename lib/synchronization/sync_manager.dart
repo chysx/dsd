@@ -2,7 +2,7 @@ import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_constant.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
-import 'package:dsd/ui/dialog/dialog.dart';
+import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'base/abstract_sync_mode.dart';
 import 'model/sync_init_model.dart';

@@ -17,7 +17,7 @@ import 'dart:io';
 ///  Date:         2019/7/29 16:51
 
 class AppLogManager {
-  static Future insert(String type, [String msg, Error error]) async {
+  static Future insert(String type, {String msg, Error error}) async {
     AppLogDao dao = new DbHelper().database.appLogDao;
     if (error != null) {
       msg = msg + "  \n" + error.toString();

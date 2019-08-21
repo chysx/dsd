@@ -11,10 +11,12 @@ import 'package:fluro/fluro.dart';
 class Routers {
   static const root = '/';
   static const settings = '/settings';
+  static const route = '/route';
 
   static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
     router.define(root, handler: rootHandler);
     router.define(settings, handler: settingsHandler);
+    router.define(route, handler: routeHandler);
   }
 }
