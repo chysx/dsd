@@ -9,8 +9,8 @@ import 'package:floor/floor.dart';
 
 @Entity(tableName: "MD_Person")
 class MD_Person_Entity {
-  @primaryKey
-  String id;
+  @PrimaryKey(autoGenerate: true)
+  int id;
   String UserCode;
   String Password;
   String FirstName;

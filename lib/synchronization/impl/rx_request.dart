@@ -48,6 +48,16 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
         }
       }
     }, onError: (e) {
+      try {
+        if (onFailSync != null) {
+          onFailSync(e);
+        }
+      } catch (ex) {
+        Log().logger.e(e.toString());
+        AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
+      }
+      syncMode.onFinish();
+
       AppLogManager.insert(ExceptionType.WARN.toString(), error: e);
       Log().logger.e(e.toString());
       try {
@@ -58,16 +68,6 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
         Log().logger.e(e.toString());
         AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
       }
-
-      try {
-        if (onFailSync != null) {
-          onFailSync(e);
-        }
-      } catch (ex) {
-        Log().logger.e(e.toString());
-        AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
-      }
-      syncMode.onFinish();
     }, onDone: () {
       syncMode.onFinish();
     });

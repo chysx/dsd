@@ -303,7 +303,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
       if (list != null && list.length > 0) {
         String sqlStr = list[0]["sql"] as String;
         for (String fieldName in fieldNames) {
-          if (!sqlStr.contains(fieldName)) {
+          if (!sqlStr.toLowerCase().contains(fieldName.toLowerCase())) {
             Log().logger.e("表:$tableName 不存在字段:$fieldName");
             AppLogManager.insert(ExceptionType.ERROR.toString(), msg: "表:$tableName 不存在字段:$fieldName");
             return false;

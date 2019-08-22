@@ -27,7 +27,7 @@ class Application {
   static void install() {
     new DbHelper();
     deviceInfo = new DeviceInfo();
-    Future.delayed(new Duration(seconds: 3),(){
+    Future.delayed(new Duration(seconds: 5),(){
       database = new DbHelper().database;
       print('database = $database');
     });

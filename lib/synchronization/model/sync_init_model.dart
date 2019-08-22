@@ -21,12 +21,6 @@ class SyncInitModel extends AbstractSyncDownloadModel {
   SyncInitModel(SyncType syncType, {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
       : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync);
 
-  List<TableKeyBean> _getTableKeyList() {
-    List<TableKeyBean> tableKeyBeanList = new List();
-    tableKeyBeanList.add(new TableKeyBean("MD_Person", ["UserCode"]));
-    return tableKeyBeanList;
-  }
-
   @override
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
     await clearDB();
@@ -37,6 +31,7 @@ class SyncInitModel extends AbstractSyncDownloadModel {
   List<String> getTableNameNotClear() {
     List<String> tableList = new List();
     tableList.add('app_config');
+    tableList.add('app_log');
     return tableList;
   }
 
@@ -82,5 +77,34 @@ class SyncInitModel extends AbstractSyncDownloadModel {
   @override
   bool isAllDataAndAllInsert(String tableName) {
     return true;
+  }
+
+  List<TableKeyBean> _getTableKeyList() {
+    List<TableKeyBean> tableKeyBeanList = new List();
+    tableKeyBeanList.add(new TableKeyBean("MD_Product", ["ProductCode"]));
+    tableKeyBeanList.add(new TableKeyBean("MD_Dictionary", ["id"]));
+    tableKeyBeanList.add(new TableKeyBean("MD_Person", ["UserCode"]));
+    tableKeyBeanList.add(new TableKeyBean("MD_Contact", ["AccountNumber__c"]));
+    tableKeyBeanList.add(new TableKeyBean("MD_Account", ["AccountNumber"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_SystemConfig", ["Category", "KeyName"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_ShipmentHeader", ["ShipmentNo"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_ShipmentItem", ["ShipmentNo", "ProductCode", "ProductUnit"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_ShipmentHeader", ["id"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_ShipmentItem", ["HeaderId", "ProductCode", "ProductUnit"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_TruckStock", ["TruckId", "ShipmentNo", "ProductCode", "ProductUnit"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_TruckStockTracking", ["id"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_Truck", ["id"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_DeliveryHeader", ["DeliveryNo"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_M_DeliveryItem", ["DeliveryNo", "ProductCode", "ProductUnit","ItemSequence"]));
+
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_Visit", ["VisitId"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_DeliveryHeader", ["DeliveryNo"]));
+    tableKeyBeanList.add(new TableKeyBean("DSD_T_DeliveryItem", ["DeliveryNo", "ProductCode", "ProductUnit","ItemSequence"]));
+    return tableKeyBeanList;
   }
 }

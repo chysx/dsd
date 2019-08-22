@@ -20,6 +20,7 @@ class AppLogManager {
   static Future insert(String type, {String msg, Error error}) async {
     AppLogDao dao = new DbHelper().database.appLogDao;
     if (error != null) {
+      msg = msg?? "";
       msg = msg + "  \n" + error.toString();
     }
     AppLogEntity entity = await _createAppLogEntity(type, msg);

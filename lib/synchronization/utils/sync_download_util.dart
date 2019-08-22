@@ -33,47 +33,21 @@ class SyncDownloadUtil {
     Map<String, Map<String, String>> tableMap = new Map();
 
     tableMap["DSD_T_ShipmentHeader"] = getFieldMapByDirty();
-    tableMap["DSD_T_ShipmentHelper"] = getFieldMapByIdOrDirty(isAddId);
-    tableMap["DSD_T_ShipmentItem"] = getFieldMapByIdOrDirty(isAddId);
-    tableMap["DSD_T_ShipmentFinance"] = getFieldMapByIdOrDirty(isAddId);
+    tableMap["DSD_T_ShipmentHelper"] = getFieldMapByDirty();
+    tableMap["DSD_T_ShipmentItem"] = getFieldMapByDirty();
+    tableMap["DSD_T_ShipmentFinance"] = getFieldMapByDirty();
 
-    tableMap["DSD_T_TruckStock"] = getFieldMapByIdOrDirty(isAddId);
+    tableMap["DSD_T_TruckStock"] = getFieldMapByDirty();
     tableMap["DSD_T_TruckStockTracking"] = getFieldMapByDirty();
 
-    tableMap["DSD_T_Visit"] = getFieldMapByIdOrDirty(isAddId);
-    tableMap["DSD_T_DeliveryHeader"] = getFieldMapByIdOrDirty(isAddId);
-    tableMap["DSD_T_DeliveryItem"] = getFieldMapByIdOrDirty(isAddId);
-    tableMap["DSD_T_DeliveryBilling"] = getFieldMapByIdOrDirty(isAddId);
-
-    tableMap["DSD_T_DayTimeTracking"] = getFieldMapByDirtyAndFileUploadFlag();
-
-    tableMap["DSD_T_TruckCheckResult"] = getFieldMapByDirty();
-    tableMap["DSD_T_ARCollection"] = getFieldMapByDirty();
-    tableMap["DSD_M_ShipmentVanSalesRoute"] = getFieldMapByIdOrDirty(isAddId);
+    tableMap["DSD_T_Visit"] = getFieldMapByDirty();
+    tableMap["DSD_T_DeliveryHeader"] = getFieldMapByDirty();
+    tableMap["DSD_T_DeliveryItem"] = getFieldMapByDirty();
 
     tableMap["DSD_T_Order"] = getFieldMapByDirty();
     tableMap["DSD_T_OrderItem"] = getFieldMapByDirty();
 
-    tableMap["MD_Person"] = getFieldMapById(isAddId);
-
     return tableMap;
-  }
-
-  static Map<String, String> getFieldMapById(bool isAddId) {
-    Map<String, String> fieldMap = new Map();
-    if (isAddId) {
-      fieldMap["Id"] = new Uuid().v1();
-    }
-    return fieldMap;
-  }
-
-  static Map<String, String> getFieldMapByIdOrDirty(bool isAddId) {
-    Map<String, String> fieldMap = new Map();
-    if (isAddId) {
-      fieldMap["Id"] = new Uuid().v1();
-    }
-    fieldMap["dirty"] = SyncDirtyStatus.EXIST;
-    return fieldMap;
   }
 
   static Map<String, String> getFieldMapByDirtyAndFileUploadFlag() {

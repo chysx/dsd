@@ -32,6 +32,7 @@ class _LoginState extends State<LoginPage> {
         presenter.inputInfo.userCode = userCtrl.text;
       });
     }
+
     userCtrl.text = presenter.inputInfo.userCode;
   }
 

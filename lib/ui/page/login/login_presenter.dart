@@ -71,10 +71,10 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
   }
 
   Future initAppConfigEntity() async {
+    print('22222222222222222');
     List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
     if (!ObjectUtil.isEmptyList(list)) {
       appConfigEntity = list[0];
-      inputInfo.userCode = appConfigEntity.userCode;
       Application.logger.i('appConfigEntity = ${appConfigEntity.toString()}');
     }
   }
@@ -84,9 +84,6 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
 
     if (StringUtil.isEmpty(loginInputInfo.password)) return LoginStatus.CheckPasswordIsNull;
 
-
-print('${loginInputInfo.userCode} = ${appConfigEntity.userCode}   ${loginInputInfo.password} = ${appConfigEntity.password}');
-print('$appConfigEntity');
     if (appConfigEntity == null ||
         StringUtil.isEmpty(appConfigEntity.userCode) ||
         StringUtil.isEmpty(appConfigEntity.password) ||
@@ -131,6 +128,10 @@ print('$appConfigEntity');
           Duration diff = localTime.difference(serviceTime);
           if (diff.inMinutes.abs() > 15) {
             responseStatus = LoginResponseStatus.LocalServeTimeDifference;
+            CustomerDialog.showCustomerDialog(context,
+                msg:'Your phone time is incorrect.\n'
+                    'Phone time ${new DateTime.now().toString()}\n'
+                    'Server time ${responseBean.result.serverTime}');
             return;
           }
           loginSuccess(context,syncType,responseBean, loginInputInfo);
@@ -185,6 +186,11 @@ print('$appConfigEntity');
           CustomerDialog.showCustomerDialog(context,
               msg:'Login failed. Please check your network and try again.');
         }
+      },
+      onError: (e){
+        Application.logger.e(e.toString());
+        CustomerDialog.showCustomerDialog(context,
+            msg:'Login failed. Please check your network and try again.');
       });
     }catch(e){
 
@@ -209,6 +215,8 @@ print('$appConfigEntity');
     }, onFailSync: (e) {
       LoadingDialog.dismiss(context);
       clearUserToDb();
+      appConfigEntity.syncInitFlag = null;
+      CustomerDialog.showCustomerDialog(context, msg:'Sync fail');
     });
   }
 
