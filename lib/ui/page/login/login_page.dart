@@ -1,7 +1,9 @@
 
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,7 @@ class LoginPage extends StatefulWidget {
   State<StatefulWidget> createState() => new _LoginState();
 }
 
-class _LoginState extends State<LoginPage> {
+class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
   TextEditingController userCtrl;
   TextEditingController pwdCtrl;
 
@@ -42,6 +44,26 @@ class _LoginState extends State<LoginPage> {
       pwdCtrl.addListener(() {
         presenter.inputInfo.password = pwdCtrl.text;
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);//添加观察者
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);//销毁
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if(state == AppLifecycleState.resumed){
+      curPage = ConstantMenu.CHECK_OUT;
     }
   }
 

@@ -9,4 +9,5 @@ class Dimens {
   static const double space_normal = 15;
 
   static const double font_normal = 16;
+  static const double font_small = 12;
 }

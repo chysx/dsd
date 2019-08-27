@@ -8,3 +8,12 @@
 class Constant {
   static const String DB_NAME = "dsd.db";
 }
+
+class ConstantMenu {
+  static const String CHECK_OUT = 'Check Out';
+  static const String CHECK_IN = 'Check In';
+  static const String ROUTE = 'Route';
+  static const String SYNC = 'Sync';
+  static const String SETTING = 'Setting';
+  static const String LOGOUT = 'Logout';
+}

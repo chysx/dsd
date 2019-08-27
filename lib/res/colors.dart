@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 
 class ColorsRes {
   static const Color app_main = Color(0xFF666666);
+  static const Color gray_normal = Color(0xFFe2e2e2);
   static const Color black = Color(0xFF000000);
   static const Color brown_normal = Color(0xFFA17A02);
 }

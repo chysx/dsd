@@ -67,7 +67,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
 
   void startNavigate(BuildContext context){
     Application.router
-        .navigateTo(context, Routers.route, transition: TransitionType.inFromLeft);
+        .navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
   }
 
   Future initAppConfigEntity() async {

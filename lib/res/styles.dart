@@ -15,4 +15,9 @@ class TextStyles {
     fontSize: Dimens.font_normal,
     color: ColorsRes.black,
   );
+
+  static TextStyle small = TextStyle(
+    fontSize: Dimens.font_small,
+    color: ColorsRes.black,
+  );
 }
