@@ -1,7 +1,9 @@
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/ui/widget/fold_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +22,8 @@ class CheckoutShipmentPage extends StatelessWidget {
         title: Text('SHIPMENT'),
       ),
       body: ListHeaderWidget(
-        names: ['zhang', 'guo', 'peng'],
+        names: [IntlUtil.getString(context, Ids.shipment_shipment), IntlUtil.getString(context, Ids.shipment_type), IntlUtil.getString(context, Ids.shipment_status)],
+
         weights: [1, 1, 1],
         aligns: [
           TextAlign.left,
