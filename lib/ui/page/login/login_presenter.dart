@@ -37,6 +37,8 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
   String version = "";
 
   void initData() {
+    inputInfo.userCode = Application.user.userCode;
+    print('userCode = ${inputInfo.userCode}');
     version = Application.deviceInfo.versionName;
   }
 
@@ -44,7 +46,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     await initAppConfigEntity();
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
-    print('status = ${loginStatus.toString()}');
+    print('*******************status = ${loginStatus.toString()}');
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
         CustomerDialog.showCustomerDialog(context,msg: 'Please input your account.');

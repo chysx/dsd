@@ -6,6 +6,7 @@ import 'package:flustars/flustars.dart';
 import 'package:logger/logger.dart';
 
 import 'db/database.dart';
+import 'db/table/entity/app_config_entity.dart';
 import 'net/http_service.dart';
 import 'utils/device_info.dart';
 
@@ -23,6 +24,7 @@ class Application {
   static Router router;
   static DeviceInfo deviceInfo;
   static User user;
+  static AppConfigEntity appConfigEntity;
 
   static void install() {
     new DbHelper();
@@ -30,11 +32,23 @@ class Application {
     Future.delayed(new Duration(seconds: 5),(){
       database = new DbHelper().database;
       print('database = $database');
+      initAppConfigEntity();
     });
     logger = new Log().logger;
     httpService = new HttpService().dio;
     router = new Router();
     DirectoryUtil.getInstance();
     user = new User();
+  }
+
+  static Future initAppConfigEntity() async {
+    List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
+    if (!ObjectUtil.isEmptyList(list)) {
+      appConfigEntity = list[0];
+      Application.logger.i('appConfigEntity = ${appConfigEntity.toString()}');
+      user.userCode = appConfigEntity.userCode;
+      user.userName = appConfigEntity.userName;
+      user.passWord = appConfigEntity.password;
+    }
   }
 }

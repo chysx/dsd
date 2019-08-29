@@ -32,37 +32,32 @@ class DrawerWidget extends StatelessWidget {
     Navigator.pop(context);
     if(page == ConstantMenu.CHECK_OUT){
       if(curPage != ConstantMenu.CHECK_OUT){
-        Navigator.pop(context);
         Application.router
-            .navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.check_out_shipment, replace: true,transition: TransitionType.inFromLeft);
         curPage = ConstantMenu.CHECK_OUT;
       }
     }else if(page == ConstantMenu.ROUTE){
       if(curPage != ConstantMenu.ROUTE){
-        Navigator.pop(context);
         Application.router
-            .navigateTo(context, Routers.route, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.route, replace: true,transition: TransitionType.inFromLeft);
         curPage = ConstantMenu.ROUTE;
       }
     }else if(page == ConstantMenu.CHECK_IN){
       if(curPage != ConstantMenu.CHECK_IN){
-        Navigator.pop(context);
         Application.router
-            .navigateTo(context, Routers.check_in_shipment, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.check_in_shipment, replace: true,transition: TransitionType.inFromLeft);
         curPage = ConstantMenu.CHECK_IN;
       }
     }else if(page == ConstantMenu.SYNC){
       if(curPage != ConstantMenu.SYNC){
-        Navigator.pop(context);
         Application.router
-            .navigateTo(context, Routers.sync, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.sync, replace: false,transition: TransitionType.inFromLeft);
         curPage = ConstantMenu.SYNC;
       }
     }else if(page == ConstantMenu.SETTING){
       if(curPage != ConstantMenu.SETTING){
-        Navigator.pop(context);
         Application.router
-            .navigateTo(context, Routers.settings, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.settings, replace: false,transition: TransitionType.inFromLeft);
         curPage = ConstantMenu.SETTING;
       }
     }else if(page == ConstantMenu.SETTING){

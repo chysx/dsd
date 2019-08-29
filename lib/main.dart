@@ -1,6 +1,7 @@
 
 import 'package:dsd/application.dart';
 import 'package:dsd/route/routers.dart';
+import 'package:dsd/splash_page.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -36,6 +37,7 @@ class MyAppState extends State<MyApp> {
         CustomLocalizations.delegate
       ],
       supportedLocales: CustomLocalizations.supportedLocales,
+      home: SplashPage(),
     );
   }
 

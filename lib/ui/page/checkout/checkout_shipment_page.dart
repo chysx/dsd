@@ -1,5 +1,8 @@
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
+import 'package:dsd/ui/widget/fold_widget.dart';
+import 'package:dsd/ui/widget/list_header_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -16,11 +19,16 @@ class CheckoutShipmentPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('SHIPMENT'),
       ),
-      body: Center(
-        child: Text('body'),
+      body: ListHeaderWidget(
+        names: ['zhang', 'guo', 'peng'],
+        weights: [1, 1, 1],
+        aligns: [
+          TextAlign.left,
+          TextAlign.center,
+          TextAlign.center,
+        ],
       ),
       drawer: DrawerWidget(),
     );
   }
-
 }

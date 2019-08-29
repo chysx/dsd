@@ -25,30 +25,33 @@ class SearchWidget extends StatelessWidget {
     });
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10),
-      child: Theme(
-        data: ThemeData(primaryColor: Colors.grey),
-        child: TextField(
-          style: TextStyles.normal,
-          onChanged: (str) {
-            subject.add(str);
-          },
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 0, bottom: 0),
-            hintText: IntlUtil.getString(context, Ids.userName),
-            prefixIcon: GestureDetector(
-              onTap: () {
-                CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
-              },
-              child: Icon(Icons.search),
-            ),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
-              },
-              child: Icon(Icons.highlight_off),
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(24),
+      child: SizedBox(
+        height: 36,
+        child: Theme(
+          data: ThemeData(primaryColor: Colors.grey),
+          child: TextField(
+            style: TextStyles.normal,
+            onChanged: (str) {
+              subject.add(str);
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 0, bottom: 0),
+              hintText: IntlUtil.getString(context, Ids.userName),
+              prefixIcon: GestureDetector(
+                onTap: () {
+                  CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
+                },
+                child: Icon(Icons.search),
+              ),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
+                },
+                child: Icon(Icons.highlight_off),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
             ),
           ),
         ),

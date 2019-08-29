@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dsd/res/colors.dart';
+import 'package:dsd/res/strings.dart';
+import 'package:dsd/res/styles.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +32,82 @@ class SignatureDialog extends StatelessWidget {
     var signature = Signature(
       width: 300,
       height: 300,
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.white,
     );
     return AlertDialog(
+      backgroundColor: ColorsRes.gray_normal,
+      contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 0),
       title: Text('Signature'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[Text('body'), signature],
+      content: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.only(left: 10,top: 15,right: 10,bottom: 15),
+              child: Row(
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 60,
+                            child: Text(
+                              'Name:',
+                              style: TextStyles.normal,
+                            ),
+                          ),
+                          Theme(
+                            data: ThemeData(primaryColor: ColorsRes.gray_normal),
+                            child: SizedBox(
+                              width: 200,
+                              child: TextField(
+                                style: TextStyles.normal,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
+                                  hintText: IntlUtil.getString(context, Ids.userName),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 15)),
+                      Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width:60,
+                            child: Text('Title:', style: TextStyles.normal,),
+                          ),
+                          Theme(
+                            data: ThemeData(primaryColor: ColorsRes.gray_normal),
+                            child: SizedBox(
+                              width: 200,
+                              child: TextField(
+                                style: TextStyles.normal,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
+                                  hintText: IntlUtil.getString(context, Ids.userName),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Padding(padding: EdgeInsets.only(top: 1)),
+            signature
+          ],
+        ),
       ),
       actions: <Widget>[
         FlatButton(
