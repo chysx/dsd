@@ -10,7 +10,8 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_T_ShipmentHeader")
 class DSD_T_ShipmentHeader_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String ShipmentNo;
   String ShipmentDate;
   String ShipmentType;
@@ -48,13 +49,13 @@ class DSD_T_ShipmentHeader_Entity {
   String Manually;
   String dirty;
 
-  DSD_T_ShipmentHeader_Entity([this.id, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.ActionType,
+  DSD_T_ShipmentHeader_Entity(this.pid, this.Id, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.ActionType,
       this.StartTime, this.EndTime, this.Odometer, this.Checker, this.CheckerConfirm, this.CheckerConfirmTime,
       this.CheckerSignImg, this.DCheckerSignImg, this.Cashier, this.CashierConfirm, this.CashierConfirmTime,
       this.CashierSignImg, this.DCashierSignImg, this.Gatekeeper, this.GKConfirm, this.GKConfirmTime, this.GKSignImg,
       this.DGKSignImg, this.WarehouseCode, this.Status, this.Driver, this.TruckId, this.TotalAmount, this.TotalWeight,
       this.WeightUnit, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.ScanResult,
-      this.Manually, this.dirty]);
+      this.Manually, this.dirty);
 
 
 }

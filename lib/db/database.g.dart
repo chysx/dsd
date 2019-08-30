@@ -132,7 +132,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `DSD_T_DeliveryItem` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `DeliveryNo` TEXT, `ProductCode` TEXT, `ProductUnit` TEXT, `PlanQty` TEXT, `ActualQty` TEXT, `DifferenceQty` TEXT, `Reason` TEXT, `BasePrice` TEXT, `Tax` TEXT, `Tax2` TEXT, `Discount` TEXT, `NetPrice` TEXT, `Deposit` TEXT, `IsReturn` TEXT, `CreateUser` TEXT, `CreateTime` TEXT, `LastUpdateUser` TEXT, `LastUpdateTime` TEXT, `IsFree` TEXT, `ItemSequence` TEXT, `ItemNumber` TEXT, `ItemCategory` TEXT, `dirty` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `DSD_T_ShipmentHeader` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `ShipmentNo` TEXT, `ShipmentDate` TEXT, `ShipmentType` TEXT, `ActionType` TEXT, `StartTime` TEXT, `EndTime` TEXT, `Odometer` INTEGER, `Checker` TEXT, `CheckerConfirm` INTEGER, `CheckerConfirmTime` TEXT, `CheckerSignImg` TEXT, `DCheckerSignImg` TEXT, `Cashier` TEXT, `CashierConfirm` INTEGER, `CashierConfirmTime` TEXT, `CashierSignImg` TEXT, `DCashierSignImg` TEXT, `Gatekeeper` TEXT, `GKConfirm` INTEGER, `GKConfirmTime` TEXT, `GKSignImg` TEXT, `DGKSignImg` TEXT, `WarehouseCode` TEXT, `Status` TEXT, `Driver` TEXT, `TruckId` INTEGER, `TotalAmount` TEXT, `TotalWeight` TEXT, `WeightUnit` TEXT, `CreateUser` TEXT, `CreateTime` TEXT, `LastUpdateUser` TEXT, `LastUpdateTime` TEXT, `ScanResult` TEXT, `Manually` TEXT, `dirty` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `DSD_T_ShipmentHeader` (`pid` INTEGER PRIMARY KEY AUTOINCREMENT, `Id` TEXT, `ShipmentNo` TEXT, `ShipmentDate` TEXT, `ShipmentType` TEXT, `ActionType` TEXT, `StartTime` TEXT, `EndTime` TEXT, `Odometer` INTEGER, `Checker` TEXT, `CheckerConfirm` INTEGER, `CheckerConfirmTime` TEXT, `CheckerSignImg` TEXT, `DCheckerSignImg` TEXT, `Cashier` TEXT, `CashierConfirm` INTEGER, `CashierConfirmTime` TEXT, `CashierSignImg` TEXT, `DCashierSignImg` TEXT, `Gatekeeper` TEXT, `GKConfirm` INTEGER, `GKConfirmTime` TEXT, `GKSignImg` TEXT, `DGKSignImg` TEXT, `WarehouseCode` TEXT, `Status` TEXT, `Driver` TEXT, `TruckId` INTEGER, `TotalAmount` TEXT, `TotalWeight` TEXT, `WeightUnit` TEXT, `CreateUser` TEXT, `CreateTime` TEXT, `LastUpdateUser` TEXT, `LastUpdateTime` TEXT, `ScanResult` TEXT, `Manually` TEXT, `dirty` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `DSD_T_ShipmentItem` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `HeaderId` TEXT, `ProductCode` TEXT, `ProductUnit` TEXT, `PlanQty` INTEGER, `ActualQty` INTEGER, `DifferenceQty` INTEGER, `DifferenceReason` TEXT, `CreateUser` TEXT, `CreateTime` TEXT, `LastUpdateUser` TEXT, `LastUpdateTime` TEXT, `dirty` TEXT)');
         await database.execute(
@@ -814,10 +814,10 @@ class _$DSD_M_ShipmentHeader_Dao extends DSD_M_ShipmentHeader_Dao {
 
   @override
   Future<DSD_M_ShipmentHeader_Entity> findEntityByShipmentNo(
-      String ShipmentNo) async {
+      String ShipmentNo, String Valid) async {
     return _queryAdapter.query(
-        'SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentNo = ?',
-        arguments: <dynamic>[ShipmentNo],
+        'SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentNo = ? AND Valid = ?',
+        arguments: <dynamic>[ShipmentNo, Valid],
         mapper: _dSD_M_ShipmentHeaderMapper);
   }
 
@@ -831,6 +831,15 @@ class _$DSD_M_ShipmentHeader_Dao extends DSD_M_ShipmentHeader_Dao {
   @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM DSD_M_ShipmentHeader');
+  }
+
+  @override
+  Future<List<DSD_M_ShipmentHeader_Entity>> findByByToday(
+      String ShipmentDate, String Valid) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentDate = ? AND Valid = ?',
+        arguments: <dynamic>[ShipmentDate, Valid],
+        mapper: _dSD_M_ShipmentHeaderMapper);
   }
 
   @override
@@ -1611,7 +1620,8 @@ class _$DSD_T_ShipmentHeader_Dao extends DSD_T_ShipmentHeader_Dao {
             database,
             'DSD_T_ShipmentHeader',
             (DSD_T_ShipmentHeader_Entity item) => <String, dynamic>{
-                  'id': item.id,
+                  'pid': item.pid,
+                  'Id': item.Id,
                   'ShipmentNo': item.ShipmentNo,
                   'ShipmentDate': item.ShipmentDate,
                   'ShipmentType': item.ShipmentType,
@@ -1652,9 +1662,10 @@ class _$DSD_T_ShipmentHeader_Dao extends DSD_T_ShipmentHeader_Dao {
         _dSD_T_ShipmentHeader_EntityUpdateAdapter = UpdateAdapter(
             database,
             'DSD_T_ShipmentHeader',
-            'id',
+            'pid',
             (DSD_T_ShipmentHeader_Entity item) => <String, dynamic>{
-                  'id': item.id,
+                  'pid': item.pid,
+                  'Id': item.Id,
                   'ShipmentNo': item.ShipmentNo,
                   'ShipmentDate': item.ShipmentDate,
                   'ShipmentType': item.ShipmentType,
@@ -1695,9 +1706,10 @@ class _$DSD_T_ShipmentHeader_Dao extends DSD_T_ShipmentHeader_Dao {
         _dSD_T_ShipmentHeader_EntityDeletionAdapter = DeletionAdapter(
             database,
             'DSD_T_ShipmentHeader',
-            'id',
+            'pid',
             (DSD_T_ShipmentHeader_Entity item) => <String, dynamic>{
-                  'id': item.id,
+                  'pid': item.pid,
+                  'Id': item.Id,
                   'ShipmentNo': item.ShipmentNo,
                   'ShipmentDate': item.ShipmentDate,
                   'ShipmentType': item.ShipmentType,
@@ -1744,7 +1756,8 @@ class _$DSD_T_ShipmentHeader_Dao extends DSD_T_ShipmentHeader_Dao {
 
   final _dSD_T_ShipmentHeaderMapper = (Map<String, dynamic> row) =>
       DSD_T_ShipmentHeader_Entity(
-          row['id'] as int,
+          row['pid'] as int,
+          row['Id'] as String,
           row['ShipmentNo'] as String,
           row['ShipmentDate'] as String,
           row['ShipmentType'] as String,

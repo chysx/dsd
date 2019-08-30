@@ -120,6 +120,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
 
       LoginResponseStatus responseStatus;
       Observable.fromFuture(ApiService.getDataByLogin(loginRequestBean)).listen((response) {
+        LoadingDialog.dismiss(context);
         Application.logger.i('''
         url = ${response.request.baseUrl + response.request.path}
         response = ${response.data}''');
@@ -190,14 +191,16 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
         }
       },
       onError: (e){
+        LoadingDialog.dismiss(context);
         Application.logger.e(e.toString());
         CustomerDialog.showCustomerDialog(context,
             msg:'Login failed. Please check your network and try again.');
+      },
+      onDone: (){
+        LoadingDialog.dismiss(context);
       });
     }catch(e){
 
-    }finally{
-      LoadingDialog.dismiss(context);
     }
 
   }

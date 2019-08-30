@@ -1,5 +1,4 @@
 import 'package:dsd/synchronization/base/abstract_request_create.dart';
-import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
 import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/db/database.dart';

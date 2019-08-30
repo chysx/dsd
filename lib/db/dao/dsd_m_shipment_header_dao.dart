@@ -15,8 +15,8 @@ abstract class DSD_M_ShipmentHeader_Dao {
   @Query('SELECT * FROM DSD_M_ShipmentHeader')
   Future<List<DSD_M_ShipmentHeader_Entity>> findAll();
 
-  @Query('SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentNo = :ShipmentNo')
-  Future<DSD_M_ShipmentHeader_Entity> findEntityByShipmentNo(String ShipmentNo);
+  @Query('SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentNo = :ShipmentNo AND Valid = :Valid')
+  Future<DSD_M_ShipmentHeader_Entity> findEntityByShipmentNo(String ShipmentNo,String Valid);
 
   @insert
   Future<void> insertEntity(DSD_M_ShipmentHeader_Entity entity);
@@ -32,4 +32,10 @@ abstract class DSD_M_ShipmentHeader_Dao {
 
   @update
   Future<int> updateEntity(DSD_M_ShipmentHeader_Entity entity);
+
+
+  @Query('SELECT * FROM DSD_M_ShipmentHeader WHERE ShipmentDate = :ShipmentDate AND Valid = :Valid')
+  Future<List<DSD_M_ShipmentHeader_Entity>> findByByToday(String ShipmentDate,String Valid);
+
+
 }

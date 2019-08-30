@@ -53,7 +53,7 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
           onFailSync(e);
         }
       } catch (ex) {
-        Log().logger.e(e.toString());
+        Log().logger.e(ex.toString());
         AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
       }
       syncMode.onFinish();

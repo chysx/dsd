@@ -6,7 +6,7 @@
 ///  Date:         2019/7/30 16:36
 
 class HttpConfig {
-  static UrlConfig urlConfig = UrlConfig.DEV;
+  static UrlConfig urlConfig = UrlConfig.QAS;
 
   static const String SCHEME_HTTP = "http://";
   static const String SCHEME_HTTPS = "https://";
@@ -97,9 +97,9 @@ class UrlDev {
 }
 
 class UrlQas {
-  static const String HOST = "40.89.153.240";
-  static const String PORT = "1080";
-  static const bool IS_SSL = false;
+  static const String HOST = "aglsfaqa.ebestmobile.net";
+  static const String PORT = "8085";
+  static const bool IS_SSL = true;
   static const String ENV = "QAS";
 }
 
