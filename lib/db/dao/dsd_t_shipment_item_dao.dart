@@ -31,4 +31,17 @@ abstract class DSD_T_ShipmentItem_Dao {
 
   @update
   Future<int> updateEntity(DSD_T_ShipmentItem_Entity entity);
+
+  @Query('DELETE FROM DSD_T_ShipmentItem WHERE HeaderId = :HeaderId')
+  Future<void> deleteByHeaderId(String HeaderId);
+
+  @Query('DELETE FROM DSD_T_ShipmentItem WHERE ShipmentNo = :ShipmentNo AND ActionType = :ActionType')
+  Future<void> deleteByShipmentNo(String ShipmentNo,String ActionType);
+
+  @Query('SELECT * FROM DSD_T_ShipmentItem WHERE HeaderId = :HeaderId')
+  Future<List<DSD_T_ShipmentItem_Entity>> findEntityByHeaderId(String HeaderId);
+
+  @Query('SELECT * FROM DSD_T_ShipmentItem WHERE HeaderId = :HeaderId AND ProductCode = :ProductCode')
+  Future<List<DSD_T_ShipmentItem_Entity>> findEntityByHeaderIdAndCode(String HeaderId,String ProductCode);
+
 }

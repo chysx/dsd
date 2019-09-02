@@ -1812,10 +1812,10 @@ class _$DSD_T_ShipmentHeader_Dao extends DSD_T_ShipmentHeader_Dao {
 
   @override
   Future<DSD_T_ShipmentHeader_Entity> findEntityByShipmentNo(
-      String ShipmentNo) async {
+      String ShipmentNo, String ActionType) async {
     return _queryAdapter.query(
-        'SELECT * FROM DSD_T_ShipmentHeader WHERE ShipmentNo = ?',
-        arguments: <dynamic>[ShipmentNo],
+        'SELECT * FROM DSD_T_ShipmentHeader WHERE ShipmentNo = ? AND ActionType = ?',
+        arguments: <dynamic>[ShipmentNo, ActionType],
         mapper: _dSD_T_ShipmentHeaderMapper);
   }
 
@@ -1966,6 +1966,38 @@ class _$DSD_T_ShipmentItem_Dao extends DSD_T_ShipmentItem_Dao {
   @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM DSD_T_ShipmentItem');
+  }
+
+  @override
+  Future<void> deleteByHeaderId(String HeaderId) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM DSD_T_ShipmentItem WHERE HeaderId = ?',
+        arguments: <dynamic>[HeaderId]);
+  }
+
+  @override
+  Future<void> deleteByShipmentNo(String ShipmentNo, String ActionType) async {
+    await _queryAdapter.queryNoReturn(
+        'DELETE FROM DSD_T_ShipmentItem WHERE ShipmentNo = ? AND ActionType = ?',
+        arguments: <dynamic>[ShipmentNo, ActionType]);
+  }
+
+  @override
+  Future<List<DSD_T_ShipmentItem_Entity>> findEntityByHeaderId(
+      String HeaderId) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_T_ShipmentItem WHERE HeaderId = ?',
+        arguments: <dynamic>[HeaderId],
+        mapper: _dSD_T_ShipmentItemMapper);
+  }
+
+  @override
+  Future<List<DSD_T_ShipmentItem_Entity>> findEntityByHeaderIdAndCode(
+      String HeaderId, String ProductCode) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_T_ShipmentItem WHERE HeaderId = ? AND ProductCode = ?',
+        arguments: <dynamic>[HeaderId, ProductCode],
+        mapper: _dSD_T_ShipmentItemMapper);
   }
 
   @override

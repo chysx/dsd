@@ -1,5 +1,6 @@
 
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
+import 'package:dsd/ui/page/checkout/checkout_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
@@ -49,6 +50,10 @@ Handler routeHandler = Handler(handlerFunc: (_,params) {
 
 Handler checkoutShipmentHandler = Handler(handlerFunc: (_,params) {
   return CheckoutShipmentPage();
+});
+
+Handler checkoutHandler = Handler(handlerFunc: (_,params) {
+  return CheckoutPage();
 });
 
 Handler checkInShipmentHandler = Handler(handlerFunc: (_,params) {

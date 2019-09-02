@@ -13,6 +13,7 @@ class Routers {
   static const settings = '/settings';
   static const route = '/route';
   static const check_out_shipment = '/check_out_shipment';
+  static const check_out = '/check_out';
   static const check_in_shipment = '/check_in_shipment';
   static const sync = '/sync';
 
@@ -22,6 +23,7 @@ class Routers {
     router.define(settings, handler: settingsHandler);
     router.define(route, handler: routeHandler);
     router.define(check_out_shipment, handler: checkoutShipmentHandler);
+    router.define(check_out, handler: checkoutHandler);
     router.define(check_in_shipment, handler: checkInShipmentHandler);
     router.define(sync, handler: syncHandler);
   }

@@ -195,9 +195,6 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
         Application.logger.e(e.toString());
         CustomerDialog.showCustomerDialog(context,
             msg:'Login failed. Please check your network and try again.');
-      },
-      onDone: (){
-        LoadingDialog.dismiss(context);
       });
     }catch(e){
 
