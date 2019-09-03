@@ -2,6 +2,7 @@
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
+import 'package:dsd/ui/page/checkout/checkout_shipment_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
@@ -49,7 +50,12 @@ Handler routeHandler = Handler(handlerFunc: (_,params) {
 });
 
 Handler checkoutShipmentHandler = Handler(handlerFunc: (_,params) {
-  return CheckoutShipmentPage();
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(builder: (context) => new CheckoutShipmentPresenter()..initData()),
+    ],
+    child: CheckoutShipmentPage(),
+  );
 });
 
 Handler checkoutHandler = Handler(handlerFunc: (_,params) {

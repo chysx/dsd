@@ -1,14 +1,14 @@
-import 'package:dsd/application.dart';
-import 'package:dsd/common/constant.dart';
+import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/res/strings.dart';
-import 'package:dsd/route/routers.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
-import 'package:dsd/ui/widget/fold_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:fluintl/fluintl.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
+
+import 'checkout_shipment_presenter.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -37,15 +37,46 @@ class CheckoutShipmentPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('SHIPMENT'),
       ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('button'),
-          onPressed: (){
-            Application.router
-                .navigateTo(context, Routers.check_out, replace: false,transition: TransitionType.inFromLeft);
-          },
-        ),
-      ),
+      body:
+          Consumer<CheckoutShipmentPresenter>(builder: (context, presenter, _) {
+        return new Column(
+          children: <Widget>[
+            header,
+            Expanded(
+              child: ListView.builder(
+                  itemCount: presenter.list.length,
+                  itemBuilder: (content, index) {
+                    ShipmentInfo info = presenter.list[index];
+                    return Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            info.no,
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            info.type,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            info.status,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+            )
+          ],
+        );
+      }),
       drawer: DrawerWidget(),
     );
   }
