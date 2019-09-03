@@ -133,7 +133,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
             responseStatus = LoginResponseStatus.LocalServeTimeDifference;
             CustomerDialog.showCustomerDialog(context,
                 msg:'Your phone time is incorrect.\n'
-                    'Phone time ${new DateTime.now().toString()}\n'
+                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
                     'Server time ${responseBean.result.serverTime}');
             return;
           }
