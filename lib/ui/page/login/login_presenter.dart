@@ -227,9 +227,10 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
   }
 
   Future saveUserToDb(LoginResponseBean responseBean, SyncType syncType,LoginInputInfo inputInfo) async {
-    AppConfigEntity entity = await AppConfigManager.queryByUserCode(inputInfo.userCode);
+    List<AppConfigEntity> list = await AppConfigManager.queryAll();
     SettingInfo settingInfo = await SettingPresenter.getCurSettingInfo();
-    if(entity == null){
+    AppConfigEntity entity;
+    if(ObjectUtil.isEmptyList(list)){
       entity = AppConfigEntity();
       entity
         ..userCode = responseBean.loginName
@@ -244,6 +245,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
         ..env = settingInfo.env;
       await AppConfigManager.insert(entity);
     }else{
+      AppConfigEntity entity = list[0];
       entity
         ..userCode = responseBean.loginName
         ..userName = responseBean.result.userName
@@ -253,7 +255,6 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
         ..lastUpdateTime = DateUtil.getNowDateStr();
       await AppConfigManager.update(entity);
     }
-
     initAppConfigEntity();
 
   }
