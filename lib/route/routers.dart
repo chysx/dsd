@@ -16,6 +16,7 @@ class Routers {
   static const check_out = '/check_out';
   static const check_in_shipment = '/check_in_shipment';
   static const sync = '/sync';
+  static const route_plan = '/route_plan';
 
   static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
@@ -26,5 +27,6 @@ class Routers {
     router.define(check_out, handler: checkoutHandler);
     router.define(check_in_shipment, handler: checkInShipmentHandler);
     router.define(sync, handler: syncHandler);
+    router.define(route_plan, handler: routePlanHandler);
   }
 }
