@@ -496,6 +496,15 @@ class _$DSD_M_DeliveryHeader_Dao extends DSD_M_DeliveryHeader_Dao {
   }
 
   @override
+  Future<List<DSD_M_DeliveryHeader_Entity>> findEntityByCon(
+      String shipmentNo, String accountNumber) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_M_DeliveryHeader WHERE shipmentNo = ? AND accountNumber = ? ORDER BY DeliverySequence ASC',
+        arguments: <dynamic>[shipmentNo, accountNumber],
+        mapper: _dSD_M_DeliveryHeaderMapper);
+  }
+
+  @override
   Future<void> insertEntity(DSD_M_DeliveryHeader_Entity entity) async {
     await _dSD_M_DeliveryHeader_EntityInsertionAdapter.insert(
         entity, sqflite.ConflictAlgorithm.abort);
@@ -1411,6 +1420,15 @@ class _$DSD_T_DeliveryHeader_Dao extends DSD_T_DeliveryHeader_Dao {
   @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM DSD_T_DeliveryHeader');
+  }
+
+  @override
+  Future<List<DSD_T_DeliveryHeader_Entity>> findEntityByShipmentNo(
+      String ShipmentNo) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_T_DeliveryHeader WHERE ShipmentNo = ?',
+        arguments: <dynamic>[ShipmentNo],
+        mapper: _dSD_T_DeliveryHeaderMapper);
   }
 
   @override
@@ -2412,6 +2430,15 @@ class _$DSD_T_Visit_Dao extends DSD_T_Visit_Dao {
   @override
   Future<void> deleteAll() async {
     await _queryAdapter.queryNoReturn('DELETE FROM DSD_T_Visit');
+  }
+
+  @override
+  Future<List<DSD_T_Visit_Entity>> findEntityByCon(
+      String ShipmentNo, String AccountNumber) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_T_Visit WHERE ShipmentNo = ? AND AccountNumber = ? ORDER BY StartTime DESC',
+        arguments: <dynamic>[ShipmentNo, AccountNumber],
+        mapper: _dSD_T_VisitMapper);
   }
 
   @override

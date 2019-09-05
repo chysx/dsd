@@ -14,8 +14,9 @@ import 'package:rxdart/rxdart.dart';
 
 class SearchWidget extends StatelessWidget {
   final Function(String str) onSearch;
+  final TextEditingController hostCtrl = new TextEditingController();
+  SearchWidget(this.onSearch, {Key key}) : super(key: key);
 
-  const SearchWidget(this.onSearch, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class SearchWidget extends StatelessWidget {
           data: ThemeData(primaryColor: Colors.grey),
           child: TextField(
             style: TextStyles.normal,
+            controller: hostCtrl,
             onChanged: (str) {
               subject.add(str);
             },
@@ -58,4 +60,6 @@ class SearchWidget extends StatelessWidget {
       ),
     );
   }
+
 }
+

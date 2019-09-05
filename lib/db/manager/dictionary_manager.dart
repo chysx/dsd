@@ -14,6 +14,6 @@ import '../../application.dart';
 class DictionaryManager {
   static Future<String> getDictionaryDescription(String category,String value) async {
     MD_Dictionary_Entity entity = await Application.database.dictionaryDao.findEntityByCon(category,value,Valid.EXIST);
-    return entity == null ? "" : entity.Description;
+    return entity == null ? "" : entity.Description?? '';
   }
 }

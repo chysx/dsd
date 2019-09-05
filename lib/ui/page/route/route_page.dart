@@ -1,19 +1,14 @@
-import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/util.dart';
 import 'package:dsd/res/colors.dart';
-import 'package:dsd/res/dimens.dart';
-import 'package:dsd/res/strings.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/route/routers.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
+import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
-import 'package:fluintl/fluintl.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
 
-import '../../../application.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -41,36 +36,44 @@ class _RouteState extends State<RoutePage> {
           },
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          _buildTopContent(),
-          Padding(
-            padding: EdgeInsets.only(top: 6),
-          ),
-          _buildCenterContent(),
-          Padding(
-            padding: EdgeInsets.only(top: 6),
-          ),
-          _buildBottomContent(),
-        ],
+      body: Consumer<RoutePresenter>(
+        builder: (context, presenter, _){
+          return Column(
+            children: <Widget>[
+              _buildTopContent(presenter),
+              Padding(
+                padding: EdgeInsets.only(top: 6),
+              ),
+              _buildCenterContent(),
+              Padding(
+                padding: EdgeInsets.only(top: 6),
+              ),
+              Divider(
+                color: Colors.grey,
+                height: 1,
+              ),
+              _buildBottomContent(),
+            ],
+          );
+        }
       ),
       drawer: DrawerWidget(),
     );
   }
 
-  List<DropdownMenuItem<String>> makeDropList() {
-    return <String>["1111111111111", "11111122222111", "1111666666111111"].map((item) {
+  List<DropdownMenuItem<String>> makeDropList(RoutePresenter presenter) {
+    return presenter.shipmentList.map((item) {
       return DropdownMenuItem<String>(
-        value: item,
+        value: item.no,
         child: Text(
-          item,
+          item.no,
           style: TextStyles.normal,
         ),
       );
     }).toList();
   }
 
-  Widget _buildTopContent() {
+  Widget _buildTopContent(RoutePresenter presenter) {
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10),
       color: ColorsRes.gray_normal,
@@ -78,10 +81,11 @@ class _RouteState extends State<RoutePage> {
         children: <Widget>[
           DropdownButton<String>(
               underline: Container(),
-              value: '1111111111111',
-//                isExpanded: true,
-              onChanged: (newValue) {},
-              items: makeDropList()),
+              value: presenter.currentShipment.no,
+              onChanged: (newValue) {
+                presenter.onEvent(RouteEvent.SelectShipment, newValue);
+              },
+              items: makeDropList(presenter)),
           Expanded(
             child: Align(
               alignment: Alignment.centerRight,
@@ -106,7 +110,7 @@ class _RouteState extends State<RoutePage> {
     List<String> items = List.generate(20, (index) => 'item $index');
     return Expanded(
       child: Container(
-        color: ColorsRes.gray_normal,
+        color: Colors.white,
         child: ListView.builder(
           itemCount: 20,
           itemBuilder: (context, index) {
@@ -123,8 +127,138 @@ class _RouteState extends State<RoutePage> {
                   color: Colors.red,
                 ),
               ],
-              child: ListTile(
-                title: Text('$index'),
+              child: Column(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: (){
+                      CustomerDialog.showCustomerDialog(context,title: 'sfjdo',msg: 'sdf');
+//                      setState(() {
+//                        isMore = !isMore;
+//                      });
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                        ),
+                        Text(
+                          '01',
+                          style: TextStyles.normal,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                              ),
+                              Text(
+                                'Team Zuich',
+                                style: TextStyles.normal,
+                              ),
+                              Text(
+                                'Wuhan',
+                                style: TextStyles.small,
+                              ),
+                              Text(
+                                '08:00-23:00',
+                                style: TextStyles.small,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.person,
+                                    size: 15,
+                                  ),
+                                  Text(
+                                    'zhang san',
+                                    style: TextStyles.small,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(Icons.phone_iphone, size: 15),
+                                  Icon(Icons.phone, size: 15),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          'D',
+                          style: TextStyles.normal,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 10),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: FlatButton(
+                          onPressed: (){
+
+                          },
+                          color: Colors.blue,
+                          child: Text(
+                            'Plan',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 1),),
+                      Expanded(
+                        child: FlatButton(
+                          onPressed: (){
+
+                          },
+                          color: Colors.blue,
+                          child: Text(
+                            'Profile',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 1),),
+                      Expanded(
+                        child: FlatButton(
+                          padding: EdgeInsets.only(left: 0),
+                          onPressed: (){
+
+                          },
+                          color: Colors.blue,
+                          child: Text(
+                            'Navigation',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 1),),
+                      Expanded(
+                        child: FlatButton(
+                          onPressed: (){
+
+                          },
+                          color: Colors.blue,
+                          child: Text(
+                            'Start Call',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+
               ),
             );
           },
@@ -132,6 +266,4 @@ class _RouteState extends State<RoutePage> {
       ),
     );
   }
-
-
 }

@@ -47,6 +47,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');
+    loginStatus = LoginStatus.OffLine;
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
         CustomerDialog.showCustomerDialog(context,msg: 'Please input your account.');

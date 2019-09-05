@@ -31,4 +31,7 @@ abstract class DSD_M_DeliveryHeader_Dao {
 
   @update
   Future<int> updateEntity(DSD_M_DeliveryHeader_Entity entity);
+
+  @Query('SELECT * FROM DSD_M_DeliveryHeader WHERE shipmentNo = :shipmentNo AND accountNumber = :accountNumber ORDER BY DeliverySequence ASC')
+  Future<List<DSD_M_DeliveryHeader_Entity>> findEntityByCon(String shipmentNo,String accountNumber);
 }

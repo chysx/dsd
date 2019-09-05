@@ -31,4 +31,7 @@ abstract class DSD_T_Visit_Dao {
 
   @update
   Future<int> updateEntity(DSD_T_Visit_Entity entity);
+
+  @Query('SELECT * FROM DSD_T_Visit WHERE ShipmentNo = :ShipmentNo AND AccountNumber = :AccountNumber ORDER BY StartTime DESC')
+  Future<List<DSD_T_Visit_Entity>> findEntityByCon(String ShipmentNo,String AccountNumber);
 }

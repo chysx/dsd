@@ -41,6 +41,8 @@ class ShipmentManager {
             md_dictionary AS t3          
                 ON t2.status = t3.VALUE             
                 AND t3.category = 'ShipmentStatus'
+        WHERE
+            t1.Valid = 'True'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -83,6 +85,7 @@ class ShipmentManager {
         WHERE
             m.shipmentdate < ? 
             and t.status is null 
+            and m.Valid = 'True'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -119,6 +122,7 @@ class ShipmentManager {
         LEFT JOIN dsd_t_shipmentheader t
                  ON m.shipmentno = t.shipmentno
         WHERE  t.status IS NULL 
+               and m.Valid = 'True'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -163,6 +167,7 @@ class ShipmentManager {
                 AND t3.category = 'ShipmentStatus' 
         WHERE
             t2.EndTime > ?
+            AND t1.Valid = 'True'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -213,7 +218,8 @@ class ShipmentManager {
                 ON t2.status = t3.VALUE             
                 AND t3.category = 'ShipmentStatus' 
         WHERE
-            t2.EndTime < ?
+            t2.EndTime < ? 
+            AND t1.Valid = 'True'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -329,5 +335,62 @@ class ShipmentManager {
       print(info);
     }
     return resultList;
+  }
+
+  ///
+  /// 获取今天计划内的shipment数据，和过去已经CheckOut了但是没有CheckIn的shipment数据
+  ///
+  static Future<List<ShipmentInfo>> getShipmentNoListByCheckOut() async {
+    String sql = ''' 
+          SELECT
+            t1.shipmentno,
+            t1.shipmenttype,
+            t2.status,
+            t3.description,
+            t2.dirty,
+            t1.ShipmentDate,
+            t1.LoadingSequence 
+        FROM
+            dsd_m_shipmentheader AS t1        
+        INNER JOIN
+            dsd_t_shipmentheader AS t2          
+                ON t1.shipmentno = t2.shipmentno                    
+                AND t2.status = 'CHKO'        
+        WHERE
+            t1.Valid = 'True'
+     ''';
+    String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
+    SqlUtil.log(sql);
+    List<ShipmentInfo> result = [];
+    var db = Application.database.database;
+    List<Map<String, dynamic>> list = await db.rawQuery(sql);
+    for (Map<String, dynamic> map in list) {
+      ShipmentInfo info = new ShipmentInfo();
+      List values = map.values.toList();
+      String dirty = values[4] ?? "";
+      if (dirty == SyncDirtyStatus.SUCCESS || dirty == SyncDirtyStatus.FAIL || dirty == SyncDirtyStatus.EXIST) {
+        info.isComplete = true;
+      }
+      info
+        ..no = values[0]
+        ..type = values[1]
+        ..status = values[2]
+        ..description = values[3]
+        ..shipmentDate = values[5]
+        ..sequence = values[6];
+      result.add(info);
+    }
+
+    //将当天以前已经CheckIn的shipment过滤掉
+    List<ShipmentInfo> checkInByLastList = await ShipmentManager.getShipmentHeaderByCheckInByLast();
+    result.removeWhere((item){
+      for(ShipmentInfo info in checkInByLastList){
+        if(item.no == info.no){
+          return true;
+        }
+      }
+      return false;
+    });
+    return result;
   }
 }

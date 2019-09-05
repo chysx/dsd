@@ -30,4 +30,7 @@ abstract class DSD_T_DeliveryHeader_Dao {
 
   @update
   Future<int> updateEntity(DSD_T_DeliveryHeader_Entity entity);
+
+  @Query('SELECT * FROM DSD_T_DeliveryHeader WHERE ShipmentNo = :ShipmentNo')
+  Future<List<DSD_T_DeliveryHeader_Entity>> findEntityByShipmentNo(String ShipmentNo);
 }
