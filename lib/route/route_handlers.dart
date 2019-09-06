@@ -7,6 +7,8 @@ import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
+import 'package:dsd/ui/page/route_plan/route_plan_page.dart';
+import 'package:dsd/ui/page/route_plan/route_plan_presenter.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
@@ -78,4 +80,13 @@ Handler checkInShipmentHandler = Handler(handlerFunc: (_,params) {
 
 Handler syncHandler = Handler(handlerFunc: (_,params) {
   return SyncPage();
+});
+
+Handler routePlanHandler = Handler(handlerFunc: (_,params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(builder: (context) => new RoutePlanPresenter()..initData()),
+    ],
+    child: RoutePlanPage(),
+  );
 });
