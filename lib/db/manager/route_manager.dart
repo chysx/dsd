@@ -48,7 +48,7 @@ class RouteManager {
             t.accountnumber,
             t.name,
             j1.deliveryaddress,
-            j2.name,
+            j2.name as name1,
             j1.Telephone,
             j2.mobilephone,
             t.Geo_Latitude,
@@ -76,10 +76,11 @@ class RouteManager {
      SqlUtil.log(sql, [shipmentNo]);
 
      var db = Application.database.database;
-     List<Map<String, dynamic>> list = await db.rawQuery(sql);
+     List<Map<String, dynamic>> list = await db.rawQuery(sql,[shipmentNo]);
      for (Map<String, dynamic> map in list) {
         CustomerInfo info = CustomerInfo();
-        List values = map.values.toList();
+        List<dynamic> values = map.values.toList();
+        resultList.add(info);
         info
           ..accountNumber = values[0]
           ..name = values[1]
@@ -87,8 +88,8 @@ class RouteManager {
           ..contactName = values[3]
           ..phone = values[4]
           ..tel = values[5]
-          ..latitude = values[6] as double
-          ..longitude = values[7] as double
+          ..latitude = double.tryParse(values[6])
+          ..longitude = double.tryParse(values[7])
           ..block = values[8]
           ..barcode = values[9]
           ..timeSlotFrom = DateUtil.getDateStrByTimeStr(values[10],format: DateFormat.HOUR_MINUTE)
@@ -101,7 +102,6 @@ class RouteManager {
         List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, info.accountNumber);
         info.status = getCustomerDeliveryStatus(tDeliveryMap[info.accountNumber], deliveryHeaderList,info.accountNumber,shipmentNo);
 
-        resultList.add(info);
      }
      return resultList;
    }

@@ -1,14 +1,15 @@
+import 'package:dsd/application.dart';
+import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/system_config.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
+import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
-import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
+import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
-import 'package:fluintl/fluintl.dart';
-import 'package:flutter/material.dart' as material;
 
 import 'customer_info.dart';
 
@@ -19,32 +20,65 @@ import 'customer_info.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/9/3 15:48
 
-enum RouteEvent{
+enum RouteEvent {
+  InitData,
   SelectShipment,
+  Search,
+}
+
+class RouteTitle extends EventNotifier{
+  int completeCount = 0;
+  int totalCount = 0;
+  RouteTitle([this.completeCount,this.totalCount]);
+
+  void reset(){
+    completeCount = 0;
+    totalCount = 0;
+  }
+
+  void makeRouteTitle(List<CustomerInfo> customerList) {
+    reset();
+    totalCount = customerList.length;
+    for (CustomerInfo info in customerList) {
+      if (info.isVisitComplete) completeCount++;
+    }
+    notifyListeners();
+  }
 }
 
 class RoutePresenter extends EventNotifier<RouteEvent> {
   List<CustomerInfo> customerList = [];
   List<ShipmentInfo> shipmentList = [];
-  ShipmentInfo currentShipment = new ShipmentInfo();
+  ShipmentInfo currentShipment;
   RouteConfigInfo configInfo = new RouteConfigInfo();
+  RouteTitle routeTitle = new RouteTitle();
 
   @override
-  void onEvent(RouteEvent event,[dynamic data]) {
-    switch(event){
-      case RouteEvent.SelectShipment:
-
+  Future onEvent(RouteEvent event, [dynamic data]) async {
+    switch (event) {
+      case RouteEvent.InitData:
+        await initData();
         break;
+      case RouteEvent.SelectShipment:
+        print('*********SelectShipment');
+        eventBus.fire(new SearchEvent());
+        await setCurShipment(data);
+        await fillCustomerData();
+        routeTitle.makeRouteTitle(customerList);
+        break;
+      case RouteEvent.Search:
+        await search(data);
+        return;
     }
-    super.onEvent(event,data);
+    super.onEvent(event, data);
   }
 
-  void initData() {
-    initConfig();
+  Future initData() async {
+    await initConfig();
 
-    fillShipmentList();
-    fillCurShipment();
-    fillCustomerData();
+    await fillShipmentList();
+    await fillCurShipment();
+    await fillCustomerData();
   }
 
   Future initConfig() async {
@@ -64,6 +98,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
 
   Future fillShipmentList() async {
     shipmentList = await ShipmentManager.getShipmentNoListByCheckOut();
+
     List<ShipmentInfo> checkInByTodayList = await ShipmentManager.getShipmentHeaderByCheckInByToday();
     shipmentList.removeWhere((item) {
       for (ShipmentInfo info in checkInByTodayList) {
@@ -135,10 +170,10 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     }
   }
 
-  void search(String nameOrCode) {
-    fillCustomerData();
+  Future search(String nameOrCode) async {
+    await fillCustomerData();
     if (StringUtil.isEmpty(nameOrCode)) {
-//      fragment.refreshAdapter();
+      notifyListeners();
     } else {
       List<CustomerInfo> searchList = [];
       for (CustomerInfo info in customerList) {
@@ -149,22 +184,39 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
       }
       customerList.clear();
       customerList.addAll(searchList);
-//      fragment.refreshAdapter();
+      notifyListeners();
     }
   }
 
   List<String> getShipmentNoList() => shipmentList.map((item) => item.no);
 
-  String createTitle(material.BuildContext context) {
-    int totalCount = customerList.length;
-    int visitCompleteCount = 0;
-    for (CustomerInfo info in customerList) {
-      if (info.isVisitComplete) visitCompleteCount++;
-    }
-    return "${IntlUtil.getString(context, Ids.route_title)}($visitCompleteCount/$totalCount)";
-  }
-
   int getPosition(String accountNumber) {
     return customerList.indexWhere((item) => accountNumber == item.accountNumber);
   }
+
+  Future setCurShipment(String shipmentNo) async {
+    DSD_M_ShipmentHeader_Entity entity =
+        await Application.database.mShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, Valid.EXIST);
+    if(entity != null){
+      currentShipment = new ShipmentInfo()
+        ..no = entity.ShipmentNo
+        ..type = entity.ShipmentType
+        ..description = entity.Description
+        ..shipmentDate = entity.ShipmentDate
+        ..sequence = entity.LoadingSequence;
+    }
+  }
+
+  void onClickPlan(){
+
+  }
+
+  void onClickProfile(){
+
+  }
+
+  void onClickStartCall(){
+
+  }
+
 }

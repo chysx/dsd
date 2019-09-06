@@ -47,7 +47,6 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');
-    loginStatus = LoginStatus.OffLine;
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
         CustomerDialog.showCustomerDialog(context,msg: 'Please input your account.');
@@ -112,7 +111,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
       loginRequestBean
         ..userName = loginInputInfo.userCode
         ..password = loginInputInfo.password
-        ..versionNum = '0.1.0.89'
+        ..versionNum = '0.1.0.93'
         ..isChangePwd = false
         ..newPassword = ""
         ..platForm = "Android";

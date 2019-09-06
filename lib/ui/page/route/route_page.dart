@@ -1,7 +1,8 @@
+
 import 'package:dsd/db/util.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/ui/dialog/customer_dialog.dart';
+import 'package:dsd/ui/page/route/customer_info.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
@@ -24,13 +25,21 @@ class RoutePage extends StatefulWidget {
   }
 }
 
+
 class _RouteState extends State<RoutePage> {
+
   @override
   Widget build(BuildContext context) {
+    print('**************build');
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: GestureDetector(
-          child: Text('Route'),
+          child: Consumer<RouteTitle>(
+            builder: (context,routeTitle,_){
+              return Text('Route(${routeTitle.completeCount}/${routeTitle.totalCount})');
+            },
+          ),
           onLongPress: () {
             DbUtil.copyDb();
           },
@@ -44,7 +53,7 @@ class _RouteState extends State<RoutePage> {
               Padding(
                 padding: EdgeInsets.only(top: 6),
               ),
-              _buildCenterContent(),
+              _buildCenterContent(presenter),
               Padding(
                 padding: EdgeInsets.only(top: 6),
               ),
@@ -52,7 +61,7 @@ class _RouteState extends State<RoutePage> {
                 color: Colors.grey,
                 height: 1,
               ),
-              _buildBottomContent(),
+              _buildBottomContent(presenter),
             ],
           );
         }
@@ -81,7 +90,7 @@ class _RouteState extends State<RoutePage> {
         children: <Widget>[
           DropdownButton<String>(
               underline: Container(),
-              value: presenter.currentShipment.no,
+              value: presenter.currentShipment?.no,
               onChanged: (newValue) {
                 presenter.onEvent(RouteEvent.SelectShipment, newValue);
               },
@@ -100,20 +109,80 @@ class _RouteState extends State<RoutePage> {
     );
   }
 
-  Widget _buildCenterContent() {
+  Widget _buildCenterContent(RoutePresenter presenter) {
     return SearchWidget((str) {
-      print(str);
+      presenter.onEvent(RouteEvent.Search,str);
     });
   }
 
-  Widget _buildBottomContent() {
-    List<String> items = List.generate(20, (index) => 'item $index');
+  bool isMore = true;
+
+  Widget _buildBottomContent(RoutePresenter presenter) {
+    List<CustomerInfo> customerList = presenter.customerList;
+    Widget row = Row(
+      children: <Widget>[
+        Expanded(
+          child: FlatButton(
+            onPressed: (){
+              presenter.onClickPlan();
+            },
+            color: Colors.blue,
+            child: Text(
+              'Plan',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(right: 1),),
+        Expanded(
+          child: FlatButton(
+            onPressed: (){
+              presenter.onClickProfile();
+            },
+            color: Colors.blue,
+            child: Text(
+              'Profile',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(right: 1),),
+        Expanded(
+          child: FlatButton(
+            padding: EdgeInsets.only(left: 0),
+            onPressed: (){
+
+            },
+            color: Colors.blue,
+            child: Text(
+              'Navigation',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(right: 1),),
+        Expanded(
+          child: FlatButton(
+            onPressed: (){
+              presenter.onClickStartCall();
+            },
+            color: Colors.blue,
+            child: Text(
+              'Start Call',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    );
+    Widget child = isMore ? row : Container();
     return Expanded(
       child: Container(
         color: Colors.white,
         child: ListView.builder(
-          itemCount: 20,
+          itemCount: customerList.length,
           itemBuilder: (context, index) {
+            CustomerInfo info = customerList[index];
             return Slidable(
               key: ValueKey(index),
               actionPane: SlidableDrawerActionPane(),
@@ -131,10 +200,9 @@ class _RouteState extends State<RoutePage> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: (){
-                      CustomerDialog.showCustomerDialog(context,title: 'sfjdo',msg: 'sdf');
-//                      setState(() {
-//                        isMore = !isMore;
-//                      });
+                      setState(() {
+                        isMore = !isMore;
+                      });
                     },
                     child: Row(
                       children: <Widget>[
@@ -142,7 +210,7 @@ class _RouteState extends State<RoutePage> {
                           padding: EdgeInsets.only(left: 10),
                         ),
                         Text(
-                          '01',
+                          info?.index?? '',
                           style: TextStyles.normal,
                         ),
                         Padding(
@@ -156,15 +224,15 @@ class _RouteState extends State<RoutePage> {
                                 padding: EdgeInsets.only(top: 10),
                               ),
                               Text(
-                                'Team Zuich',
+                                info?.name?? '',
                                 style: TextStyles.normal,
                               ),
                               Text(
-                                'Wuhan',
+                                info?.address?? '',
                                 style: TextStyles.small,
                               ),
                               Text(
-                                '08:00-23:00',
+                                info?.timeSlotFrom?? '',
                                 style: TextStyles.small,
                               ),
                               Row(
@@ -174,7 +242,7 @@ class _RouteState extends State<RoutePage> {
                                     size: 15,
                                   ),
                                   Text(
-                                    'zhang san',
+                                    info?.contactName?? '',
                                     style: TextStyles.small,
                                   ),
                                 ],
@@ -201,62 +269,7 @@ class _RouteState extends State<RoutePage> {
                       ],
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: FlatButton(
-                          onPressed: (){
-
-                          },
-                          color: Colors.blue,
-                          child: Text(
-                            'Plan',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(right: 1),),
-                      Expanded(
-                        child: FlatButton(
-                          onPressed: (){
-
-                          },
-                          color: Colors.blue,
-                          child: Text(
-                            'Profile',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(right: 1),),
-                      Expanded(
-                        child: FlatButton(
-                          padding: EdgeInsets.only(left: 0),
-                          onPressed: (){
-
-                          },
-                          color: Colors.blue,
-                          child: Text(
-                            'Navigation',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(right: 1),),
-                      Expanded(
-                        child: FlatButton(
-                          onPressed: (){
-
-                          },
-                          color: Colors.blue,
-                          child: Text(
-                            'Start Call',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  child
                 ],
 
               ),

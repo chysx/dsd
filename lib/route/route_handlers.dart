@@ -46,9 +46,14 @@ Handler settingsHandler = Handler(handlerFunc: (_, params) {
 });
 
 Handler routeHandler = Handler(handlerFunc: (_,params) {
+  RouteTitle routeTitle = new RouteTitle();
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new RoutePresenter()..initData()),
+      ChangeNotifierProvider<RouteTitle>(builder: (context) => routeTitle),
+      ChangeNotifierProvider<RoutePresenter>(builder: (context) =>
+      new RoutePresenter()
+        ..routeTitle = routeTitle
+        ..onEvent(RouteEvent.InitData)),
     ],
     child: RoutePage(),
   );

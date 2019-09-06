@@ -19,6 +19,7 @@ class SyncUtil {
     syncDataRequestBean.domainId = "1";
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     syncDataRequestBean.version = packageInfo.version;
+    syncDataRequestBean.version = '0.1.0.92';
     syncDataRequestBean.isGzip = "1";
     return syncDataRequestBean;
   }

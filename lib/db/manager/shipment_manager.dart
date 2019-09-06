@@ -346,7 +346,6 @@ class ShipmentManager {
             t1.shipmentno,
             t1.shipmenttype,
             t2.status,
-            t3.description,
             t2.dirty,
             t1.ShipmentDate,
             t1.LoadingSequence 
@@ -367,7 +366,7 @@ class ShipmentManager {
     for (Map<String, dynamic> map in list) {
       ShipmentInfo info = new ShipmentInfo();
       List values = map.values.toList();
-      String dirty = values[4] ?? "";
+      String dirty = values[3] ?? "";
       if (dirty == SyncDirtyStatus.SUCCESS || dirty == SyncDirtyStatus.FAIL || dirty == SyncDirtyStatus.EXIST) {
         info.isComplete = true;
       }
@@ -375,9 +374,8 @@ class ShipmentManager {
         ..no = values[0]
         ..type = values[1]
         ..status = values[2]
-        ..description = values[3]
-        ..shipmentDate = values[5]
-        ..sequence = values[6];
+        ..shipmentDate = values[4]
+        ..sequence = values[5];
       result.add(info);
     }
 

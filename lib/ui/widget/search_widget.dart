@@ -1,3 +1,4 @@
+import 'package:dsd/application.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
@@ -12,18 +13,55 @@ import 'package:rxdart/rxdart.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/23 14:16
 
-class SearchWidget extends StatelessWidget {
+class SearchEvent {}
+
+class SearchWidget extends StatefulWidget {
   final Function(String str) onSearch;
-  final TextEditingController hostCtrl = new TextEditingController();
+
   SearchWidget(this.onSearch, {Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _SearchState(onSearch);
+  }
+
+}
+
+class _SearchState extends State<SearchWidget> {
+  final Function(String str) onSearch;
+  final TextEditingController textCtrl = new TextEditingController();
+  final BehaviorSubject subject = BehaviorSubject<String>();
+
+  _SearchState(this.onSearch);
 
 
   @override
-  Widget build(BuildContext context) {
-    final BehaviorSubject subject = BehaviorSubject<String>();
-    subject.debounceTime(Duration(seconds: 1)).listen((str) {
+  void initState() {
+    super.initState();
+
+    eventBus.on<SearchEvent>().listen((event){
+      textCtrl.text = '';
+    });
+
+    textCtrl.addListener(() {
+      subject.add(textCtrl.text);
+    });
+
+    subject.debounceTime(Duration(milliseconds: 200)).listen((str) {
       onSearch(str);
     });
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    subject.close();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.only(left: 10, right: 10),
       child: SizedBox(
@@ -32,10 +70,7 @@ class SearchWidget extends StatelessWidget {
           data: ThemeData(primaryColor: Colors.grey),
           child: TextField(
             style: TextStyles.normal,
-            controller: hostCtrl,
-            onChanged: (str) {
-              subject.add(str);
-            },
+            controller: textCtrl,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 0, bottom: 0),
               hintText: IntlUtil.getString(context, Ids.userName),

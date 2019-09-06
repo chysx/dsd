@@ -9,6 +9,7 @@ import 'db/database.dart';
 import 'db/table/entity/app_config_entity.dart';
 import 'net/http_service.dart';
 import 'utils/device_info.dart';
+import 'package:event_bus/event_bus.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -16,6 +17,8 @@ import 'utils/device_info.dart';
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/2 14:28
+
+EventBus eventBus = new EventBus();
 
 class Application {
   static AppDatabase database;

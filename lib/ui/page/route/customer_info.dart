@@ -29,4 +29,11 @@ class CustomerInfo {
 
   String timeSlotFrom;
   String timeSlotTo;
+
+  @override
+  String toString() {
+    return 'CustomerInfo{idByVanSales: $idByVanSales, accountNumber: $accountNumber, name: $name, address: $address, tel: $tel, phone: $phone, contactName: $contactName, status: $status, latitude: $latitude, longitude: $longitude, index: $index, cancelReason: $cancelReason, isShow: $isShow, customerType: $customerType, newAndStatus: $newAndStatus, isVisitComplete: $isVisitComplete, block: $block, barcode: $barcode, timeSlotFrom: $timeSlotFrom, timeSlotTo: $timeSlotTo}';
+  }
+
+
 }
