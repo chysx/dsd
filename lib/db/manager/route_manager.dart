@@ -92,8 +92,8 @@ class RouteManager {
           ..longitude = double.tryParse(values[7])
           ..block = values[8]
           ..barcode = values[9]
-          ..timeSlotFrom = DateUtil.getDateStrByTimeStr(values[10],format: DateFormat.HOUR_MINUTE)
-          ..timeSlotTo = DateUtil.getDateStrByTimeStr(values[11],format: DateFormat.HOUR_MINUTE)
+//          ..timeSlotFrom = DateUtil.getDateStrByTimeStr(values[10],format: DateFormat.HOUR_MINUTE)
+//          ..timeSlotTo = DateUtil.getDateStrByTimeStr(values[11],format: DateFormat.HOUR_MINUTE)
           ..index = RoutePresenter.realMakeIndex(resultList.length)
           ..customerType = CustomerType.Delivery;
         info.isVisitComplete = await VisitManager.isVisitCompleteByCustomer(shipmentNo, info.accountNumber);
