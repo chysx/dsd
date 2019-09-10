@@ -30,7 +30,9 @@ class RoutePlanPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('ROUTE PLAN'),
+        title: GestureDetector(
+          child: Text('Setting'),
+        )//Text('ROUTE PLAN'),
       ),
         body:
         Consumer<RoutePlanPresenter>(builder: (context, presenter, _) {

@@ -7,9 +7,11 @@ import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
+import 'package:dsd/route/routers.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart' as material;
 
 import 'customer_info.dart';
@@ -71,7 +73,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         await search(data);
         return;
     }
-//    super.onEvent(event, data);
+    super.onEvent(event, data);
   }
 
   Future initData() async {
@@ -214,7 +216,8 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   void onClickPlan(material.BuildContext context){
-
+    Application.router
+        .navigateTo(context, Routers.route_plan, transition: TransitionType.inFromLeft);
   }
 
   void onClickProfile(){
