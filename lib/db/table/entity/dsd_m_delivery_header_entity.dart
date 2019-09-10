@@ -7,9 +7,9 @@ import 'package:floor/floor.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/1 10:12
 
-@Entity(tableName: "DSD_M_DeliveryHeader")
+//@Entity(tableName: "DSD_M_DeliveryHeader")
 class DSD_M_DeliveryHeader_Entity {
-  @PrimaryKey(autoGenerate: true)
+//  @PrimaryKey(autoGenerate: true)
   int id;
   String DeliveryNo;
   String ShipmentNo;
@@ -47,41 +47,14 @@ class DSD_M_DeliveryHeader_Entity {
   String OtherDiscount;
   String APDiscount;
 
-  DSD_M_DeliveryHeader_Entity(
-      [this.id,
-      this.DeliveryNo,
-      this.ShipmentNo,
-      this.DeliveryType,
-      this.DeliveryStatus,
-      this.AccountNumber,
-      this.OrderNo,
-      this.InvoiceNo,
-      this.PONumber,
-      this.OrderDate,
-      this.PlanDeliveryDate,
-      this.SalesRep,
-      this.CompanyCode,
-      this.SalesOrg,
-      this.SalesOff,
-      this.PaymentType,
-      this.Currency,
-      this.PlanDeliveryQty,
-      this.DeliveryAddress,
-      this.Contact,
-      this.Telephone,
-      this.BasePrice,
-      this.Tax,
-      this.Tax2,
-      this.NetPrice,
-      this.Deposit,
-      this.DataSource,
-      this.DeliveryNote,
-      this.Discount,
-      this.MarketDeveloper,
-      this.DeliverySequence,
-      this.DeliveryTimeSlotFrom,
-      this.DeliveryTimeSlotTo,
-      this.OnlineDiscount,
-      this.OtherDiscount,
-      this.APDiscount]);
+  DSD_M_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.ShipmentNo, this.DeliveryType, this.DeliveryStatus,
+      this.AccountNumber, this.OrderNo, this.InvoiceNo, this.PONumber, this.OrderDate, this.PlanDeliveryDate,
+      this.SalesRep, this.CompanyCode, this.SalesOrg, this.SalesOff, this.PaymentType, this.Currency,
+      this.PlanDeliveryQty, this.DeliveryAddress, this.Contact, this.Telephone, this.BasePrice, this.Tax, this.Tax2,
+      this.NetPrice, this.Deposit, this.DataSource, this.DeliveryNote, this.Discount, this.MarketDeveloper,
+      this.DeliverySequence, this.DeliveryTimeSlotFrom, this.DeliveryTimeSlotTo, this.OnlineDiscount,
+      this.OtherDiscount, this.APDiscount);
+
+  DSD_M_DeliveryHeader_Entity.Empty();
+
 }

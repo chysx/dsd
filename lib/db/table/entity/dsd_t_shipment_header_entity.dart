@@ -57,5 +57,6 @@ class DSD_T_ShipmentHeader_Entity {
       this.WeightUnit, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.ScanResult,
       this.Manually, this.dirty);
 
+  DSD_T_ShipmentHeader_Entity.Empty();
 
 }

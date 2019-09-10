@@ -18,10 +18,12 @@ class MD_Person_Entity {
   String Type;
   String RouteNumber;
 
-  MD_Person_Entity([this.id, this.UserCode, this.Password, this.FirstName, this.LastName, this.Type, this.RouteNumber]);
+  MD_Person_Entity(this.id, this.UserCode, this.Password, this.FirstName, this.LastName, this.Type, this.RouteNumber);
 
   @override
   String toString() {
     return 'MD_Person_Entity{id: $id, UserCode: $UserCode, Password: $Password, FirstName: $FirstName, LastName: $LastName, Type: $Type, RouteNumber: $RouteNumber}';
   }
+
+  MD_Person_Entity.Empty();
 }

@@ -10,6 +10,7 @@ import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
+import 'package:flutter/material.dart' as material;
 
 import 'customer_info.dart';
 
@@ -70,7 +71,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         await search(data);
         return;
     }
-    super.onEvent(event, data);
+//    super.onEvent(event, data);
   }
 
   Future initData() async {
@@ -110,6 +111,11 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     });
 
     sortShipmentList();
+
+    print('print shipmentList');
+    shipmentList.forEach((item){
+      print(item);
+    });
   }
 
   void sortShipmentList() {
@@ -207,7 +213,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     }
   }
 
-  void onClickPlan(){
+  void onClickPlan(material.BuildContext context){
 
   }
 

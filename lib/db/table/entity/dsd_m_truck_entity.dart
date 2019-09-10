@@ -21,8 +21,9 @@ class DSD_M_Truck_Entity {
   String SalesOff;
   String Status;
 
-  DSD_M_Truck_Entity([this.id, this.TruckCode, this.Type, this.Capacity, this.Volume, this.VolumeUnit, this.CompanyCode,
-      this.SalesOrg, this.SalesOff, this.Status]);
+  DSD_M_Truck_Entity(this.id, this.TruckCode, this.Type, this.Capacity, this.Volume, this.VolumeUnit, this.CompanyCode,
+      this.SalesOrg, this.SalesOff, this.Status);
 
+  DSD_M_Truck_Entity.Empty();
 
 }

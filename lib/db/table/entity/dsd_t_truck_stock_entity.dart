@@ -23,8 +23,9 @@ class DSD_T_TruckStock_Entity {
   String LastUpdateTime;
   String dirty;
 
-  DSD_T_TruckStock_Entity([this.id, this.TruckId, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.StockQty,
-      this.SaleableQty, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty]);
+  DSD_T_TruckStock_Entity(this.id, this.TruckId, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.StockQty,
+      this.SaleableQty, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty);
 
+  DSD_T_TruckStock_Entity.Empty();
 
 }

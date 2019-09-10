@@ -231,7 +231,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     SettingInfo settingInfo = await SettingPresenter.getCurSettingInfo();
     AppConfigEntity entity;
     if(ObjectUtil.isEmptyList(list)){
-      entity = AppConfigEntity();
+      entity = AppConfigEntity.Empty();
       entity
         ..userCode = responseBean.loginName
         ..userName = responseBean.result.userName

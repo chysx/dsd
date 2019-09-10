@@ -32,4 +32,6 @@ class DSD_T_TruckStockTracking_Entity {
       this.ProductCode, this.ProductUnit, this.ChangeAction, this.ChangeQuantity, this.FromQty, this.ToQty,
       this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty);
 
+  DSD_T_TruckStockTracking_Entity.Empty();
+
 }

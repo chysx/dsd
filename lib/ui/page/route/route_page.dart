@@ -124,7 +124,7 @@ class _RouteState extends State<RoutePage> {
         Expanded(
           child: FlatButton(
             onPressed: (){
-              presenter.onClickPlan();
+              presenter.onClickPlan(context);
             },
             color: Colors.blue,
             child: Text(

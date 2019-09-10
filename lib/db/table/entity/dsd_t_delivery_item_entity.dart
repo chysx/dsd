@@ -35,10 +35,11 @@ class DSD_T_DeliveryItem_Entity {
   String ItemCategory;
   String dirty;
 
-  DSD_T_DeliveryItem_Entity([this.id, this.DeliveryNo, this.ProductCode, this.ProductUnit, this.PlanQty, this.ActualQty,
+  DSD_T_DeliveryItem_Entity(this.id, this.DeliveryNo, this.ProductCode, this.ProductUnit, this.PlanQty, this.ActualQty,
       this.DifferenceQty, this.Reason, this.BasePrice, this.Tax, this.Tax2, this.Discount, this.NetPrice,
       this.Deposit, this.IsReturn, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime,
-      this.IsFree, this.ItemSequence, this.ItemNumber, this.ItemCategory, this.dirty]);
+      this.IsFree, this.ItemSequence, this.ItemNumber, this.ItemCategory, this.dirty);
 
+  DSD_T_DeliveryItem_Entity.Empty();
 
 }

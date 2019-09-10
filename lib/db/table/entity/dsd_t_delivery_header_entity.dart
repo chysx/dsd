@@ -51,13 +51,14 @@ class DSD_T_DeliveryHeader_Entity {
   String CustomerNot;
   String dirty;
 
-  DSD_T_DeliveryHeader_Entity([this.id, this.DeliveryNo, this.VisitId, this.ShipmentNo, this.DeliveryType,
+  DSD_T_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.VisitId, this.ShipmentNo, this.DeliveryType,
       this.DeliveryStatus, this.AccountNumber, this.OrderNo, this.InvoiceNo, this.PONumber, this.OrderDate,
       this.ActualDeliveryDate, this.Currency, this.CustomerSignStatus, this.CustomerSignDate, this.CustomerSignImg,
       this.DriverSignStatus, this.DriverSignDate, this.DriverSignImg, this.StartTime, this.EndTime, this.BasePrice,
       this.Tax, this.Tax2, this.Discount, this.NetPrice, this.Deposit, this.ActualPayment, this.ActualDeposit,
       this.CancelTime, this.CancelReason, this.Rebook, this.DeliveryNote, this.CreateUser, this.CreateTime,
-      this.LastUpdateUser, this.LastUpdateTime, this.MarketDeveloper, this.CustomerNot, this.dirty]);
+      this.LastUpdateUser, this.LastUpdateTime, this.MarketDeveloper, this.CustomerNot, this.dirty);
 
+  DSD_T_DeliveryHeader_Entity.Empty();
 
 }

@@ -36,11 +36,12 @@ class DSD_M_ShipmentHeader_Entity {
   String DataSource;
   String Valid;
 
-  DSD_M_ShipmentHeader_Entity([this.id, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.Route,
+  DSD_M_ShipmentHeader_Entity(this.id, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.Route,
       this.Description, this.ReleaseStatus, this.ReleaseUser, this.ReleaseTime, this.CompletionStatus,
       this.CompletionTime, this.Driver1, this.Driver2, this.TruckId, this.TruckCode, this.TruckType,
       this.LoadingSequence, this.WarehouseCode, this.OutWarehouse, this.TotalProductQty, this.TotalItemAmount,
-      this.TotalWeight, this.WeightUnit, this.DataSource, this.Valid]);
+      this.TotalWeight, this.WeightUnit, this.DataSource, this.Valid);
 
+  DSD_M_ShipmentHeader_Entity.Empty();
 
 }

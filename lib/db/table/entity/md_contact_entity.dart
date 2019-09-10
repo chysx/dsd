@@ -69,5 +69,6 @@ class MD_Contact_Entity {
       this.ebMobile__Primary__c, this.ebMobile__RecordAction__c, this.CCSM_SAP_Contact_ID__c, this.ebMobile__Spouse__c,
       this.ebMobile__Title__c, this.ebMobile__Twitter__c);
 
+  MD_Contact_Entity.Empty();
 
 }

@@ -16,6 +16,8 @@ class DSD_M_ShipmentItem_Entity {
   String ProductUnit;
   String PlanQty;
 
-  DSD_M_ShipmentItem_Entity([this.id, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.PlanQty]);
+  DSD_M_ShipmentItem_Entity(this.id, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.PlanQty);
+
+  DSD_M_ShipmentItem_Entity.Empty();
 
 }

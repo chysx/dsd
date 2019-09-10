@@ -17,7 +17,8 @@ class MD_Dictionary_Entity {
   int Valid;
   int Sequence;
 
-  MD_Dictionary_Entity([this.id, this.Category, this.Value, this.Description, this.Valid, this.Sequence]);
+  MD_Dictionary_Entity(this.id, this.Category, this.Value, this.Description, this.Valid, this.Sequence);
 
+  MD_Dictionary_Entity.Empty();
 
 }

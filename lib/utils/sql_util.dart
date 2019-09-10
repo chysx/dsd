@@ -10,6 +10,6 @@ import 'package:dsd/application.dart';
 class SqlUtil {
   static void log(String sql,[List params]){
     String paramsStr = 'params = $params';
-//    Application.logger.i(sql + '\n' + paramsStr);
+    Application.logger.i(sql + '\n' + paramsStr);
   }
 }

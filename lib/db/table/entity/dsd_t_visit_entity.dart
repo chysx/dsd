@@ -28,9 +28,10 @@ class DSD_T_Visit_Entity {
   String dirty;
   String isCompleted;
 
-  DSD_T_Visit_Entity([this.id, this.VisitId, this.ShipmentNo, this.StartTime, this.EndTime, this.UserCode,
+  DSD_T_Visit_Entity(this.id, this.VisitId, this.ShipmentNo, this.StartTime, this.EndTime, this.UserCode,
       this.AccountNumber, this.Longitude, this.Latitude, this.CancelReason, this.NoScanReason, this.CreateUser,
-      this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty, this.isCompleted]);
+      this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty, this.isCompleted);
 
+  DSD_T_Visit_Entity.Empty();
 
 }

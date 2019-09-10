@@ -17,7 +17,8 @@ class DSD_M_SystemConfig_Entity {
   String Value;
   String Valid;
 
-  DSD_M_SystemConfig_Entity([this.id, this.Category, this.KeyName, this.Description, this.Value, this.Valid]);
+  DSD_M_SystemConfig_Entity(this.id, this.Category, this.KeyName, this.Description, this.Value, this.Valid);
 
+  DSD_M_SystemConfig_Entity.Empty();
 
 }

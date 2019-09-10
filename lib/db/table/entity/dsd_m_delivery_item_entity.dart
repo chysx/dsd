@@ -28,9 +28,10 @@ class DSD_M_DeliveryItem_Entity {
   String ItemNumber;
   String ItemCategory;
 
-  DSD_M_DeliveryItem_Entity([this.id, this.DeliveryNo, this.ProductCode, this.ProductUnit, this.PlanQty,
+  DSD_M_DeliveryItem_Entity(this.id, this.DeliveryNo, this.ProductCode, this.ProductUnit, this.PlanQty,
       this.TotalWeight, this.WeightUnit, this.BasePrice, this.Tax, this.Tax2, this.NetPrice, this.Deposit,
-      this.Discount, this.IsFree, this.ItemSequence, this.ItemNumber, this.ItemCategory]);
+      this.Discount, this.IsFree, this.ItemSequence, this.ItemNumber, this.ItemCategory);
 
+  DSD_M_DeliveryItem_Entity.Empty();
 
 }

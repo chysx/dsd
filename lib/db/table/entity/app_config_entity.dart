@@ -23,7 +23,7 @@ class AppConfigEntity {
   String lastUpdateTime;
 
   AppConfigEntity(
-      [this.id,
+      this.id,
       this.userCode,
       this.userName,
       this.password,
@@ -33,7 +33,9 @@ class AppConfigEntity {
       this.isSsl,
       this.syncInitFlag,
       this.version,
-      this.lastUpdateTime]);
+      this.lastUpdateTime);
+
+  AppConfigEntity.Empty();
 
   @override
   String toString() {

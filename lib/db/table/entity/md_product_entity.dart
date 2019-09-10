@@ -77,7 +77,7 @@ class MD_Product_Entity {
   String ebMobile__Trademark__c;
   String ArabicProductDescription;
 
-  MD_Product_Entity([this.id, this.IsActive, this.CreatedBy, this.DisplayUrl, this.ExternalDataSource, this.ExternalId,
+  MD_Product_Entity(this.id, this.IsActive, this.CreatedBy, this.DisplayUrl, this.ExternalDataSource, this.ExternalId,
       this.LastModifiedBy, this.ProductCode, this.Description, this.Family, this.Name, this.QuantityUnitOfMeasure,
       this.ebMobile__BaseUOM__c, this.ebMobile__BeverageCategory__c, this.ebMobile__BeverageProduct__c,
       this.ebMobile__BeverageType__c, this.ebMobile__Brand__c, this.ebMobile__CarbonationIndicator__c,
@@ -95,7 +95,8 @@ class MD_Product_Entity {
       this.ebMobile__PlRefMat__c, this.ebMobile__ReturnablePackagingIndicator__c, this.ebMobile__SalesOrg__c,
       this.ebMobile__SalesUnit__c, this.ebMobile__SalStatus__c, this.ebMobile__Sequence__c, this.ebMobile__SFAGroup__c,
       this.ebMobile__TaxClass__c, this.ebMobile__TaxType__c, this.ebMobile__Trademark__c,
-      this.ArabicProductDescription]);
+      this.ArabicProductDescription);
 
+  MD_Product_Entity.Empty();
 
 }

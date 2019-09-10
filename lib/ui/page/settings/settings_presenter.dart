@@ -180,7 +180,7 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
     AppConfigEntity entity;
 
     if(ObjectUtil.isEmptyList(list)){
-      entity = new AppConfigEntity();
+      entity = new AppConfigEntity.Empty();
       entity
         ..env = curSettingInfo.env
         ..host = curSettingInfo.host
