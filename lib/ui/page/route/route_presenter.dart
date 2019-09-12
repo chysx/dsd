@@ -220,8 +220,12 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         .navigateTo(context, Routers.route_plan, transition: TransitionType.inFromLeft);
   }
 
-  void onClickProfile(){
-
+  void onClickProfile(material.BuildContext context){
+    String itemUrl = 'hahaha';
+    String route = '${Routers.task_list}?data=${Uri.encodeComponent(itemUrl)}';
+//    String route = Routers.task_list;
+    Application.router
+        .navigateTo(context, route, transition: TransitionType.inFromLeft);
   }
 
   void onClickStartCall(){

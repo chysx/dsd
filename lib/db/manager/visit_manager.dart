@@ -29,4 +29,13 @@ class VisitManager {
         StringUtil.equalsIgnoreCase(visitEntity.dirty, SyncDirtyStatus.DEFAULT)) return false;
     return true;
   }
+
+  static Future insertOrUpdateVisit(DSD_T_Visit_Entity visit) async {
+    DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityByVisitId(visit.VisitId);
+    if(entity == null){
+      await Application.database.tVisitDao.insertEntity(visit);
+    }else{
+      await Application.database.tVisitDao.updateEntity(visit);
+    }
+  }
 }

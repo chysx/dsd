@@ -30,7 +30,6 @@ class _RouteState extends State<RoutePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('**************build');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -115,67 +114,8 @@ class _RouteState extends State<RoutePage> {
     });
   }
 
-  bool isMore = true;
-
   Widget _buildBottomContent(RoutePresenter presenter) {
     List<CustomerInfo> customerList = presenter.customerList;
-    Widget row = Row(
-      children: <Widget>[
-        Expanded(
-          child: FlatButton(
-            onPressed: (){
-              presenter.onClickPlan(context);
-            },
-            color: Colors.blue,
-            child: Text(
-              'Plan',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(right: 1),),
-        Expanded(
-          child: FlatButton(
-            onPressed: (){
-              presenter.onClickProfile();
-            },
-            color: Colors.blue,
-            child: Text(
-              'Profile',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(right: 1),),
-        Expanded(
-          child: FlatButton(
-            padding: EdgeInsets.only(left: 0),
-            onPressed: (){
-
-            },
-            color: Colors.blue,
-            child: Text(
-              'Navigation',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-        Padding(padding: EdgeInsets.only(right: 1),),
-        Expanded(
-          child: FlatButton(
-            onPressed: (){
-              presenter.onClickStartCall();
-            },
-            color: Colors.blue,
-            child: Text(
-              'Start Call',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ),
-      ],
-    );
-    Widget child = isMore ? row : Container();
     return Expanded(
       child: Container(
         color: Colors.white,
@@ -183,6 +123,64 @@ class _RouteState extends State<RoutePage> {
           itemCount: customerList.length,
           itemBuilder: (context, index) {
             CustomerInfo info = customerList[index];
+            Widget row = Row(
+              children: <Widget>[
+                Expanded(
+                  child: FlatButton(
+                    onPressed: (){
+                      presenter.onClickPlan(context);
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Plan',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 1),),
+                Expanded(
+                  child: FlatButton(
+                    onPressed: (){
+                      presenter.onClickProfile(context);
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Profile',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 1),),
+                Expanded(
+                  child: FlatButton(
+                    padding: EdgeInsets.only(left: 0),
+                    onPressed: (){
+
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Navigation',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(right: 1),),
+                Expanded(
+                  child: FlatButton(
+                    padding: EdgeInsets.only(left: 0),
+                    onPressed: (){
+                      presenter.onClickStartCall();
+                    },
+                    color: Colors.blue,
+                    child: Text(
+                      'Start Call',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            );
+            Widget child = info.isMore ? row : Container();
             return Slidable(
               key: ValueKey(index),
               actionPane: SlidableDrawerActionPane(),
@@ -201,7 +199,7 @@ class _RouteState extends State<RoutePage> {
                   GestureDetector(
                     onTap: (){
                       setState(() {
-                        isMore = !isMore;
+                        info.isMore = !info.isMore;
                       });
                     },
                     child: Row(

@@ -27,7 +27,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
   rxdart: ^0.22.0
-  floor: ^0.7.0
+  floor: ^0.8.0
   json_serializable: ^3.1.0
   dio: ^2.1.13
   logger: ^0.7.0+2
@@ -49,7 +49,7 @@ dev_dependencies:
     sdk: flutter
 
   build_runner: ^1.6.1
-  floor_generator: ^0.7.0
+  floor_generator: ^0.8.0
 
 
 

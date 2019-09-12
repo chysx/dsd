@@ -32,4 +32,11 @@ abstract class DSD_T_DeliveryItem_Dao {
 
   @update
   Future<int> updateEntity(DSD_T_DeliveryItem_Entity entity);
+
+  @Query('DELETE FROM DSD_T_DeliveryItem WHERE deliveryNo = :deliveryNo')
+  Future<void> deleteByNo(String deliveryNo);
+
+  @insert
+  Future<List<int>> insertEntityList(List<DSD_T_DeliveryItem_Entity> entityList);
+
 }

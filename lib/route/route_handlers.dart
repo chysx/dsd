@@ -12,6 +12,7 @@ import 'package:dsd/ui/page/route_plan/route_plan_presenter.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
+import 'package:dsd/ui/page/task_list/task_list_page.dart';
 import 'package:fluro/fluro.dart';
 
 import '../application.dart';
@@ -89,4 +90,9 @@ Handler routePlanHandler = Handler(handlerFunc: (_,params) {
     ],
     child: RoutePlanPage(),
   );
+});
+
+Handler taskListHandler = Handler(handlerFunc: (_,params) {
+  String data = params['data'][0];
+  return TaskListPage(data);
 });

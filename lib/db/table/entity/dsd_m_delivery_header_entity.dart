@@ -7,9 +7,9 @@ import 'package:floor/floor.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/1 10:12
 
-//@Entity(tableName: "DSD_M_DeliveryHeader")
+@Entity(tableName: "DSD_M_DeliveryHeader")
 class DSD_M_DeliveryHeader_Entity {
-//  @PrimaryKey(autoGenerate: true)
+  @PrimaryKey(autoGenerate: true)
   int id;
   String DeliveryNo;
   String ShipmentNo;
@@ -46,6 +46,7 @@ class DSD_M_DeliveryHeader_Entity {
   String OnlineDiscount;
   String OtherDiscount;
   String APDiscount;
+
 
   DSD_M_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.ShipmentNo, this.DeliveryType, this.DeliveryStatus,
       this.AccountNumber, this.OrderNo, this.InvoiceNo, this.PONumber, this.OrderDate, this.PlanDeliveryDate,

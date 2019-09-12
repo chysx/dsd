@@ -33,4 +33,7 @@ abstract class DSD_T_DeliveryHeader_Dao {
 
   @Query('SELECT * FROM DSD_T_DeliveryHeader WHERE ShipmentNo = :ShipmentNo')
   Future<List<DSD_T_DeliveryHeader_Entity>> findEntityByShipmentNo(String ShipmentNo);
+
+  @Query('SELECT * FROM DSD_T_DeliveryHeader WHERE shipmentNo = :shipmentNo AND accountNumber = :accountNumber')
+  Future<List<DSD_T_DeliveryHeader_Entity>> findEntityByCon(String shipmentNo,String accountNumber);
 }

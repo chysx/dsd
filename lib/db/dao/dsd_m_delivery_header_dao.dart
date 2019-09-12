@@ -1,4 +1,3 @@
-import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:floor/floor.dart';
 
@@ -14,8 +13,8 @@ abstract class DSD_M_DeliveryHeader_Dao {
   @Query('SELECT * FROM DSD_M_DeliveryHeader')
   Future<List<DSD_M_DeliveryHeader_Entity>> findAll();
 
-  @Query('SELECT * FROM DSD_M_DeliveryHeader WHERE DeliveryNo = :DeliveryNo')
-  Future<DSD_M_DeliveryHeader_Entity> findEntityByDeliveryNo(String DeliveryNo);
+  @Query('SELECT * FROM DSD_M_DeliveryHeader WHERE deliveryNo = :deliveryNo')
+  Future<DSD_M_DeliveryHeader_Entity> findEntityByDeliveryNo(String deliveryNo);
 
   @insert
   Future<void> insertEntity(DSD_M_DeliveryHeader_Entity entity);

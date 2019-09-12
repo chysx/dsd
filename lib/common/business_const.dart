@@ -33,3 +33,47 @@ class Show {
 
   static const String FALSE = "False";
 }
+
+///
+/// 根据配置控制
+///
+class IsReturn {
+  /// 显示
+
+  static const String TRUE = "1";
+
+  /// 隐藏
+
+  static const String FALSE = "0";
+}
+
+class ProductUnit {
+  static const String CS_EA = "CS_EA";
+  static const String CS = "CS";
+  static const String EA = "EA";
+  static const String CS_EA_VALUE = "1";
+  static const String CS_VALUE = "0";
+  static const String EA_VALUE = "2";
+}
+
+class StockTracking {
+  static const String CATEGORY = "StockTracking";
+  static const String CHKO = "CHKO";
+  static const String CHKI = "CHKI";
+  static const String DELE = "DELE";
+  static const String ERET = "ERET";
+  static const String TRET = "TRET";
+  static const String VASL = "VASL";
+}
+
+class StockChildTracking {
+  static const String CATEGORY = "StockChildTracking";
+  static const String CHKO_DELIVERY = "CHKO_DELIVERY";
+  static const String CHKO_VANSALE = "CHKO_VANSALE";
+  static const String CHKI_DELIVERY = "CHKI_DELIVERY";
+  static const String CHKI_EMPTYRETURN = "CHKI_EMPTYRETURN";
+  static const String CHKI_TRADERETURN = "CHKI_TRADERETURN";
+  static const String CHKI_VANSALE = "CHKI_VANSALE";
+  static const String EMPTY_IN_DELIVERY = "EMPTY_IN_DELIVERY";
+  static const String EMPTY_IN_VANSALE = "EMPTY_IN_VANSALE";
+}
