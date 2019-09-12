@@ -65,7 +65,11 @@ Handler routeHandler = Handler(handlerFunc: (_,params) {
 Handler checkoutShipmentHandler = Handler(handlerFunc: (_,params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new CheckoutShipmentPresenter()..initData()),
+      //ChangeNotifierProvider(builder: (context) => new CheckoutShipmentPresenter()..initData()),
+
+      ChangeNotifierProvider<CheckoutShipmentPresenter>(builder: (context) =>
+      new CheckoutShipmentPresenter()
+        ..onEvent(ShipmentEvent.InitData)),
     ],
     child: CheckoutShipmentPage(),
   );

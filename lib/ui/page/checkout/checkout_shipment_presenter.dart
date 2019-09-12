@@ -1,31 +1,40 @@
+import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
 
-class CheckoutShipmentPresenter extends EventNotifier<ShipmentInfo> {
+enum ShipmentEvent {
+  InitData
+}
+
+class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
   List<ShipmentInfo> list = new List();
 
   @override
-  void onEvent(ShipmentInfo event, [data]) {
+  void onEvent(ShipmentEvent event, [dynamic data]) async {
+
+    switch(event){
+      case ShipmentEvent.InitData:
+        print("123");
+        await initData();
+        break;
+    }
+
     super.onEvent(event, data);
   }
 
-  Future initData() {
+  Future initData() async {
     //initSettingList();
-    initCheckoutShipmentInfo();
-  }
-
-  void initCheckoutShipmentInfo() async {
     await getCheckoutShipmentInfo();
   }
 
   Future<ShipmentInfo> getCheckoutShipmentInfo() async {
-    //list = await ShipmentManager.getShipmentList();
-
-    ShipmentInfo item = new ShipmentInfo();
+    list = await ShipmentManager.getShipmentList();
+    print("size:" + list.length.toString());
+    /*ShipmentInfo item = new ShipmentInfo();
     item.no = "111";
     item.type = "222";
     item.status = "333";
     list.add(item);
-    print(list.length);
+    print(list.length);*/
   }
 }

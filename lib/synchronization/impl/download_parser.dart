@@ -42,7 +42,7 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
     print("**********************Request*****************************");
 
     print("**********************Response*****************************");
-    _printDataStr("response",response.data);
+    //_printDataStr("response",response.data);
     print("**********************Response*****************************");
 
     bool result = true;

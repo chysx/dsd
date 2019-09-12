@@ -74,7 +74,6 @@ class RoutePlanPage extends StatelessWidget {
             ],
           );
         }),
-       drawer: DrawerWidget(),
     );
   }
 }
