@@ -1,4 +1,5 @@
 
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
@@ -13,6 +14,7 @@ import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
 import 'package:dsd/ui/page/task_list/task_list_page.dart';
+import 'package:dsd/ui/page/task_list/task_list_presenter.dart';
 import 'package:fluro/fluro.dart';
 
 import '../application.dart';
@@ -97,6 +99,14 @@ Handler routePlanHandler = Handler(handlerFunc: (_,params) {
 });
 
 Handler taskListHandler = Handler(handlerFunc: (_,params) {
-  String data = params['data'][0];
-  return TaskListPage(data);
+
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<TaskListPresenter>(builder: (context) =>
+      new TaskListPresenter()
+        ..setPageParams(params)
+        ..onEvent(TaskListEvent.InitData)),
+    ],
+    child: TaskListPage(),
+  );
 });

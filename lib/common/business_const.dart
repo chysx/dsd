@@ -77,3 +77,8 @@ class StockChildTracking {
   static const String EMPTY_IN_DELIVERY = "EMPTY_IN_DELIVERY";
   static const String EMPTY_IN_VANSALE = "EMPTY_IN_VANSALE";
 }
+
+class ActionType {
+  static const String CheckOut = "CHKO";
+  static const String CheckIn = "CHKI";
+}

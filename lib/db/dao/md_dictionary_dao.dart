@@ -31,4 +31,7 @@ abstract class MD_Dictionary_Dao {
 
   @update
   Future<int> updateEntity(MD_Dictionary_Entity entity);
+
+  @Query('SELECT * FROM MD_Dictionary WHERE Category = :Category AND valid = :valid ORDER BY Sequence ASC')
+  Future<List<MD_Dictionary_Entity>> findEntityByCategory(String category,String valid);
 }

@@ -28,14 +28,14 @@ class CustomerDialog extends StatelessWidget {
       content: Text(msg),
       actions: <Widget>[
         FlatButton(
-          child: Text('ok'),
+          child: Text(IntlUtil.getString(context, Ids.general_confirm)),
           onPressed: () {
             dismiss(context);
             if(onConfirm != null) onConfirm();
           },
         ),
         FlatButton(
-          child: Text('cancel'),
+          child: Text(IntlUtil.getString(context, Ids.general_cancel)),
           onPressed: () {
             dismiss(context);
             if(onCancel != null) onCancel();
@@ -45,7 +45,7 @@ class CustomerDialog extends StatelessWidget {
     );
   }
 
-  static showCustomerDialog(BuildContext context,{String title,String msg,OnConfirm onConfirm,OnCancel onCancel}) {
+  static show(BuildContext context,{String title,String msg,OnConfirm onConfirm,OnCancel onCancel}) {
     if(title == null) title = IntlUtil.getString(context, Ids.general_warning);
     showDialog(
         context: context,

@@ -5,3 +5,6 @@
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/9/11 14:11
 
+class BusinessUtil {
+
+}

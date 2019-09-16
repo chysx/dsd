@@ -82,6 +82,15 @@ flutter:
     - assets/imgs/menu_setting.png
     - assets/imgs/menu_sync.png
     - assets/imgs/menu_workflow.png
+    - assets/imgs/task_ar_collection.png
+    - assets/imgs/task_delivery.png
+    - assets/imgs/task_documents.png
+    - assets/imgs/task_empty_return.png
+    - assets/imgs/task_notes.png
+    - assets/imgs/task_pre_sell.png
+    - assets/imgs/task_survey.png
+    - assets/imgs/task_trade_return.png
+    - assets/imgs/task_van_sales.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

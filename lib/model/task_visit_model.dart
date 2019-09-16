@@ -26,6 +26,17 @@ class TaskVisitModel {
   DSD_T_Visit_Entity tVisit = new DSD_T_Visit_Entity.Empty();
   List<TaskVisitItemModel> visitItemModelList = [];
 
+  static TaskVisitModel _instance;
+  TaskVisitModel._();
+  static TaskVisitModel _getInstance(){
+    if(_instance == null){
+      _instance = new TaskVisitModel._();
+    }
+    return _instance;
+  }
+
+  factory TaskVisitModel() => _getInstance();
+
   Future fillVisitData(String shipmentNo, String accountNumber) async {
     if (await TaskVisitUtil.isNeedCreateVisit(shipmentNo, accountNumber)) {
       createVisit(shipmentNo, accountNumber);
@@ -209,6 +220,15 @@ class TaskVisitModel {
       return entity.ProductCode == productCode && entity.IsReturn == IsReturn.TRUE;
     });
   }
+
+  ///
+  /// 清空数据
+  ///
+   void clearData() {
+    tVisit = new DSD_T_Visit_Entity.Empty();
+    visitItemModelList.clear();
+  }
+
 }
 
 class TaskVisitItemModel {

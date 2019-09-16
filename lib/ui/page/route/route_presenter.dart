@@ -1,16 +1,21 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/system_config.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
+import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
+import 'package:dsd/res/strings.dart';
 import 'package:dsd/route/routers.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart' as material;
 
@@ -29,12 +34,13 @@ enum RouteEvent {
   Search,
 }
 
-class RouteTitle extends EventNotifier{
+class RouteTitle extends EventNotifier {
   int completeCount = 0;
   int totalCount = 0;
-  RouteTitle([this.completeCount,this.totalCount]);
 
-  void reset(){
+  RouteTitle([this.completeCount, this.totalCount]);
+
+  void reset() {
     completeCount = 0;
     totalCount = 0;
   }
@@ -115,7 +121,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     sortShipmentList();
 
     print('print shipmentList');
-    shipmentList.forEach((item){
+    shipmentList.forEach((item) {
       print(item);
     });
   }
@@ -205,7 +211,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   Future setCurShipment(String shipmentNo) async {
     DSD_M_ShipmentHeader_Entity entity =
         await Application.database.mShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, Valid.EXIST);
-    if(entity != null){
+    if (entity != null) {
       currentShipment = new ShipmentInfo()
         ..no = entity.ShipmentNo
         ..type = entity.ShipmentType
@@ -215,21 +221,34 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     }
   }
 
-  void onClickPlan(material.BuildContext context){
-    Application.router
-        .navigateTo(context, Routers.route_plan, transition: TransitionType.inFromLeft);
+  void onClickPlan(material.BuildContext context) {
+    Application.router.navigateTo(context, Routers.route_plan, transition: TransitionType.inFromLeft);
   }
 
-  void onClickProfile(material.BuildContext context){
-    String itemUrl = 'hahaha';
-    String route = '${Routers.task_list}?data=${Uri.encodeComponent(itemUrl)}';
-//    String route = Routers.task_list;
-    Application.router
-        .navigateTo(context, route, transition: TransitionType.inFromLeft);
+  void onClickProfile(material.BuildContext context) {}
+
+  Future onClickStartCall(material.BuildContext context, CustomerInfo info) async {
+    if (await isDoCheckIn(context, currentShipment.no)) return;
+    String path =
+        '''${Routers.task_list}?${FragmentArg.TASK_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.TASK_ACCOUNT_NUMBER}=${info.accountNumber}&${FragmentArg.TASK_NO_SCAN_REASON}=''&${FragmentArg.TASK_SHIPMENT_TYPE}=${currentShipment.type}&${FragmentArg.TASK_CUSTOMER_NAME}=${info.name}&${FragmentArg.TASK_CUSTOMER_TYPE}=${info.customerType}&${FragmentArg.TASK_IS_BLOCK}=${info.block}
+    ''';
+
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
-  void onClickStartCall(){
-
+  ///
+  /// 判断当前shipmentno是否做过checkin
+  /// @param shipmentNo
+  /// @return
+  ///
+  Future<bool> isDoCheckIn(material.BuildContext context, String shipmentNo) async {
+    //判断当前shipmentno是否做过checkin
+    DSD_T_ShipmentHeader_Entity tShipmentHeader =
+        await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, ActionType.CheckIn);
+    if (tShipmentHeader != null) {
+      CustomerDialog.show(context, msg: IntlUtil.getString(context, Ids.tasklist_verification_no_visit));
+      return true;
+    }
+    return false;
   }
-
 }

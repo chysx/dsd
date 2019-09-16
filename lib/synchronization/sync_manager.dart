@@ -17,7 +17,7 @@ import 'model/sync_init_model.dart';
 class SyncManager {
   static void start(SyncType syncType,
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) {
-    if (context != null) LoadingDialog.showLoadingDialog(context);
+    if (context != null) LoadingDialog.show(context);
     if (syncParameter == null) syncParameter = new SyncParameter();
     new SyncInitModel(syncType, syncParameter: syncParameter, onSuccessSync: () {
       print("onSuccessSync");

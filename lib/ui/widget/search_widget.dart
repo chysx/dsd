@@ -76,13 +76,13 @@ class _SearchState extends State<SearchWidget> {
               hintText: IntlUtil.getString(context, Ids.userName),
               prefixIcon: GestureDetector(
                 onTap: () {
-                  CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
+                  CustomerDialog.show(context, msg: 'hahaha');
                 },
                 child: Icon(Icons.search),
               ),
               suffixIcon: GestureDetector(
                 onTap: () {
-                  CustomerDialog.showCustomerDialog(context, msg: 'hahaha');
+                  CustomerDialog.show(context, msg: 'hahaha');
                 },
                 child: Icon(Icons.highlight_off),
               ),

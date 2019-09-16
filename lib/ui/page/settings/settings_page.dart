@@ -171,7 +171,7 @@ class _SettingState extends State<SettingsPage> {
                           ),
                           onPressed: () {
                             presenter.onEvent(SettingEvent.Save);
-                            CustomerDialog.showCustomerDialog(context, msg:'save success',onConfirm: () {
+                            CustomerDialog.show(context, msg:'save success',onConfirm: () {
                               Navigator.of(context).pop();
                             });
                           },

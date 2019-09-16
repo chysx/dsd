@@ -49,10 +49,10 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     print('*******************status = ${loginStatus.toString()}');
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
-        CustomerDialog.showCustomerDialog(context,msg: 'Please input your account.');
+        CustomerDialog.show(context,msg: 'Please input your account.');
         break;
       case LoginStatus.CheckPasswordIsNull:
-        CustomerDialog.showCustomerDialog(context,msg: 'Please input your password!');
+        CustomerDialog.show(context,msg: 'Please input your password!');
         break;
       case LoginStatus.SyncUpdate:
         loginByOnline(context,SyncType.SYNC_UPDATE,loginInputInfo);
@@ -105,7 +105,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
   }
 
   void loginByOnline(BuildContext context,SyncType syncType,LoginInputInfo loginInputInfo) {
-    LoadingDialog.showLoadingDialog(context,msg: 'Login...');
+    LoadingDialog.show(context,msg: 'Login...');
     try{
       LoginRequestBean loginRequestBean = new LoginRequestBean();
       loginRequestBean
@@ -131,7 +131,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
           Duration diff = localTime.difference(serviceTime);
           if (diff.inMinutes.abs() > 15) {
             responseStatus = LoginResponseStatus.LocalServeTimeDifference;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'Your phone time is incorrect.\n'
                     'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
                     'Server time ${responseBean.result.serverTime}');
@@ -146,54 +146,54 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
 
           if (exceptionCode == 1) {
             responseStatus = LoginResponseStatus.ErrorUserMsg;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'Your account or password is incorrect. Please check it and try again.');
             return;
           }
 
           if (exceptionCode == 2) {
             responseStatus = LoginResponseStatus.ErrorPasswordExpired;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'Incorrect username or password expired!');
             return;
           }
 
           if (exceptionCode == 3) {
             responseStatus = LoginResponseStatus.AccountLock;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'The account had been locked. Please contact your manager.');
             return;
           }
 
           if (exceptionCode == 4) {
             responseStatus = LoginResponseStatus.AccountInvalid;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'The account is invalid. Please contact your manager.');
             return;
           }
 
           if (exceptionCode == 7) {
             responseStatus = LoginResponseStatus.NoShipment;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'You had not been assigned shipments, please contact your manager.');
             return;
           }
 
           if (exceptionCode == 9) {
             responseStatus = LoginResponseStatus.ImeiNotMatch;
-            CustomerDialog.showCustomerDialog(context,
+            CustomerDialog.show(context,
                 msg:'The IMEI is incorrect. Please contact your manager.');
             return;
           }
 
-          CustomerDialog.showCustomerDialog(context,
+          CustomerDialog.show(context,
               msg:'Login failed. Please check your network and try again.');
         }
       },
       onError: (e){
         LoadingDialog.dismiss(context);
         Application.logger.e(e.toString());
-        CustomerDialog.showCustomerDialog(context,
+        CustomerDialog.show(context,
             msg:'Login failed. Please check your network and try again.');
       });
     }catch(e){
@@ -210,7 +210,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
   }
 
   void syncData(BuildContext context, SyncType syncType) {
-    LoadingDialog.showLoadingDialog(context);
+    LoadingDialog.show(context);
     SyncManager.start(syncType, context: context, onSuccessSync: () {
       LoadingDialog.dismiss(context);
       startNavigate(context);
@@ -218,7 +218,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
       LoadingDialog.dismiss(context);
       clearUserToDb();
       appConfigEntity.syncInitFlag = null;
-      CustomerDialog.showCustomerDialog(context, msg:'Sync fail');
+      CustomerDialog.show(context, msg:'Sync fail');
     });
   }
 

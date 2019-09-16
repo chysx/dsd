@@ -59,3 +59,14 @@ class TaskType {
   static const String Profile = "Customer Profile";
 }
 
+class TaskDeliveryStatus {
+  static const String Default = "";
+  static const String NotComplete = "Not Complete";
+  static const String Complete = "Complete";
+  static const String PartialDelivered = "Partial Delivered";
+  static const String TotalDelivered = "Total Delivered";
+  static const String Rebook = "Rebook";
+  static const String Hold = "Hold";
+  static const String Cancel = "Cancel";
+  static const String Sales = "Sales";
+}

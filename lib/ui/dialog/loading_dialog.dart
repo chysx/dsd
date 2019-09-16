@@ -38,7 +38,7 @@ class LoadingDialog extends Dialog {
     );
   }
 
-  static showLoadingDialog(BuildContext context,{String msg = 'sync data...'}) {
+  static show(BuildContext context,{String msg = 'sync data...'}) {
     showDialog(
         context: context,
         barrierDismissible: false,
