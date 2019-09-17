@@ -12,6 +12,8 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:sqflite/sqlite_api.dart' as sqlite_api;
 import 'package:dsd/synchronization/bean/sync_response_bean.dart';
 
+import '../../application.dart';
+
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
 ///
@@ -38,11 +40,12 @@ class DownloadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   @override
   Future<bool> parse(Response<Map<String, dynamic>> response) async {
     print("**********************Request*****************************");
-    _printDataStr("request", response.request.data);
+    Application.logger.i('''url = ${response.request.baseUrl + response.request.path}''');
+    _printDataStr("response",response.request);
     print("**********************Request*****************************");
 
     print("**********************Response*****************************");
-    //_printDataStr("response",response.data);
+//    _printDataStr("response",response.data);
     print("**********************Response*****************************");
 
     bool result = true;

@@ -164,7 +164,7 @@ class _$AppDatabase extends AppDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `MD_Contact` (`pid` INTEGER PRIMARY KEY AUTOINCREMENT, `ID` TEXT, `AssistantName` TEXT, `AssistantPhone` TEXT, `Birthdate` TEXT, `Owner` TEXT, `CreatedBy` TEXT, `Jigsaw` TEXT, `Department` TEXT, `Description` TEXT, `DoNotCall` TEXT, `Email` TEXT, `HasOptedOutOfEmail` TEXT, `Fax` TEXT, `HasOptedOutOfFax` TEXT, `HomePhone` TEXT, `LastModifiedBy` TEXT, `LastCURequestDate` TEXT, `LastCUUpdateDate` TEXT, `LeadSource` TEXT, `MailingAddress` TEXT, `MobilePhone` TEXT, `Name` TEXT, `Salutation` TEXT, `FirstName` TEXT, `LastName` TEXT, `OtherAddress` TEXT, `OtherPhone` TEXT, `Phone` TEXT, `ReportsTo` TEXT, `Title` TEXT, `AccountNumber__c` TEXT, `ebMobile__IsActive__c` TEXT, `ebMobile__Anniversary__c` TEXT, `ebMobile__CustomerOnboarding__c` TEXT, `ebMobile__ExternalID__c` TEXT, `ebMobile__Facebook__c` TEXT, `ebMobile__GUID__c` TEXT, `ebMobile__Hobbies__c` TEXT, `ebMobile__Married__c` TEXT, `ebMobile__OnboardingUser__c` TEXT, `ebMobile__Primary__c` TEXT, `ebMobile__RecordAction__c` TEXT, `CCSM_SAP_Contact_ID__c` TEXT, `ebMobile__Spouse__c` TEXT, `ebMobile__Title__c` TEXT, `ebMobile__Twitter__c` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `MD_Dictionary` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `Category` TEXT, `Value` TEXT, `Description` TEXT, `Valid` INTEGER, `Sequence` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `MD_Dictionary` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `Category` TEXT, `Value` TEXT, `Description` TEXT, `Valid` TEXT, `Sequence` INTEGER)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `MD_Person` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `UserCode` TEXT, `Password` TEXT, `FirstName` TEXT, `LastName` TEXT, `Type` TEXT, `RouteNumber` TEXT)');
         await database.execute(
@@ -3708,7 +3708,7 @@ class _$MD_Dictionary_Dao extends MD_Dictionary_Dao {
           row['Category'] as String,
           row['Value'] as String,
           row['Description'] as String,
-          row['Valid'] as int,
+          row['Valid'] as String,
           row['Sequence'] as int);
 
   final InsertionAdapter<MD_Dictionary_Entity>

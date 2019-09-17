@@ -14,7 +14,7 @@ class MD_Dictionary_Entity {
   String Category;
   String Value;
   String Description;
-  int Valid;
+  String Valid;
   int Sequence;
 
   MD_Dictionary_Entity(this.id, this.Category, this.Value, this.Description, this.Valid, this.Sequence);
