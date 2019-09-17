@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/ui/page/login/user.dart';
 import 'package:fluro/fluro.dart';
@@ -28,6 +29,7 @@ class Application {
   static DeviceInfo deviceInfo;
   static User user;
   static AppConfigEntity appConfigEntity;
+  static Map<String,String> productMap = {};
 
   static void install() {
     new DbHelper();
@@ -36,6 +38,7 @@ class Application {
       database = new DbHelper().database;
       print('database = $database');
       initAppConfigEntity();
+      makeProductMap();
     });
     logger = new Log().logger;
     httpService = new HttpService().dio;
@@ -52,6 +55,14 @@ class Application {
       user.userCode = appConfigEntity.userCode;
       user.userName = appConfigEntity.userName;
       user.passWord = appConfigEntity.password;
+    }
+  }
+
+  static Future makeProductMap() async {
+    productMap.clear();
+    List<MD_Product_Entity> list = await database.productDao.findAll();
+    for(MD_Product_Entity entity in list){
+      productMap[entity.ProductCode] = entity.Name;
     }
   }
 }

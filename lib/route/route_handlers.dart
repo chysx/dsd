@@ -4,6 +4,8 @@ import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_presenter.dart';
+import 'package:dsd/ui/page/delivery/delivery_page.dart';
+import 'package:dsd/ui/page/delivery/delivery_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
@@ -108,5 +110,18 @@ Handler taskListHandler = Handler(handlerFunc: (_,params) {
         ..onEvent(TaskListEvent.InitData)),
     ],
     child: TaskListPage(),
+  );
+});
+
+Handler deliveryHandler = Handler(handlerFunc: (_,params) {
+
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<DeliveryPresenter>(builder: (context) =>
+      new DeliveryPresenter()
+        ..setPageParams(params)
+        ..onEvent(DeliveryEvent.InitData)),
+    ],
+    child: DeliveryPage(),
   );
 });

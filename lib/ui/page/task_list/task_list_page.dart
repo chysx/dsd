@@ -1,5 +1,4 @@
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/ui/page/route/customer_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_presenter.dart';
 import 'package:dsd/utils/string_util.dart';
@@ -60,38 +59,43 @@ class _TaskListState extends State<TaskListPage> {
                       itemBuilder: (context, index) {
                         TaskInfo info = presenter.taskList[index];
 
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 16, bottom: 16),
-                          child: Row(
-                            children: <Widget>[
-                              Image.asset(info.imgPath),
-                              Padding(
-                                padding: EdgeInsets.only(right: 10),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    info.name,
-                                    style: TextStyles.normal,
-                                  ),
-                                  getDesc(info)
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 10),
-                              ),
-                              getMust(info),
-                              Spacer(),
-                              Text(
-                                info.status,
-                                style: TextStyles.normal,
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_right,
-                                color: Colors.grey,
-                              ),
-                            ],
+                        return GestureDetector(
+                          onTap: (){
+                            presenter.onItemClick(context, info);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16, bottom: 16),
+                            child: Row(
+                              children: <Widget>[
+                                Image.asset(info.imgPath),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      info.name,
+                                      style: TextStyles.normal,
+                                    ),
+                                    getDesc(info)
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                ),
+                                getMust(info),
+                                Spacer(),
+                                Text(
+                                  info.status,
+                                  style: TextStyles.normal,
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       }),

@@ -50,3 +50,8 @@ class FragmentArg {
   static const String PRINT_PRAMETER = "print_prameter";
   static const String IS_FROM_VISIT = "is_from_visit";
 }
+
+class ReadyOnly {
+  static const String TRUE = "true";
+  static const String FALSE = "false";
+}

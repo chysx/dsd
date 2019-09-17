@@ -102,3 +102,16 @@ class CheckOut {
   static const String ODOMETER_MANDATORY = "OdometerMandatory";
   static const String HELPER_MANDANTORY = "HelperMandantory";
 }
+
+class Delivery {
+  static const String CATEGORY = "Delivery";
+  static const String PRODUCT_UNIT = "ProductUnit";
+  static const String ENABLE_PARTIAL_DELIVERY = "EnablePartialDelivery";
+  static const String DRIVER_SIGN_OFF = "DriverSignOff";
+  static const String CUSTOMER_SIGN_OFF = "CustomerSignOff"; //"EnableCustomerSignOff"
+  static const String ALLOW_MULTI_PAYMENT = "AllowMultiPayment";
+  static const String ACTUAL_PAY_MUST_ENOUGH = "ActualPayMustEnough";
+  static const String PRINT_PROFOMA_INVOICE = "PrintProfomaInvoice";
+  static const String PRINT_DELIVERY_SLIP = "PrintDeliverySlip";
+  static const String DEFAULT_ALL_EQUAL = "DefaultAllEqual";
+}

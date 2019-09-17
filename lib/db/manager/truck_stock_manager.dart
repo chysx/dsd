@@ -2,6 +2,7 @@ import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/db/table/entity/dsd_t_truck_stock_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_truck_stock_tracking_entity.dart';
+import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:flustars/flustars.dart';
 
@@ -21,17 +22,8 @@ enum StockType {
 }
 
 class TruckStockManager {
-  static Future setStock(
-      StockType stockType,
-      String action,
-      int truckId,
-      String shipmentNo,
-      String productCode,
-      int csChange,
-      int eaChange,
-      int csSaleableChange,
-      int eaSaleableChange,
-      String visitId) async {
+  static Future setStock(StockType stockType, String action, int truckId, String shipmentNo, String productCode,
+      int csChange, int eaChange, int csSaleableChange, int eaSaleableChange, String visitId) async {
     DSD_T_TruckStock_Entity csTruckStock =
         await Application.database.tTruckStockDao.findEntityByCon(truckId, shipmentNo, productCode, ProductUnit.CS);
 
@@ -204,5 +196,37 @@ class TruckStockManager {
     eaAdd.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
     eaAdd.dirty = SyncDirtyStatus.DEFAULT;
     await Application.database.tTruckStockTrackingDao.insertEntity(eaAdd);
+  }
+
+  ///
+  /// 获取产品的库存数据
+  ///
+  /// @param shippmentNo
+  ///
+  static Future<List<TruckStockProductInfo>> getProductStock(String shipmentNo) async {
+    List<DSD_T_TruckStock_Entity> stockEntityList =
+        await Application.database.tTruckStockDao.findEntityByShipment(shipmentNo);
+
+    Map<String, TruckStockProductInfo> hashMap = {};
+    for (DSD_T_TruckStock_Entity entity in stockEntityList) {
+      String code = entity.ProductCode;
+      String unit = entity.ProductUnit;
+      TruckStockProductInfo info = hashMap[code];
+      if (info == null) {
+        info = new TruckStockProductInfo();
+        hashMap[code] = info;
+        info.productCode = code;
+      }
+      if (ProductUnit.CS == unit) {
+        info.csStockQty = entity.StockQty;
+        info.csSaleableQty = entity.SaleableQty;
+      } else if (ProductUnit.EA == unit) {
+        info.eaStockQty = entity.StockQty;
+        info.eaSaleableQty = entity.SaleableQty;
+      }
+    }
+    List<TruckStockProductInfo> resultList = [];
+    resultList.addAll(hashMap.values);
+    return resultList;
   }
 }

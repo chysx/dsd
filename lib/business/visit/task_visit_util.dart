@@ -1,5 +1,6 @@
 import 'package:dsd/db/manager/visit_manager.dart';
 import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
+import 'package:dsd/model/task_visit_model.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -19,5 +20,9 @@ class TaskVisitUtil {
       return false;
     }
     return true;
+  }
+
+   static void cacheDeliveryHeaderStatus(TaskVisitItemModel visitItem, String deliveryStatus) {
+    visitItem.tDeliveryHeader.DeliveryStatus = deliveryStatus;
   }
 }

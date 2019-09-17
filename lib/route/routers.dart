@@ -18,6 +18,7 @@ class Routers {
   static const sync = '/sync';
   static const route_plan = '/route_plan';
   static const task_list = '/task_list';
+  static const delivery = '/delivery';
 
   static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
@@ -30,5 +31,6 @@ class Routers {
     router.define(sync, handler: syncHandler);
     router.define(route_plan, handler: routePlanHandler);
     router.define(task_list, handler: taskListHandler);
+    router.define(delivery, handler: deliveryHandler);
   }
 }

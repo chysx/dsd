@@ -10,9 +10,14 @@ import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/md_dictionary_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/task_visit_model.dart';
+import 'package:dsd/route/routers.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/page/task_list/config_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_info.dart';
+import 'package:fluro/fluro.dart';
+import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart' as material;
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -246,6 +251,50 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     return list.firstWhere((item){
       return item.DeliveryNo == deliveryNo;
     },orElse: () => null);
+  }
+
+  void onItemClick(material.BuildContext context,TaskInfo info) {
+    switch (info.type) {
+      case TaskType.Delivery:
+        doDelivery(context,info);
+        break;
+    }
+  }
+
+   void doDelivery(material.BuildContext context,TaskInfo info) {
+    if (!info.isMust) return;
+    String readOnly;
+    switch (info.status) {
+      case TaskDeliveryStatus.TotalDelivered:
+      case TaskDeliveryStatus.PartialDelivered:
+      case TaskDeliveryStatus.Rebook:
+        readOnly = ReadyOnly.TRUE;
+        break;
+      default:
+        readOnly = ReadyOnly.FALSE;
+        createDeliveryHeader(info);
+        break;
+    }
+
+    String path =
+    '''${Routers.delivery}?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
+    ''';
+
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
+  ///
+  /// 保存DeliveryHeader数据
+  ///
+   Future createDeliveryHeader(TaskInfo info) async {
+    TaskVisitItemModel visitItem = TaskVisitModel().getVisitItemByDeliveryNo(info.no);
+    visitItem.tDeliveryHeader.DeliveryNo = info.no;
+    visitItem.tDeliveryHeader.VisitId = TaskVisitModel().tVisit.VisitId;
+    visitItem.tDeliveryHeader.ShipmentNo = shipmentNo;
+    visitItem.tDeliveryHeader.AccountNumber = accountNumber;
+    visitItem.tDeliveryHeader.DeliveryType = info.type;
+    visitItem.tDeliveryHeader.StartTime = DateUtil.getDateStrByDateTime(DateTime.now());
+    visitItem.tDeliveryHeader.dirty = SyncDirtyStatus.DEFAULT;
   }
 
 }

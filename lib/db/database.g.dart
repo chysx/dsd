@@ -2196,6 +2196,15 @@ class _$DSD_T_TruckStock_Dao extends DSD_T_TruckStock_Dao {
   }
 
   @override
+  Future<List<DSD_T_TruckStock_Entity>> findEntityByShipment(
+      String shipmentNo) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM DSD_T_TruckStock WHERE shipmentNo = ?',
+        arguments: <dynamic>[shipmentNo],
+        mapper: _dSD_T_TruckStockMapper);
+  }
+
+  @override
   Future<void> insertEntity(DSD_T_TruckStock_Entity entity) async {
     await _dSD_T_TruckStock_EntityInsertionAdapter.insert(
         entity, sqflite.ConflictAlgorithm.abort);
