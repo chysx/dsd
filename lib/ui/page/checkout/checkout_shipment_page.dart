@@ -43,34 +43,40 @@ class CheckoutShipmentPage extends StatelessWidget {
           children: <Widget>[
             header,
             Expanded(
-              child: ListView.builder(
-                  itemCount: presenter.list.length,
-                  itemBuilder: (content, index) {
-                    ShipmentInfo info = presenter.list[index];
-                    return Row(
-                      children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            info.no,
-                            textAlign: TextAlign.left,
+              child: ListView.separated(
+                  itemCount: presenter.shipmentInfoList.length,
+                  separatorBuilder: (context, index){
+                    return Divider(height: 2,);
+                  },
+                  itemBuilder: (context, index) {
+                    ShipmentInfo info = presenter.shipmentInfoList[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              info.no??'',
+                              textAlign: TextAlign.left,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            info.type,
-                            textAlign: TextAlign.center,
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              info.type??'',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            info.status,
-                            textAlign: TextAlign.center,
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              info.status??'',
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   }),
             )

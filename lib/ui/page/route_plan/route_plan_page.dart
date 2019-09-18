@@ -1,5 +1,3 @@
-
-
 import 'package:dsd/model/route_plan_info.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/page/route_plan/route_plan_presenter.dart';
@@ -11,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class RoutePlanPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     var header = ListHeaderWidget(
@@ -30,50 +27,55 @@ class RoutePlanPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: GestureDetector(
-          child: Text('ROUTE PLAN'),
-        )//Text('ROUTE PLAN'),
-      ),
-        body:
-        Consumer<RoutePlanPresenter>(builder: (context, presenter, _) {
-          return new Column(
-            children: <Widget>[
-              header,
-              Expanded(
-                child: ListView.builder(
-                    itemCount: presenter.list.length,
-                    itemBuilder: (content, index) {
-                      RoutePlanInfo info = presenter.list[index];
-                      return Row(
+          title: GestureDetector(
+        child: Text('ROUTE PLAN'),
+      ) //Text('ROUTE PLAN'),
+          ),
+      body: Consumer<RoutePlanPresenter>(builder: (context, presenter, _) {
+        return new Column(
+          children: <Widget>[
+            header,
+            Expanded(
+              child: ListView.separated(
+                  itemCount: presenter.routePlanList.length,
+                  separatorBuilder: (context, index){
+                    return Divider(height: 2,);
+                  },
+                  itemBuilder: (context, index) {
+                    RoutePlanInfo info = presenter.routePlanList[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "a",
+                              info.no,
                               textAlign: TextAlign.left,
                             ),
                           ),
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "b",
+                              info.type,
                               textAlign: TextAlign.center,
                             ),
                           ),
                           Expanded(
                             flex: 1,
                             child: Text(
-                              "c",
+                              info.qty.toString(),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ],
-                      );
-                    }),
-              )
-            ],
-          );
-        }),
+                      ),
+                    );
+                  }),
+            )
+          ],
+        );
+      }),
     );
   }
 }

@@ -7,14 +7,13 @@ enum ShipmentEvent {
 }
 
 class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
-  List<ShipmentInfo> list = new List();
+  List<ShipmentInfo> shipmentInfoList = [];
 
   @override
   void onEvent(ShipmentEvent event, [dynamic data]) async {
 
     switch(event){
       case ShipmentEvent.InitData:
-        print("123");
         await initData();
         break;
     }
@@ -23,18 +22,14 @@ class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
   }
 
   Future initData() async {
-    //initSettingList();
-    await getCheckoutShipmentInfo();
+    await fillShipmentData();
   }
 
-  Future<ShipmentInfo> getCheckoutShipmentInfo() async {
-    list = await ShipmentManager.getShipmentList();
-    print("size:" + list.length.toString());
-    /*ShipmentInfo item = new ShipmentInfo();
-    item.no = "111";
-    item.type = "222";
-    item.status = "333";
-    list.add(item);
-    print(list.length);*/
+   Future fillShipmentData() async {
+    shipmentInfoList = await ShipmentManager.getShipmentList();
+    shipmentInfoList.sort((ShipmentInfo si1, ShipmentInfo si2){
+      int result = si2.shipmentDate.compareTo(si1.shipmentDate);
+      return result == 0 ? si1.sequence.compareTo(si2.sequence) : result;
+    });
   }
 }

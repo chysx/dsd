@@ -221,8 +221,10 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     }
   }
 
-  void onClickPlan(material.BuildContext context) {
-    Application.router.navigateTo(context, Routers.route_plan, transition: TransitionType.inFromLeft);
+  void onClickPlan(material.BuildContext context, CustomerInfo info) {
+    String path =
+    '''${Routers.route_plan}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
   void onClickProfile(material.BuildContext context) {}
@@ -230,8 +232,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   Future onClickStartCall(material.BuildContext context, CustomerInfo info) async {
     if (await isDoCheckIn(context, currentShipment.no)) return;
     String path =
-        '''${Routers.task_list}?${FragmentArg.TASK_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.TASK_ACCOUNT_NUMBER}=${info.accountNumber}&${FragmentArg.TASK_NO_SCAN_REASON}=''&${FragmentArg.TASK_SHIPMENT_TYPE}=${currentShipment.type}&${FragmentArg.TASK_CUSTOMER_NAME}=${info.name}&${FragmentArg.TASK_CUSTOMER_TYPE}=${info.customerType}&${FragmentArg.TASK_IS_BLOCK}=${info.block}
-    ''';
+        '''${Routers.task_list}?${FragmentArg.TASK_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.TASK_ACCOUNT_NUMBER}=${info.accountNumber}&${FragmentArg.TASK_NO_SCAN_REASON}=''&${FragmentArg.TASK_SHIPMENT_TYPE}=${currentShipment.type}&${FragmentArg.TASK_CUSTOMER_NAME}=${info.name}&${FragmentArg.TASK_CUSTOMER_TYPE}=${info.customerType}&${FragmentArg.TASK_IS_BLOCK}=${info.block}''';
 
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }

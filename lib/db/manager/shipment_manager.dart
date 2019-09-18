@@ -98,10 +98,8 @@ class ShipmentManager {
       info
         ..no = values[0]
         ..type = values[1]
-        ..status = values[2]
-        ..description = values[3]
-        ..shipmentDate = values[4]
-        ..sequence = values[5];
+        ..shipmentDate = values[2]
+        ..sequence = values[3];
       result.add(info);
     }
     return result;

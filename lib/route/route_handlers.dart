@@ -1,4 +1,3 @@
-
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
@@ -54,88 +53,87 @@ Handler settingsHandler = Handler(handlerFunc: (_, params) {
   );
 });
 
-Handler routeHandler = Handler(handlerFunc: (_,params) {
+Handler routeHandler = Handler(handlerFunc: (_, params) {
   RouteTitle routeTitle = new RouteTitle();
   return MultiProvider(
     providers: [
       ChangeNotifierProvider<RouteTitle>(builder: (context) => routeTitle),
-      ChangeNotifierProvider<RoutePresenter>(builder: (context) =>
-      new RoutePresenter()
-        ..routeTitle = routeTitle
-        ..onEvent(RouteEvent.InitData)),
+      ChangeNotifierProvider<RoutePresenter>(
+          builder: (context) => new RoutePresenter()
+            ..routeTitle = routeTitle
+            ..onEvent(RouteEvent.InitData)),
     ],
     child: RoutePage(),
   );
 });
 
-Handler checkoutShipmentHandler = Handler(handlerFunc: (_,params) {
+Handler checkoutShipmentHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
       //ChangeNotifierProvider(builder: (context) => new CheckoutShipmentPresenter()..initData()),
 
-      ChangeNotifierProvider<CheckoutShipmentPresenter>(builder: (context) =>
-      new CheckoutShipmentPresenter()
-        ..onEvent(ShipmentEvent.InitData)),
+      ChangeNotifierProvider<CheckoutShipmentPresenter>(
+          builder: (context) => new CheckoutShipmentPresenter()..onEvent(ShipmentEvent.InitData)),
     ],
     child: CheckoutShipmentPage(),
   );
 });
 
-Handler checkoutHandler = Handler(handlerFunc: (_,params) {
+Handler checkoutHandler = Handler(handlerFunc: (_, params) {
   return CheckoutPage();
 });
 
-Handler checkInShipmentHandler = Handler(handlerFunc: (_,params) {
+Handler checkInShipmentHandler = Handler(handlerFunc: (_, params) {
   return CheckInShipmentPage();
 });
 
-Handler syncHandler = Handler(handlerFunc: (_,params) {
+Handler syncHandler = Handler(handlerFunc: (_, params) {
   return SyncPage();
 });
 
-Handler routePlanHandler = Handler(handlerFunc: (_,params) {
+Handler routePlanHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new RoutePlanPresenter()..initData()),
+      ChangeNotifierProvider(
+          builder: (context) => new RoutePlanPresenter()
+            ..setPageParams(params)
+            ..onEvent(RoutePlanEvent.InitData)),
     ],
     child: RoutePlanPage(),
   );
 });
 
-Handler taskListHandler = Handler(handlerFunc: (_,params) {
-
+Handler taskListHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider<TaskListPresenter>(builder: (context) =>
-      new TaskListPresenter()
-        ..setPageParams(params)
-        ..onEvent(TaskListEvent.InitData)),
+      ChangeNotifierProvider<TaskListPresenter>(
+          builder: (context) => new TaskListPresenter()
+            ..setPageParams(params)
+            ..onEvent(TaskListEvent.InitData)),
     ],
     child: TaskListPage(),
   );
 });
 
-Handler deliveryHandler = Handler(handlerFunc: (_,params) {
-
+Handler deliveryHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider<DeliveryPresenter>(builder: (context) =>
-      new DeliveryPresenter()
-        ..setPageParams(params)
-        ..onEvent(DeliveryEvent.InitData)),
+      ChangeNotifierProvider<DeliveryPresenter>(
+          builder: (context) => new DeliveryPresenter()
+            ..setPageParams(params)
+            ..onEvent(DeliveryEvent.InitData)),
     ],
     child: DeliveryPage(),
   );
 });
 
-Handler deliverySummaryHandler = Handler(handlerFunc: (_,params) {
-
+Handler deliverySummaryHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider<DeliverySummaryPresenter>(builder: (context) =>
-      new DeliverySummaryPresenter()
-        ..setPageParams(params)
-        ..onEvent(DeliverySummaryEvent.InitData)),
+      ChangeNotifierProvider<DeliverySummaryPresenter>(
+          builder: (context) => new DeliverySummaryPresenter()
+            ..setPageParams(params)
+            ..onEvent(DeliverySummaryEvent.InitData)),
     ],
     child: DeliverySummaryPage(),
   );
