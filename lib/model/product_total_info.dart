@@ -9,10 +9,10 @@ import 'package:dsd/common/dictionary.dart';
 ///  Date:         2019/9/16 14:43
 
 class ProductTotalInfo {
-   int totalPlanCs;
-   int totalPlanEa;
-   int totalActualCs;
-   int totalActualEa;
+   int totalPlanCs = 0;
+   int totalPlanEa = 0;
+   int totalActualCs = 0;
+   int totalActualEa = 0;
 
    void clear(){
     totalPlanCs = 0;

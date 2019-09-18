@@ -1,57 +1,81 @@
+import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/res/styles.dart';
+import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
 import 'package:dsd/ui/widget/fold_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'delivery_presenter.dart';
+import 'package:provider/provider.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/9/16 12:05
+///  Date:         2019/9/17 18:44
 
-class DeliveryPage extends StatefulWidget {
+class DeliverySummaryPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new _DeliveryState();
+    return _DeliverySummarySate();
   }
+
 }
 
-class _DeliveryState extends State<DeliveryPage> {
+class _DeliverySummarySate extends State<DeliverySummaryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Delivery'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.arrow_forward),
-            onPressed: (){
-              DeliveryPresenter presenter = Provider.of<DeliveryPresenter>(context);
-              presenter.onClickRight(context);
-            },
-          )
-        ],
+        title: Text('DeliverySummary'),
       ),
-      body: Consumer<DeliveryPresenter>(builder: (context, presenter, _) {
-
+      body: Consumer<DeliverySummaryPresenter>(builder: (context, presenter, _) {
         return Column(
           children: <Widget>[
+            FoldWidget(
+              msg: 'DELIVERY INFO',
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text('Delivery No:',style: TextStyles.normal,),
+                        Spacer(),
+                        Text('1234567890',style: TextStyles.normal,),
+                      ],
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10),),
+                    Row(
+                      children: <Widget>[
+                        Text('Delivery Date:',style: TextStyles.normal,),
+                        Spacer(),
+                        Text('1234567890',style: TextStyles.normal,),
+                      ],
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10),),
+                    Row(
+                      children: <Widget>[
+                        Text('Delivery Note:',style: TextStyles.normal,),
+                        Spacer(),
+                        Text('1234567890',style: TextStyles.normal,),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
             FoldWidget(
               msg: 'DELIVERY PRODUCTS',
               isMore: true,
               child: Column(
                 children: <Widget>[
                   ListHeaderWidget(
-                    names: ['Product', 'Planned', 'Actual'],
-                    supNames: ['', 'cs', 'cs'],
-                    weights: [1, 1, 1],
+                    names: ['Product', 'Qty'],
+                    supNames: ['', 'cs/ea'],
+                    weights: [1, 1],
                     aligns: [
-                      TextAlign.center,
                       TextAlign.center,
                       TextAlign.center,
                     ],
@@ -72,11 +96,7 @@ class _DeliveryState extends State<DeliveryPage> {
                               ),
                               Expanded(
                                 flex: 1,
-                                child: Text(info.getPlanShowStr(presenter.productUnitValue),textAlign:TextAlign.center,style: TextStyles.small,),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Text(info.getActualShowStr(presenter.productUnitValue),textAlign:TextAlign.center,style: TextStyles.small,),
+                                child: Text(info.getPlanShowStr(TaskType.Delivery),textAlign:TextAlign.center,style: TextStyles.small,),
                               ),
                             ],
                           ),
@@ -92,13 +112,10 @@ class _DeliveryState extends State<DeliveryPage> {
                 ],
               ),
             ),
-            FoldWidget(
-              msg: 'EMPTY RETURN',
-              child: Container(),
-            ),
           ],
         );
-      }),
+      })
     );
   }
+
 }

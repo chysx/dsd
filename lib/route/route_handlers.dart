@@ -6,6 +6,8 @@ import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_presenter.dart';
 import 'package:dsd/ui/page/delivery/delivery_page.dart';
 import 'package:dsd/ui/page/delivery/delivery_presenter.dart';
+import 'package:dsd/ui/page/delivery_summary/delivery_summary_page.dart';
+import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
@@ -123,5 +125,18 @@ Handler deliveryHandler = Handler(handlerFunc: (_,params) {
         ..onEvent(DeliveryEvent.InitData)),
     ],
     child: DeliveryPage(),
+  );
+});
+
+Handler deliverySummaryHandler = Handler(handlerFunc: (_,params) {
+
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<DeliverySummaryPresenter>(builder: (context) =>
+      new DeliverySummaryPresenter()
+        ..setPageParams(params)
+        ..onEvent(DeliverySummaryEvent.InitData)),
+    ],
+    child: DeliverySummaryPage(),
   );
 });

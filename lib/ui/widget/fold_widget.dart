@@ -1,4 +1,5 @@
 import 'package:dsd/res/colors.dart';
+import 'package:dsd/res/styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,10 @@ import 'package:flutter/material.dart';
 
 class FoldWidget extends StatefulWidget {
   final Widget child;
+  final String msg;
   bool isMore;
 
-  FoldWidget({this.child, this.isMore = true, Key key}) : super(key: key);
+  FoldWidget({this.msg,this.isMore = true,this.child, Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -47,7 +49,7 @@ class _FoldState extends State<FoldWidget> {
             color: ColorsRes.gray_normal,
             child: Row(
               children: <Widget>[
-                Text('Shipment'),
+                Text(widget.msg,style: TextStyles.large,),
                 Expanded(
                   child: Align(
                     alignment: Alignment.centerRight,

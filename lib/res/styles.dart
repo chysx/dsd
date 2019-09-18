@@ -16,6 +16,11 @@ class TextStyles {
     color: ColorsRes.black,
   );
 
+  static TextStyle large = TextStyle(
+    fontSize: Dimens.font_large,
+    color: ColorsRes.black,
+  );
+
   static TextStyle small = TextStyle(
     fontSize: Dimens.font_small,
     color: ColorsRes.black,

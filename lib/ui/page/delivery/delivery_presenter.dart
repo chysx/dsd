@@ -13,8 +13,11 @@ import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/product_total_info.dart';
 import 'package:dsd/model/task_visit_model.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
+import 'package:dsd/route/routers.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -30,7 +33,7 @@ enum DeliveryEvent {
 class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   List<BaseProductInfo> showProductList = [];
   TaskVisitItemModel visitItem;
-  ProductTotalInfo productTotalInfo;
+  ProductTotalInfo productTotalInfo = new ProductTotalInfo();
   List<TruckStockProductInfo> stockList = [];
   String deliveryNo;
   String shipmentNo;
@@ -43,6 +46,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   Future onEvent(DeliveryEvent event, [dynamic data]) async {
     switch (event) {
       case DeliveryEvent.InitData:
+        await initData();
         break;
     }
     super.onEvent(event, data);
@@ -58,6 +62,9 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   Future initData() async {
     visitItem = TaskVisitModel().getVisitItemByDeliveryNo(deliveryNo);
     await initConfig();
+    await fillProductData();
+    fillProductSummaryData();
+    await fillStockData();
   }
 
   Future initConfig() async {
@@ -89,20 +96,22 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
       info.name = Application.productMap[mItem.ProductCode];
       if (mItem.ProductUnit == ProductUnit.CS) {
         info.plannedCs = int.tryParse(mItem.PlanQty);
+        info.actualCs = int.tryParse(mItem.PlanQty);
       } else {
         info.plannedEa = int.tryParse(mItem.PlanQty);
+        info.actualEa = int.tryParse(mItem.PlanQty);
       }
       info.isInMDelivery = true;
       showProductList.add(info);
-      for (DSD_T_DeliveryItem_Entity tItem in tList) {
-        if (mItem.ProductCode == tItem.ProductCode) {
-          if (tItem.ProductUnit == ProductUnit.CS) {
-            info.actualCs = int.tryParse(tItem.ActualQty);
-          } else {
-            info.actualEa = int.tryParse(tItem.ActualQty);
-          }
-        }
-      }
+//      for (DSD_T_DeliveryItem_Entity tItem in tList) {
+//        if (mItem.ProductCode == tItem.ProductCode) {
+//          if (tItem.ProductUnit == ProductUnit.CS) {
+//            info.actualCs = int.tryParse(tItem.ActualQty);
+//          } else {
+//            info.actualEa = int.tryParse(tItem.ActualQty);
+//          }
+//        }
+//      }
     }
   }
 
@@ -198,4 +207,14 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
       }
     }
   }
+
+  void onClickRight(BuildContext context){
+    doNext();
+    String path =
+    '''${Routers.delivery_summary}?${FragmentArg.DELIVERY_NO}=$deliveryNo&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_SUMMARY_READONLY}=${false}
+    ''';
+    Application.router
+        .navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
 }
