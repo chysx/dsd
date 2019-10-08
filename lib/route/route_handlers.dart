@@ -9,6 +9,8 @@ import 'package:dsd/ui/page/delivery_summary/delivery_summary_page.dart';
 import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/page/profile/profile_page.dart';
+import 'package:dsd/ui/page/profile/profile_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/ui/page/route_plan/route_plan_page.dart';
@@ -136,5 +138,17 @@ Handler deliverySummaryHandler = Handler(handlerFunc: (_, params) {
             ..onEvent(DeliverySummaryEvent.InitData)),
     ],
     child: DeliverySummaryPage(),
+  );
+});
+
+Handler profileHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider<ProfilePresenter>(
+          builder: (context) => new ProfilePresenter()
+            ..setPageParams(params)
+            ..onEvent(ProfileEvent.InitData)),
+    ],
+    child: ProfilePage(),
   );
 });

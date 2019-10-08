@@ -141,7 +141,7 @@ class _RouteState extends State<RoutePage> {
                 Expanded(
                   child: FlatButton(
                     onPressed: (){
-                      presenter.onClickProfile(context);
+                      presenter.onClickProfile(context,info);
                     },
                     color: Colors.blue,
                     child: Text(
@@ -197,6 +197,7 @@ class _RouteState extends State<RoutePage> {
               child: Column(
                 children: <Widget>[
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: (){
                       setState(() {
                         info.isMore = !info.isMore;

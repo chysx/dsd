@@ -70,3 +70,16 @@ class TaskDeliveryStatus {
   static const String Cancel = "Cancel";
   static const String Sales = "Sales";
 }
+
+class AccountMasterFields {
+  static const String CATEGORY = "AccountMasterFields";
+  static const String STORE_INFO = "StoreInfo";
+  static const String CONTACT_INFO = "ContactInfo";
+  static const String FINANCE_INFO = "FinanceInfo";
+  static const String DELIVERY_INFO = "DeliveryInfo";
+
+  static const String Account_ebMobile__PaymentTerms__c = "Account_ebMobile__PaymentTerms__c";
+  static const String Account_ebMobile__SubTradeChannel__c = "Account_ebMobile__SubTradeChannel__c";
+  static const String Account_ebMobile__TradeChannel__c = "Account_ebMobile__TradeChannel__c";
+  static const String Account_ebMobile__Classification__c = "Account_ebMobile__Classification__c";
+}

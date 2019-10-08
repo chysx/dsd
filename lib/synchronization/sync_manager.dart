@@ -2,6 +2,7 @@ import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_constant.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
+import 'package:dsd/synchronization/sync_factory.dart';
 import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'base/abstract_sync_mode.dart';
@@ -19,15 +20,20 @@ class SyncManager {
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) {
     if (context != null) LoadingDialog.show(context);
     if (syncParameter == null) syncParameter = new SyncParameter();
-    new SyncInitModel(syncType, syncParameter: syncParameter, onSuccessSync: () {
-      print("onSuccessSync");
-      if (context != null) LoadingDialog.dismiss(context);
-      onSuccessSync();
-    }, onFailSync: (e) {
-      print("onFailSync");
-      if (context != null) LoadingDialog.dismiss(context);
-
-      onFailSync(e);
-    }).start();
+    AbstractSyncMode syncMode = SyncFactory.createSyncModel(syncType);
+    syncMode
+      ..onSuccessSync = () {
+        print("onSuccessSync");
+        if (context != null) LoadingDialog.dismiss(context);
+        onSuccessSync();
+      }
+      ..onFailSync = (e) {
+        print("onFailSync");
+        if (context != null) LoadingDialog.dismiss(context);
+        onFailSync(e);
+      };
+    syncMode.start();
   }
 }
+
+

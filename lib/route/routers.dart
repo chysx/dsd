@@ -20,6 +20,7 @@ class Routers {
   static const task_list = '/task_list';
   static const delivery = '/delivery';
   static const delivery_summary = '/delivery_summary';
+  static const profile = '/profile';
 
   static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
@@ -34,5 +35,6 @@ class Routers {
     router.define(task_list, handler: taskListHandler);
     router.define(delivery, handler: deliveryHandler);
     router.define(delivery_summary, handler: deliverySummaryHandler);
+    router.define(profile, handler: profileHandler);
   }
 }

@@ -4,8 +4,6 @@ import 'package:dsd/exception/exception_type.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_request.dart';
 import 'package:dsd/synchronization/base/abstract_sync_mode.dart';
-import 'package:dsd/synchronization/bean/sync_response_bean.dart';
-import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:rxdart/rxdart.dart';
 

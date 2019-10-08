@@ -31,7 +31,7 @@ import 'login_response_bean.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/2 11:00
 
-class LoginPresenter  extends EventNotifier<SettingEvent> {
+class LoginPresenter extends EventNotifier<SettingEvent> {
   LoginInputInfo inputInfo = new LoginInputInfo();
   AppConfigEntity appConfigEntity;
   String version = "";
@@ -49,16 +49,16 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     print('*******************status = ${loginStatus.toString()}');
     switch (loginStatus) {
       case LoginStatus.CheckUserCodeIsNull:
-        CustomerDialog.show(context,msg: 'Please input your account.');
+        CustomerDialog.show(context, msg: 'Please input your account.');
         break;
       case LoginStatus.CheckPasswordIsNull:
-        CustomerDialog.show(context,msg: 'Please input your password!');
+        CustomerDialog.show(context, msg: 'Please input your password!');
         break;
       case LoginStatus.SyncUpdate:
-        loginByOnline(context,SyncType.SYNC_UPDATE,loginInputInfo);
+        loginByOnline(context, SyncType.SYNC_UPDATE, loginInputInfo);
         break;
       case LoginStatus.SyncInit:
-        loginByOnline(context,SyncType.SYNC_INIT,loginInputInfo);
+        loginByOnline(context, SyncType.SYNC_INIT, loginInputInfo);
         break;
       case LoginStatus.OffLine:
         startNavigate(context);
@@ -67,9 +67,8 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     }
   }
 
-  void startNavigate(BuildContext context){
-    Application.router
-        .navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
+  void startNavigate(BuildContext context) {
+    Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
   }
 
   Future initAppConfigEntity() async {
@@ -104,9 +103,9 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     return LoginStatus.OffLine;
   }
 
-  void loginByOnline(BuildContext context,SyncType syncType,LoginInputInfo loginInputInfo) {
-    LoadingDialog.show(context,msg: 'Login...');
-    try{
+  void loginByOnline(BuildContext context, SyncType syncType, LoginInputInfo loginInputInfo) {
+    LoadingDialog.show(context, msg: 'Login...');
+    try {
       LoginRequestBean loginRequestBean = new LoginRequestBean();
       loginRequestBean
         ..userName = loginInputInfo.userCode
@@ -132,93 +131,77 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
           if (diff.inMinutes.abs() > 15) {
             responseStatus = LoginResponseStatus.LocalServeTimeDifference;
             CustomerDialog.show(context,
-                msg:'Your phone time is incorrect.\n'
+                msg: 'Your phone time is incorrect.\n'
                     'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
                     'Server time ${responseBean.result.serverTime}');
             return;
           }
-          loginSuccess(context,syncType,responseBean, loginInputInfo);
+          loginSuccess(context, syncType, responseBean, loginInputInfo);
         } else {
           AppLogManager.insert(ExceptionType.WARN.toString(), msg: response.toString());
           responseStatus = LoginResponseStatus.OnLineError;
           int exceptionCode = responseBean.exceptionCode;
 
-
           if (exceptionCode == 1) {
             responseStatus = LoginResponseStatus.ErrorUserMsg;
-            CustomerDialog.show(context,
-                msg:'Your account or password is incorrect. Please check it and try again.');
+            CustomerDialog.show(context, msg: 'Your account or password is incorrect. Please check it and try again.');
             return;
           }
 
           if (exceptionCode == 2) {
             responseStatus = LoginResponseStatus.ErrorPasswordExpired;
-            CustomerDialog.show(context,
-                msg:'Incorrect username or password expired!');
+            CustomerDialog.show(context, msg: 'Incorrect username or password expired!');
             return;
           }
 
           if (exceptionCode == 3) {
             responseStatus = LoginResponseStatus.AccountLock;
-            CustomerDialog.show(context,
-                msg:'The account had been locked. Please contact your manager.');
+            CustomerDialog.show(context, msg: 'The account had been locked. Please contact your manager.');
             return;
           }
 
           if (exceptionCode == 4) {
             responseStatus = LoginResponseStatus.AccountInvalid;
-            CustomerDialog.show(context,
-                msg:'The account is invalid. Please contact your manager.');
+            CustomerDialog.show(context, msg: 'The account is invalid. Please contact your manager.');
             return;
           }
 
           if (exceptionCode == 7) {
             responseStatus = LoginResponseStatus.NoShipment;
-            CustomerDialog.show(context,
-                msg:'You had not been assigned shipments, please contact your manager.');
+            CustomerDialog.show(context, msg: 'You had not been assigned shipments, please contact your manager.');
             return;
           }
 
           if (exceptionCode == 9) {
             responseStatus = LoginResponseStatus.ImeiNotMatch;
-            CustomerDialog.show(context,
-                msg:'The IMEI is incorrect. Please contact your manager.');
+            CustomerDialog.show(context, msg: 'The IMEI is incorrect. Please contact your manager.');
             return;
           }
 
-          CustomerDialog.show(context,
-              msg:'Login failed. Please check your network and try again.');
+          CustomerDialog.show(context, msg: 'Login failed. Please check your network and try again.');
         }
-      },
-      onError: (e){
+      }, onError: (e) {
         LoadingDialog.dismiss(context);
         Application.logger.e(e.toString());
-        CustomerDialog.show(context,
-            msg:'Login failed. Please check your network and try again.');
+        CustomerDialog.show(context, msg: 'Login failed. Please check your network and try again.');
       });
-    }catch(e){
-
-    }
-
+    } catch (e) {}
   }
 
-  void loginSuccess(BuildContext context,SyncType syncType,LoginResponseBean responseBean, LoginInputInfo inputInfo) {
+  void loginSuccess(BuildContext context, SyncType syncType, LoginResponseBean responseBean, LoginInputInfo inputInfo) {
     saveUserToApp(responseBean, inputInfo);
-    saveUserToDb(responseBean, syncType,inputInfo);
+    saveUserToDb(responseBean, syncType, inputInfo);
 
     syncData(context, syncType);
   }
 
   void syncData(BuildContext context, SyncType syncType) {
-    LoadingDialog.show(context);
     SyncManager.start(syncType, context: context, onSuccessSync: () {
-      LoadingDialog.dismiss(context);
       startNavigate(context);
     }, onFailSync: (e) {
-      LoadingDialog.dismiss(context);
       clearUserToDb();
       appConfigEntity.syncInitFlag = null;
-      CustomerDialog.show(context, msg:'Sync fail');
+      CustomerDialog.show(context, msg: 'Sync fail');
     });
   }
 
@@ -226,11 +209,11 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
     AppConfigManager.deleteAll();
   }
 
-  Future saveUserToDb(LoginResponseBean responseBean, SyncType syncType,LoginInputInfo inputInfo) async {
+  Future saveUserToDb(LoginResponseBean responseBean, SyncType syncType, LoginInputInfo inputInfo) async {
     List<AppConfigEntity> list = await AppConfigManager.queryAll();
     SettingInfo settingInfo = await SettingPresenter.getCurSettingInfo();
     AppConfigEntity entity;
-    if(ObjectUtil.isEmptyList(list)){
+    if (ObjectUtil.isEmptyList(list)) {
       entity = AppConfigEntity.Empty();
       entity
         ..userCode = responseBean.loginName
@@ -244,7 +227,7 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
         ..isSsl = SettingInfo.boolToStr(settingInfo.isSsl)
         ..env = settingInfo.env;
       await AppConfigManager.insert(entity);
-    }else{
+    } else {
       AppConfigEntity entity = list[0];
       entity
         ..userCode = responseBean.loginName
@@ -256,7 +239,6 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
       await AppConfigManager.update(entity);
     }
     initAppConfigEntity();
-
   }
 
   void saveUserToApp(LoginResponseBean responseBean, LoginInputInfo inputInfo) {
@@ -265,5 +247,4 @@ class LoginPresenter  extends EventNotifier<SettingEvent> {
       ..userName = responseBean.result.userName
       ..passWord = inputInfo.password;
   }
-
 }

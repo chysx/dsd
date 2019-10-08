@@ -227,7 +227,11 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
-  void onClickProfile(material.BuildContext context) {}
+  void onClickProfile(material.BuildContext context, CustomerInfo info) {
+    String path =
+    '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
 
   Future onClickStartCall(material.BuildContext context, CustomerInfo info) async {
     if (await isDoCheckIn(context, currentShipment.no)) return;
