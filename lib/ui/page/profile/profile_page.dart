@@ -1,6 +1,9 @@
 import 'package:dsd/res/styles.dart';
+import 'package:dsd/ui/page/profile/note_info.dart';
+import 'package:dsd/ui/page/profile/order_info.dart';
 import 'package:dsd/ui/page/profile/profile_presenter.dart';
 import 'package:dsd/ui/widget/fold_widget.dart';
+import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,12 +29,18 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
     List<MapEntry<String, String>> list = presenter.profileStoreList;
     List<Widget> rowList = list.map((item) {
       return Padding(
-        padding: const EdgeInsets.only(top: 10,left: 10,right: 10),
+        padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
         child: Row(
           children: <Widget>[
-            Text('${item.key}:',style: TextStyles.normal,),
+            Text(
+              '${item.key}:',
+              style: TextStyles.normal,
+            ),
             Spacer(),
-            Text(item.value,style: TextStyles.normal,),
+            Text(
+              item.value,
+              style: TextStyles.normal,
+            ),
           ],
         ),
       );
@@ -44,15 +53,144 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
     );
   }
 
-  Widget createOrder() {
-    return Center(
-      child: Text('zhang'),
+  Widget createOrder(ProfilePresenter presenter) {
+    var header = ListHeaderWidget(
+      names: ["Date", "Order No.", "Type", "Qty", "Status"],
+      weights: [1, 1, 1, 1, 1],
+      aligns: [
+        TextAlign.center,
+        TextAlign.center,
+        TextAlign.center,
+        TextAlign.center,
+        TextAlign.center,
+      ],
+    );
+
+    return Column(
+      children: <Widget>[
+        header,
+        Expanded(
+          child: ListView.separated(
+            itemCount: presenter.orderInfoList.length,
+            separatorBuilder: (context, index) {
+              return Divider(
+                height: 2,
+              );
+            },
+            itemBuilder: (context, index) {
+              OrderInfo info = presenter.orderInfoList[index];
+              return Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        width: 52,
+                        height: 52,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1, style: BorderStyle.solid),
+                            shape: BoxShape.circle),
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(top: 5),
+                            ),
+                            Text(
+                              info.getShowDay(),
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              info.getShowDate(),
+                              style: TextStyle(fontSize: 10),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        info.no ?? '',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        info.type ?? '',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        info.qty ?? '',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Text(
+                        info.status ?? '',
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 
-  Widget createNote() {
-    return Center(
-      child: Text('zhang'),
+  Widget createNote(ProfilePresenter presenter) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return Divider(
+                height: 2,
+              );
+            },
+            itemCount: presenter.noteInfoList.length,
+            itemBuilder: (context, index) {
+              NoteInfo info = presenter.noteInfoList[index];
+              return Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          info.getShowDate(),
+                          style: TextStyles.normal,
+                        ),
+                        Spacer(),
+                        Text(
+                          info.name ?? '',
+                          style: TextStyles.normal,
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                    ),
+                    Text(
+                      info.dsc ?? '',
+                      style: TextStyles.normal,
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 
@@ -81,7 +219,7 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
       body: Consumer<ProfilePresenter>(builder: (context, presenter, _) {
         return TabBarView(
           controller: tabController,
-          children: <Widget>[createProfile(presenter), createOrder(), createNote()],
+          children: <Widget>[createProfile(presenter), createOrder(presenter), createNote(presenter)],
         );
       }),
     );

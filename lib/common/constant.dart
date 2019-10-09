@@ -55,3 +55,8 @@ class ReadyOnly {
   static const String TRUE = "true";
   static const String FALSE = "false";
 }
+
+String getMonth(int monthInt) {
+  List<String> months = <String>['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
+  return months[monthInt];
+}

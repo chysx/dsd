@@ -56,6 +56,46 @@ class DSD_M_DeliveryHeader_Entity {
       this.DeliverySequence, this.DeliveryTimeSlotFrom, this.DeliveryTimeSlotTo, this.OnlineDiscount,
       this.OtherDiscount, this.APDiscount);
 
+
+  static Map<String, dynamic> toJson(
+      DSD_M_DeliveryHeader_Entity instance) =>
+      <String, dynamic>{
+        'id': instance.id,
+        'DeliveryNo': instance.DeliveryNo,
+        'ShipmentNo': instance.ShipmentNo,
+        'DeliveryType': instance.DeliveryType,
+        'DeliveryStatus': instance.DeliveryStatus,
+        'AccountNumber': instance.AccountNumber,
+        'OrderNo': instance.OrderNo,
+        'InvoiceNo': instance.InvoiceNo,
+        'PONumber': instance.PONumber,
+        'OrderDate': instance.OrderDate,
+        'PlanDeliveryDate': instance.PlanDeliveryDate,
+        'SalesRep': instance.SalesRep,
+        'CompanyCode': instance.CompanyCode,
+        'SalesOrg': instance.SalesOrg,
+        'SalesOff': instance.SalesOff,
+        'PaymentType': instance.PaymentType,
+        'Currency': instance.Currency,
+        'PlanDeliveryQty': instance.PlanDeliveryQty,
+        'DeliveryAddress': instance.DeliveryAddress,
+        'Contact': instance.Contact,
+        'Telephone': instance.Telephone,
+        'BasePrice': instance.BasePrice,
+        'Tax': instance.Tax,
+        'Tax2': instance.Tax2,
+        'NetPrice': instance.NetPrice,
+        'DataSource': instance.DataSource,
+        'DeliveryNote': instance.DeliveryNote,
+        'MarketDeveloper': instance.MarketDeveloper,
+        'DeliverySequence': instance.DeliverySequence,
+        'DeliveryTimeSlotFrom': instance.DeliveryTimeSlotFrom,
+        'DeliveryTimeSlotTo': instance.DeliveryTimeSlotTo,
+        'OnlineDiscount': instance.OnlineDiscount,
+        'OtherDiscount': instance.OtherDiscount,
+        'APDiscount': instance.APDiscount,
+      };
+
   DSD_M_DeliveryHeader_Entity.Empty();
 
 }
