@@ -20,6 +20,9 @@ abstract class DSD_T_ShipmentItem_Dao {
   @insert
   Future<void> insertEntity(DSD_T_ShipmentItem_Entity entity);
 
+  @insert
+  Future<List<int>> insertEntityList(List<DSD_T_ShipmentItem_Entity> entityList);
+
   @delete
   Future<int> deleteEntity(List<DSD_T_ShipmentItem_Entity> entityList);
 

@@ -17,7 +17,7 @@ class BaseProductInfo {
    int actualEa = 0;
    String itmNumberCs;
    String itmNumberEa;
-   String pack;
+   String desc;
    String reasonValue;
   //该产品code是否存在DSD_M_DeliveryItem表中
    bool isInMDelivery;

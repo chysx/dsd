@@ -1,6 +1,11 @@
+import 'package:dsd/application.dart';
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
+import 'package:dsd/route/routers.dart';
+import 'package:fluro/fluro.dart';
+import 'package:flutter/cupertino.dart';
 
 enum ShipmentEvent {
   InitData
@@ -32,4 +37,11 @@ class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
       return result == 0 ? si1.sequence.compareTo(si2.sequence) : result;
     });
   }
+
+  void onClickItem(BuildContext context,ShipmentInfo info) {
+    String path =
+    '''${Routers.check_out}?${FragmentArg.ROUTE_SHIPMENT_NO}=${info.no}''';
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
 }

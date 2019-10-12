@@ -140,12 +140,12 @@ class TaskVisitModel {
     for (TaskVisitItemModel item in visitItemModelList) {
       if (save.deliveryNo == item.deliveryNo) {
         //删除数据
-        saveStock(StockType.CANCEL, tVisit.ShipmentNo, item.deliveryNo);
+        await saveStock(StockType.CANCEL, tVisit.ShipmentNo, item.deliveryNo);
         await Application.database.tDeliveryItemDao.deleteByNo(item.deliveryNo);
 
         //增加数据
         await Application.database.tDeliveryItemDao.insertEntityList(item.tDeliveryItemList);
-        saveStock(StockType.DO, tVisit.ShipmentNo, item.deliveryNo);
+        await saveStock(StockType.DO, tVisit.ShipmentNo, item.deliveryNo);
       }
     }
   }
@@ -210,7 +210,7 @@ class TaskVisitModel {
           break;
       }
 
-      TruckStockManager.setStock(stockType, action, truckId, shipmentNo, key, stocks[key].cs, stocks[key].ea,
+      await TruckStockManager.setStock(stockType, action, truckId, shipmentNo, key, stocks[key].cs, stocks[key].ea,
           stocks[key].getCsChange(), stocks[key].getEaChange(), tVisit.VisitId);
     }
   }

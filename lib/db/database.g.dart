@@ -2069,6 +2069,13 @@ class _$DSD_T_ShipmentItem_Dao extends DSD_T_ShipmentItem_Dao {
   }
 
   @override
+  Future<List<int>> insertEntityList(
+      List<DSD_T_ShipmentItem_Entity> entityList) {
+    return _dSD_T_ShipmentItem_EntityInsertionAdapter.insertListAndReturnIds(
+        entityList, sqflite.ConflictAlgorithm.abort);
+  }
+
+  @override
   Future<int> updateEntity(DSD_T_ShipmentItem_Entity entity) {
     return _dSD_T_ShipmentItem_EntityUpdateAdapter.updateAndReturnChangedRows(
         entity, sqflite.ConflictAlgorithm.abort);

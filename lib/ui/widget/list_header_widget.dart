@@ -10,13 +10,43 @@ import 'package:flutter/material.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/28 15:35
 
-class ListHeaderWidget extends StatelessWidget {
+class ListHeaderWidget extends StatefulWidget {
   final List<String> names;
   final List<String> supNames;
   final List<int> weights;
   final List<TextAlign> aligns;
+  final bool isCheck;
+  final Function(bool) onChange;
 
-  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns, Key key}) : super(key: key);
+  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns,this.isCheck,this.onChange, Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ListHeaderState(names: names,supNames: supNames,weights: weights,aligns: aligns,isCheck: isCheck);
+  }
+
+
+}
+
+class _ListHeaderState extends State<ListHeaderWidget> {
+  final List<String> names;
+  final List<String> supNames;
+  final List<int> weights;
+  final List<TextAlign> aligns;
+  bool isCheck;
+
+  _ListHeaderState({this.names, this.supNames, this.weights, this.aligns,this.isCheck});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      color: Colors.white,
+      child: Row(
+        children: _makeWidgets(),
+      ),
+    );
+  }
 
   Widget _getSupWidget(int position) {
     if(supNames != null && !StringUtil.isEmpty(supNames[position])){
@@ -32,7 +62,8 @@ class ListHeaderWidget extends StatelessWidget {
   List<Widget> _makeWidgets() {
     int position = -1;
 
-    return names.map((item) {
+    List<Widget> list = [];
+    list.addAll(names.map((item) {
       position++;
       return Expanded(
           flex: weights[position],
@@ -46,17 +77,30 @@ class ListHeaderWidget extends StatelessWidget {
               _getSupWidget(position)
             ],
           ));
-    }).toList();
+    }).toList()
+    );
+
+    if(isCheck != null){
+      Widget checkBox = Expanded(
+          flex: 1,
+          child: Align(
+            alignment: Alignment.center,
+            child: Checkbox(
+              value: isCheck,
+              onChanged: (value){
+                setState(() {
+                  isCheck = value;
+                });
+                if(widget.onChange != null) widget.onChange(value);
+              },
+            ),
+          )
+      );
+
+      list.add(checkBox);
+    }
+
+    return list;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      color: Colors.white,
-      child: Row(
-        children: _makeWidgets(),
-      ),
-    );
-  }
 }

@@ -1,6 +1,9 @@
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
+import 'package:dsd/ui/page/checkout/checkout_inventory_page.dart';
+import 'package:dsd/ui/page/checkout/checkout_inventory_presenter.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
+import 'package:dsd/ui/page/checkout/checkout_presenter.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_shipment_presenter.dart';
 import 'package:dsd/ui/page/delivery/delivery_page.dart';
@@ -82,7 +85,27 @@ Handler checkoutShipmentHandler = Handler(handlerFunc: (_, params) {
 });
 
 Handler checkoutHandler = Handler(handlerFunc: (_, params) {
-  return CheckoutPage();
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new CheckoutPresenter()
+            ..setPageParams(params)
+            ..onEvent(CheckOutEvent.InitData)),
+    ],
+    child: CheckoutPage(),
+  );
+});
+
+Handler checkoutInventoryHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new CheckoutInventoryPresenter()
+            ..setPageParams(params)
+            ..onEvent(CheckOutInventoryEvent.InitData)),
+    ],
+    child: CheckoutInventoryPage(),
+  );
 });
 
 Handler checkInShipmentHandler = Handler(handlerFunc: (_, params) {

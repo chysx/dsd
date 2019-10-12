@@ -22,8 +22,9 @@ enum StockType {
 }
 
 class TruckStockManager {
+
   static Future setStock(StockType stockType, String action, int truckId, String shipmentNo, String productCode,
-      int csChange, int eaChange, int csSaleableChange, int eaSaleableChange, String visitId) async {
+      int csChange, int eaChange, [int csSaleableChange, int eaSaleableChange, String visitId]) async {
     DSD_T_TruckStock_Entity csTruckStock =
         await Application.database.tTruckStockDao.findEntityByCon(truckId, shipmentNo, productCode, ProductUnit.CS);
 
@@ -37,6 +38,12 @@ class TruckStockManager {
 
     int csSaleable = csTruckStock?.SaleableQty ?? 0;
     int eaSaleable = eaTruckStock?.SaleableQty ?? 0;
+
+    csChange = csChange ?? 0;
+    eaChange = eaChange ?? 0;
+    csSaleableChange = csSaleableChange ?? 0;
+    eaSaleableChange = eaSaleableChange ?? 0;
+
 
     switch (action) {
       case StockTracking.CHKO:
@@ -132,16 +139,16 @@ class TruckStockManager {
 
       await Application.database.tTruckStockDao.updateEntity(csTruckStock);
     } else {
-      DSD_T_TruckStock_Entity add = new DSD_T_TruckStock_Entity.Empty();
-      add.TruckId = truckId;
-      add.ShipmentNo = shipmentNo;
-      add.ProductCode = productCode;
-      add.ProductUnit = ProductUnit.CS;
-      add.StockQty = csStockQtyTo;
-      add.SaleableQty = csSaleable;
-      add.CreateUser = Application.user.userCode;
-      add.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
-      add.dirty = SyncDirtyStatus.DEFAULT;
+      csTruckStock = new DSD_T_TruckStock_Entity.Empty();
+      csTruckStock.TruckId = truckId;
+      csTruckStock.ShipmentNo = shipmentNo;
+      csTruckStock.ProductCode = productCode;
+      csTruckStock.ProductUnit = ProductUnit.CS;
+      csTruckStock.StockQty = csStockQtyTo;
+      csTruckStock.SaleableQty = csSaleable;
+      csTruckStock.CreateUser = Application.user.userCode;
+      csTruckStock.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
+      csTruckStock.dirty = SyncDirtyStatus.DEFAULT;
       await Application.database.tTruckStockDao.insertEntity(csTruckStock);
     }
 
@@ -152,19 +159,19 @@ class TruckStockManager {
       eaTruckStock.LastUpdateTime = DateUtil.getDateStrByDateTime(DateTime.now());
       eaTruckStock.dirty = SyncDirtyStatus.DEFAULT;
 
-      await Application.database.tTruckStockDao.updateEntity(csTruckStock);
+      await Application.database.tTruckStockDao.updateEntity(eaTruckStock);
     } else {
-      DSD_T_TruckStock_Entity add = new DSD_T_TruckStock_Entity.Empty();
-      add.TruckId = truckId;
-      add.ShipmentNo = shipmentNo;
-      add.ProductCode = productCode;
-      add.ProductUnit = ProductUnit.EA;
-      add.StockQty = eaStockQtyTo;
-      add.SaleableQty = eaSaleable;
-      add.CreateUser = Application.user.userCode;
-      add.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
-      add.dirty = SyncDirtyStatus.DEFAULT;
-      await Application.database.tTruckStockDao.insertEntity(csTruckStock);
+      eaTruckStock = new DSD_T_TruckStock_Entity.Empty();
+      eaTruckStock.TruckId = truckId;
+      eaTruckStock.ShipmentNo = shipmentNo;
+      eaTruckStock.ProductCode = productCode;
+      eaTruckStock.ProductUnit = ProductUnit.EA;
+      eaTruckStock.StockQty = eaStockQtyTo;
+      eaTruckStock.SaleableQty = eaSaleable;
+      eaTruckStock.CreateUser = Application.user.userCode;
+      eaTruckStock.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
+      eaTruckStock.dirty = SyncDirtyStatus.DEFAULT;
+      await Application.database.tTruckStockDao.insertEntity(eaTruckStock);
     }
 
     DSD_T_TruckStockTracking_Entity csAdd = new DSD_T_TruckStockTracking_Entity.Empty();

@@ -1,4 +1,5 @@
 import 'package:dsd/application.dart';
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
@@ -15,6 +16,7 @@ import 'package:dsd/ui/page/login/login_request_bean.dart';
 import 'package:dsd/ui/page/login/login_status.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
+import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
@@ -67,8 +69,9 @@ class LoginPresenter extends EventNotifier<SettingEvent> {
     }
   }
 
-  void startNavigate(BuildContext context) {
-    Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
+  Future startNavigate(BuildContext context) async {
+    await Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
+    curPage = ConstantMenu.CHECK_OUT;
   }
 
   Future initAppConfigEntity() async {

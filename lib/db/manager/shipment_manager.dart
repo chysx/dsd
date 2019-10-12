@@ -3,6 +3,7 @@ import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/db/manager/dictionary_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
+import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/utils/sql_util.dart';
@@ -99,7 +100,8 @@ class ShipmentManager {
         ..no = values[0]
         ..type = values[1]
         ..shipmentDate = values[2]
-        ..sequence = values[3];
+        ..sequence = values[3]
+        ..status = ShipmentStatus.RELE;
       result.add(info);
     }
     return result;
@@ -389,4 +391,57 @@ class ShipmentManager {
     });
     return result;
   }
+
+  static Future<List<BaseProductInfo>> getShipmentItemProductByNo(String shipmentNo) async {
+    String sql = ''' 
+            SELECT
+            T1.ShipmentNo,
+            T1.ProductCode,
+            T1.ProductUnit,
+            T1.PlanQty, 
+            T2.Name,
+            T3.Description,
+            T2.ebMobile__Pack__c        
+        FROM
+            DSD_M_ShipmentItem AS T1    
+        INNER JOIN 
+            MD_Product AS T2 
+              ON T1.ProductCode = T2.ProductCode     
+        LEFT JOIN 
+            MD_Dictionary AS T3 
+              ON T3.Value = T2.ebMobile__Pack__c  
+              and T3.Category = 'Pack'    
+        WHERE
+            T1.ShipmentNo = ?
+        ORDER BY T2.ebMobile__Pack__c ASC,T1.ProductCode ASC 
+     ''';
+
+    SqlUtil.log(sql, [shipmentNo]);
+    Map<String,BaseProductInfo> mapData = {};
+    var db = Application.database.database;
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, [shipmentNo]);
+    for (Map<String, dynamic> map in list) {
+      List values = map.values.toList();
+      String code = values[1];
+      String unit = values[2];
+      BaseProductInfo info = mapData[code];
+      if(info == null) {
+        info = new BaseProductInfo();
+        mapData[code] = info;
+        info.code = code;
+        info.name = values[4];
+        info.desc = values[5];
+      }
+      if(ProductUnit.CS == unit){
+        info.plannedCs = int.tryParse(values[3]);
+      }else if(ProductUnit.EA == unit){
+        info.plannedEa = int.tryParse(values[3]);
+      }
+    }
+    List<BaseProductInfo> result = [];
+    result.addAll(mapData.values);
+    return result;
+  }
+
+
 }

@@ -115,3 +115,4 @@ class Delivery {
   static const String PRINT_DELIVERY_SLIP = "PrintDeliverySlip";
   static const String DEFAULT_ALL_EQUAL = "DefaultAllEqual";
 }
+

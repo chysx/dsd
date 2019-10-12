@@ -37,45 +37,52 @@ class CheckoutShipmentPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('SHIPMENT'),
       ),
-      body:
-          Consumer<CheckoutShipmentPresenter>(builder: (context, presenter, _) {
+      body: Consumer<CheckoutShipmentPresenter>(builder: (context, presenter, _) {
         return new Column(
           children: <Widget>[
             header,
             Expanded(
               child: ListView.separated(
                   itemCount: presenter.shipmentInfoList.length,
-                  separatorBuilder: (context, index){
-                    return Divider(height: 2,);
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      height: 2,
+                    );
                   },
                   itemBuilder: (context, index) {
                     ShipmentInfo info = presenter.shipmentInfoList[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              info.no??'',
-                              textAlign: TextAlign.left,
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        presenter.onClickItem(context, info);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                info.no ?? '',
+                                textAlign: TextAlign.left,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              info.type??'',
-                              textAlign: TextAlign.center,
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                info.type ?? '',
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              info.status??'',
-                              textAlign: TextAlign.center,
+                            Expanded(
+                              flex: 1,
+                              child: Text(
+                                info.status ?? '',
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   }),
