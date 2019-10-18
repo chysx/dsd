@@ -1,5 +1,10 @@
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/ui/page/checkin/checkin_inventory_page.dart';
+import 'package:dsd/ui/page/checkin/checkin_inventory_presenter.dart';
+import 'package:dsd/ui/page/checkin/checkin_page.dart';
+import 'package:dsd/ui/page/checkin/checkin_presenter.dart';
 import 'package:dsd/ui/page/checkin/checkin_shipment_page.dart';
+import 'package:dsd/ui/page/checkin/checkin_shipment_presenter.dart';
 import 'package:dsd/ui/page/checkout/checkout_inventory_page.dart';
 import 'package:dsd/ui/page/checkout/checkout_inventory_presenter.dart';
 import 'package:dsd/ui/page/checkout/checkout_page.dart';
@@ -66,6 +71,7 @@ Handler routeHandler = Handler(handlerFunc: (_, params) {
       ChangeNotifierProvider<RoutePresenter>(
           builder: (context) => new RoutePresenter()
             ..routeTitle = routeTitle
+            ..setPageParams(params)
             ..onEvent(RouteEvent.InitData)),
     ],
     child: RoutePage(),
@@ -108,8 +114,39 @@ Handler checkoutInventoryHandler = Handler(handlerFunc: (_, params) {
   );
 });
 
+Handler checkInHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new CheckInPresenter()
+            ..setPageParams(params)
+            ..onEvent(CheckInEvent.InitData)),
+    ],
+    child: CheckInPage(),
+  );
+});
+
+Handler checkInInventoryHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new CheckInInventoryPresenter()
+            ..setPageParams(params)
+            ..onEvent(CheckInInventoryEvent.InitData)),
+    ],
+    child: CheckInInventoryPage(),
+  );
+});
+
 Handler checkInShipmentHandler = Handler(handlerFunc: (_, params) {
-  return CheckInShipmentPage();
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new CheckInShipmentPresenter()
+            ..onEvent(CheckInShipmentEvent.InitData)),
+    ],
+    child: CheckInShipmentPage(),
+  );
 });
 
 Handler syncHandler = Handler(handlerFunc: (_, params) {

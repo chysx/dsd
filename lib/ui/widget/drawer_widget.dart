@@ -16,124 +16,93 @@ import '../../application.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/26 17:38
 
-String curPage = ConstantMenu.CHECK_OUT;
 class DrawerWidget extends StatelessWidget {
+  final List<MenuInfo> menuInfoList = [];
+  final String page;
+  DrawerWidget({this.page,Key key}): super(key: key) {
+    MenuInfo menuInfo1 = new MenuInfo();
+    menuInfo1
+      ..page = ConstantMenu.CHECK_OUT
+      ..title = ConstantMenu.CHECK_OUT
+      ..imgPath = 'assets/imgs/menu_check_out.png';
+
+    MenuInfo menuInfo2 = new MenuInfo();
+    menuInfo2
+      ..page = ConstantMenu.ROUTE
+      ..title = ConstantMenu.ROUTE
+      ..imgPath = 'assets/imgs/menu_route.png';
+
+    MenuInfo menuInfo3 = new MenuInfo();
+    menuInfo3
+      ..page = ConstantMenu.CHECK_IN
+      ..title = ConstantMenu.CHECK_IN
+      ..imgPath = 'assets/imgs/menu_check_in.png';
+
+    MenuInfo menuInfo4 = new MenuInfo();
+    menuInfo4
+      ..page = ConstantMenu.SYNC
+      ..title = ConstantMenu.SYNC
+      ..imgPath = 'assets/imgs/menu_sync.png';
+
+    MenuInfo menuInfo5 = new MenuInfo();
+    menuInfo5
+      ..page = ConstantMenu.SETTING
+      ..title = ConstantMenu.SETTING
+      ..imgPath = 'assets/imgs/menu_setting.png';
+
+    MenuInfo menuInfo6 = new MenuInfo();
+    menuInfo6
+      ..page = ConstantMenu.LOGOUT
+      ..title = ConstantMenu.LOGOUT
+      ..imgPath = 'assets/imgs/menu_log_out.png';
+
+    menuInfoList.add(menuInfo1);
+    menuInfoList.add(menuInfo2);
+    menuInfoList.add(menuInfo3);
+    menuInfoList.add(menuInfo4);
+    menuInfoList.add(menuInfo5);
+    menuInfoList.add(menuInfo6);
+
+    _setCurMenuInfo();
+  }
+
+  _setCurMenuInfo(){
+    for(MenuInfo menuInfo in menuInfoList){
+      if(menuInfo.page == page){
+        menuInfo.isSelect = true;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return _buildDrawer(context);
   }
 
-  Color _getColor(String page){
-    return page == curPage ? Colors.blue : Colors.grey;
-  }
-
-  void _onTap(BuildContext context,String page){
-    print('page = $page');
-    Navigator.pop(context);
-    if(page == ConstantMenu.CHECK_OUT){
-      if(curPage != ConstantMenu.CHECK_OUT){
+  void _onTap(BuildContext context, String goPage) {
+    print('page = $goPage');
+    if(page != goPage){
+      if(goPage == ConstantMenu.CHECK_OUT){
         Application.router
-            .navigateTo(context, Routers.check_out_shipment, replace: true,transition: TransitionType.inFromLeft);
-        curPage = ConstantMenu.CHECK_OUT;
+            .navigateTo(context, Routers.check_out_shipment, replace: true, transition: TransitionType.inFromLeft);
       }
-    }else if(page == ConstantMenu.ROUTE){
-      if(curPage != ConstantMenu.ROUTE){
+      if(goPage == ConstantMenu.CHECK_IN){
         Application.router
-            .navigateTo(context, Routers.route, replace: true,transition: TransitionType.inFromLeft);
-        curPage = ConstantMenu.ROUTE;
+            .navigateTo(context, Routers.check_in_shipment, replace: true, transition: TransitionType.inFromLeft);
       }
-    }else if(page == ConstantMenu.CHECK_IN){
-      if(curPage != ConstantMenu.CHECK_IN){
+      if(goPage == ConstantMenu.ROUTE){
         Application.router
-            .navigateTo(context, Routers.check_in_shipment, replace: true,transition: TransitionType.inFromLeft);
-        curPage = ConstantMenu.CHECK_IN;
+            .navigateTo(context, Routers.route, replace: true, transition: TransitionType.inFromLeft);
       }
-    }else if(page == ConstantMenu.SYNC){
-      if(curPage != ConstantMenu.SYNC){
+      if(goPage == ConstantMenu.SYNC){
         Application.router
-            .navigateTo(context, Routers.sync, replace: false,transition: TransitionType.inFromLeft);
-        curPage = ConstantMenu.SYNC;
+            .navigateTo(context, Routers.sync, replace: false, transition: TransitionType.inFromLeft);
       }
-    }else if(page == ConstantMenu.SETTING){
-      if(curPage != ConstantMenu.SETTING){
+      if(goPage == ConstantMenu.SETTING){
         Application.router
-            .navigateTo(context, Routers.settings, replace: false,transition: TransitionType.inFromLeft);
-        curPage = ConstantMenu.SETTING;
+            .navigateTo(context, Routers.settings, replace: false, transition: TransitionType.inFromLeft);
       }
-    }else if(page == ConstantMenu.SETTING){
-      Navigator.pop(context);
     }
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Colors.grey,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            _buildHeader(),
-            Container(
-              color: _getColor(ConstantMenu.CHECK_OUT),
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_check_out.png'),
-                title: Text('Check Out',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.CHECK_OUT);
-                },
-              ),
-            ),
-            Container(
-              color: _getColor(ConstantMenu.ROUTE),
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_route.png'),
-                title: Text('Route',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.ROUTE);
-                },
-              ),
-            ),
-            Container(
-              color: _getColor(ConstantMenu.CHECK_IN),
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_check_in.png'),
-                title: Text('Check In',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.CHECK_IN);
-                },
-              ),
-            ),
-            Container(
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_setting.png'),
-                title: Text('Setting',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.SETTING);
-                },
-              ),
-            ),
-            Container(
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_sync.png'),
-                title: Text('Sync',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.SYNC);
-                },
-              ),
-            ),
-            Container(
-              child: ListTile(
-                leading: Image.asset('assets/imgs/menu_log_out.png'),
-                title: Text('Logout',style: TextStyle(color: Colors.white,fontSize: Dimens.font_normal),),
-                onTap: () {
-                  _onTap(context,ConstantMenu.LOGOUT);
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildHeader() {
@@ -176,4 +145,44 @@ class DrawerWidget extends StatelessWidget {
         ));
   }
 
+  List<Widget> _buildContent(BuildContext context) {
+    return menuInfoList.map((menu){
+      return Container(
+        color: menu.isSelect ? Colors.blue : Colors.grey,
+        child: ListTile(
+          leading: Image.asset(menu.imgPath),
+          title: Text(
+            menu.title,
+            style: TextStyle(color: Colors.white, fontSize: Dimens.font_normal),
+          ),
+          onTap: () {
+            _onTap(context, menu.page);
+          },
+        ),
+      );
+    }).toList();
+  }
+
+
+  Widget _buildDrawer(BuildContext context) {
+    List<Widget> list = [];
+    list.add(_buildHeader());
+    list.addAll(_buildContent(context));
+    return Drawer(
+      child: Container(
+        color: Colors.grey,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: list,
+        ),
+      ),
+    );
+  }
+}
+
+class MenuInfo {
+  bool isSelect = false;
+  String imgPath;
+  String title;
+  String page;
 }

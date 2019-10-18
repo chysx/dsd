@@ -17,32 +17,46 @@ import 'base_product_info.dart';
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/10/11 11:11
+///  Date:         2019/10/16 11:52
 
-class CheckoutModel {
-  static CheckoutModel _instance;
-
-  CheckoutModel._();
-
-  static CheckoutModel _getInstance() {
-    if (_instance == null) {
-      _instance = new CheckoutModel._();
-    }
-    return _instance;
-  }
-
-  factory CheckoutModel() => _getInstance();
-
+class CheckOutAndInModel {
   String _shipmentNo;
   DSD_M_ShipmentHeader_Entity mShipmentHeader;
   DSD_T_ShipmentHeader_Entity shipmentHeader;
   List<DSD_T_ShipmentItem_Entity> shipmentItemList = [];
 
+  String _getActionType(){
+    if(this is CheckOutModel){
+      return ActionType.CheckOut;
+    }else if(this is CheckInModel){
+      return ActionType.CheckIn;
+    }
+    return null;
+  }
+
+  String _getShipmentStatus(){
+    if(this is CheckOutModel){
+      return ShipmentStatus.CHKO;
+    }else if(this is CheckInModel){
+      return ShipmentStatus.CHKI;
+    }
+    return null;
+  }
+
+  String _getStockTrackingType(){
+    if(this is CheckOutModel){
+      return StockTracking.CHKO;
+    }else if(this is CheckInModel){
+      return StockTracking.CHKI;
+    }
+    return null;
+  }
+
   Future initData(String shipmentNo) async {
     _shipmentNo = shipmentNo;
     mShipmentHeader = await Application.database.mShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, Valid.EXIST);
     shipmentHeader =
-        await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, ActionType.CheckOut);
+    await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, _getActionType());
     if (shipmentHeader != null) {
       shipmentItemList = await Application.database.tShipmentItemDao.findEntityByHeaderId(shipmentHeader.Id);
     }
@@ -52,45 +66,6 @@ class CheckoutModel {
     _shipmentNo = null;
     shipmentHeader = null;
     shipmentItemList.clear();
-  }
-
-  Future saveShipmentHeader() async {
-    if (shipmentHeader == null) {
-      String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
-      shipmentHeader = DSD_T_ShipmentHeader_Entity.Empty();
-      shipmentHeader
-        ..Id = new Uuid().v1()
-        ..ShipmentNo = _shipmentNo
-        ..ShipmentType = mShipmentHeader.ShipmentType
-        ..ShipmentDate = DateUtil.getDateStrByTimeStr(notTime,format: DateFormat.YEAR_MONTH_DAY)
-        ..ActionType = ActionType.CheckOut
-        ..StartTime = notTime
-        ..WarehouseCode = mShipmentHeader.WarehouseCode
-        ..Driver = Application.user.userCode
-        ..TruckId = mShipmentHeader.TruckId
-        ..CreateUser = Application.user.userCode
-        ..CreateTime = notTime
-        ..ScanResult = '0'
-        ..Manually = '0'
-        ..dirty = SyncDirtyStatus.DEFAULT;
-
-      await Application.database.tShipmentHeaderDao.insertEntity(shipmentHeader);
-    }
-  }
-
-  Future updateShipmentHeader() async {
-    shipmentHeader
-      ..EndTime = DateUtil.getDateStrByDateTime(new DateTime.now())
-      ..Status = ShipmentStatus.CHKO;
-    await Application.database.tShipmentHeaderDao.updateEntity(shipmentHeader);
-  }
-
-  Future saveShipmentItems() async {
-    await saveStock(StockType.CANCEL,shipmentHeader);
-    await Application.database.tShipmentItemDao.deleteByHeaderId(shipmentHeader.Id);
-
-    await Application.database.tShipmentItemDao.insertEntityList(shipmentItemList);
-    await saveStock(StockType.DO,shipmentHeader);
   }
 
   void setShipmentItemList(List<BaseProductInfo> productList, String productUnitValue){
@@ -140,7 +115,47 @@ class CheckoutModel {
     }
   }
 
-  static Future saveStock(StockType stockType,DSD_T_ShipmentHeader_Entity shipmentHeader) async {
+  Future saveShipmentHeader() async {
+    if (shipmentHeader == null) {
+      String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+      shipmentHeader = DSD_T_ShipmentHeader_Entity.Empty();
+      shipmentHeader
+        ..Id = new Uuid().v1()
+        ..ShipmentNo = _shipmentNo
+        ..ShipmentType = mShipmentHeader.ShipmentType
+        ..ShipmentDate = DateUtil.getDateStrByTimeStr(notTime,format: DateFormat.YEAR_MONTH_DAY)
+        ..ActionType = _getActionType()
+        ..StartTime = notTime
+        ..WarehouseCode = mShipmentHeader.WarehouseCode
+        ..Driver = Application.user.userCode
+        ..TruckId = mShipmentHeader.TruckId
+        ..CreateUser = Application.user.userCode
+        ..CreateTime = notTime
+        ..ScanResult = '0'
+        ..Manually = '0'
+        ..dirty = SyncDirtyStatus.DEFAULT;
+
+      await Application.database.tShipmentHeaderDao.insertEntity(shipmentHeader);
+    }
+  }
+
+  Future updateShipmentHeader() async {
+    shipmentHeader
+      ..Status = _getShipmentStatus()
+      ..EndTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    await Application.database.tShipmentHeaderDao.updateEntity(shipmentHeader);
+  }
+
+  Future saveShipmentItems() async {
+    String stockTrackingType = _getStockTrackingType();
+    await saveStock(StockType.CANCEL,shipmentHeader,stockTrackingType);
+    await Application.database.tShipmentItemDao.deleteByHeaderId(shipmentHeader.Id);
+
+    await Application.database.tShipmentItemDao.insertEntityList(shipmentItemList);
+    await saveStock(StockType.DO,shipmentHeader,stockTrackingType);
+  }
+
+  static Future saveStock(StockType stockType,DSD_T_ShipmentHeader_Entity shipmentHeader,String stockTrackingType) async {
     if(shipmentHeader == null) return;
 
     List<DSD_T_ShipmentItem_Entity> shipmentItemList = await Application.database.tShipmentItemDao.findEntityByHeaderId(shipmentHeader.Id);
@@ -164,7 +179,38 @@ class CheckoutModel {
 
     for (String key in stockMap.keys) {
       await TruckStockManager.setStock(
-          stockType, StockTracking.CHKO, shipmentHeader.TruckId, shipmentHeader.ShipmentNo, key, stockMap[key].cs, stockMap[key].ea);
+          stockType, stockTrackingType, shipmentHeader.TruckId, shipmentHeader.ShipmentNo, key, stockMap[key].cs, stockMap[key].ea);
     }
   }
+
+}
+
+class CheckOutModel extends CheckOutAndInModel{
+  static CheckOutModel _instance;
+
+  CheckOutModel._();
+
+  static CheckOutModel _getInstance() {
+    if (_instance == null) {
+      _instance = new CheckOutModel._();
+    }
+    return _instance;
+  }
+
+  factory CheckOutModel() => _getInstance();
+}
+
+class CheckInModel extends CheckOutAndInModel{
+  static CheckInModel _instance;
+
+  CheckInModel._();
+
+  static CheckInModel _getInstance() {
+    if (_instance == null) {
+      _instance = new CheckInModel._();
+    }
+    return _instance;
+  }
+
+  factory CheckInModel() => _getInstance();
 }

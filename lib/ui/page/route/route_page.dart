@@ -1,4 +1,5 @@
 
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/util.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/styles.dart';
@@ -65,7 +66,7 @@ class _RouteState extends State<RoutePage> {
           );
         }
       ),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(page: ConstantMenu.ROUTE,),
     );
   }
 

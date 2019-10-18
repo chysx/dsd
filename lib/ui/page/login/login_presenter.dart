@@ -71,7 +71,6 @@ class LoginPresenter extends EventNotifier<SettingEvent> {
 
   Future startNavigate(BuildContext context) async {
     await Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
-    curPage = ConstantMenu.CHECK_OUT;
   }
 
   Future initAppConfigEntity() async {

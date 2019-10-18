@@ -25,7 +25,7 @@ class CheckoutPage extends StatelessWidget {
               icon: Icon(Icons.arrow_forward),
               onPressed: () {
                 CheckoutPresenter presenter = Provider.of<CheckoutPresenter>(context);
-                presenter.onClickRight();
+                presenter.onClickRight(context);
               },
             )
           ],
@@ -48,7 +48,7 @@ class CheckoutPage extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'INVENTORY CHECKOUT',
-                            style: TextStyles.normal,
+                            style: TextStyles.large,
                           ),
                           Text(
                             'Shipment No:${presenter.shipmentNo}',
@@ -59,7 +59,7 @@ class CheckoutPage extends StatelessWidget {
                       Spacer(),
                       Text(
                         presenter.getIsCompleteText(),
-                        style: TextStyles.normal,
+                        style: TextStyles.large,
                       ),
                       Icon(
                         Icons.arrow_forward_ios,

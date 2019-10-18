@@ -1,30 +1,30 @@
-import 'package:dsd/application.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
 import 'package:dsd/route/routers.dart';
-import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+
+import '../../../application.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
 ///
 ///  Author:       张国鹏
 ///  Email:        guopeng.zhang@ebestmobile.com)
-///  Date:         2019/8/30 11:43
+///  Date:         2019/10/12 16:21
 
-enum CheckOutEvent {
+enum CheckInEvent {
   InitData
 }
 
-class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
+class CheckInPresenter extends EventNotifier<CheckInEvent> {
   String shipmentNo;
-  @override
-  void onEvent(CheckOutEvent event, [dynamic data]) async {
 
-    switch(event){
-      case CheckOutEvent.InitData:
+  @override
+  void onEvent(CheckInEvent event, [dynamic data]) async {
+    switch (event) {
+      case CheckInEvent.InitData:
         await initData();
         break;
     }
@@ -37,11 +37,11 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
   }
 
   Future initData() async {
-    await CheckOutModel().initData(shipmentNo);
+    await CheckInModel().initData(shipmentNo);
   }
 
   bool isComplete(){
-    return CheckOutModel().shipmentItemList.length > 0;
+    return CheckInModel().shipmentItemList.length > 0;
   }
 
   String getIsCompleteText() {
@@ -53,34 +53,18 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
 
   Future onClickItem(BuildContext context,String shipmentNo) async {
     String path =
-    '''${Routers.check_out_inventory}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo''';
+    '''${Routers.check_in_inventory}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo''';
     await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
 
     onResume();
   }
 
   void onResume(){
-    onEvent(CheckOutEvent.InitData);
+    onEvent(CheckInEvent.InitData);
   }
 
-  Future onClickRight(BuildContext context) async {
-    if(isPass()){
-      await CheckOutModel().updateShipmentHeader();
-      Navigator.of(context).pop();
-    }else{
-      CustomerDialog.show(context,msg: 'You must complete the inventory count.');
-    }
-  }
-
-  bool isPass(){
-    return isComplete();
-  }
-
-  @override
-  void dispose() {
-    CheckOutModel().clear();
-    print('*************************checkout dispose************************');
-    super.dispose();
+  void onClickRight(){
+    CheckInModel().updateShipmentHeader();
   }
 
 }

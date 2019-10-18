@@ -1,3 +1,4 @@
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
@@ -90,7 +91,7 @@ class CheckoutShipmentPage extends StatelessWidget {
           ],
         );
       }),
-      drawer: DrawerWidget(),
+      drawer: DrawerWidget(page: ConstantMenu.CHECK_OUT,),
     );
   }
 }

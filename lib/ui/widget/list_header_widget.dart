@@ -1,4 +1,3 @@
-
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flutter/material.dart';
@@ -15,27 +14,22 @@ class ListHeaderWidget extends StatefulWidget {
   final List<String> supNames;
   final List<int> weights;
   final List<TextAlign> aligns;
-  final bool isCheck;
+  final isCheck;
   final Function(bool) onChange;
 
-  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns,this.isCheck,this.onChange, Key key}) : super(key: key);
+  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns, this.isCheck, this.onChange, Key key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ListHeaderState(names: names,supNames: supNames,weights: weights,aligns: aligns,isCheck: isCheck);
+    return _ListHeaderState(isCheck:isCheck);
   }
-
-
 }
 
 class _ListHeaderState extends State<ListHeaderWidget> {
-  final List<String> names;
-  final List<String> supNames;
-  final List<int> weights;
-  final List<TextAlign> aligns;
   bool isCheck;
 
-  _ListHeaderState({this.names, this.supNames, this.weights, this.aligns,this.isCheck});
+  _ListHeaderState({this.isCheck});
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +43,10 @@ class _ListHeaderState extends State<ListHeaderWidget> {
   }
 
   Widget _getSupWidget(int position) {
-    if(supNames != null && !StringUtil.isEmpty(supNames[position])){
+    if (widget.supNames != null && !StringUtil.isEmpty(widget.supNames[position])) {
       return Text(
-        supNames[position],
-        textAlign: aligns[position],
+        widget.supNames[position],
+        textAlign: widget.aligns[position],
         style: TextStyles.small,
       );
     }
@@ -61,46 +55,42 @@ class _ListHeaderState extends State<ListHeaderWidget> {
 
   List<Widget> _makeWidgets() {
     int position = -1;
-
     List<Widget> list = [];
-    list.addAll(names.map((item) {
+    list.addAll(widget.names.map((item) {
       position++;
       return Expanded(
-          flex: weights[position],
+          flex: widget.weights[position],
           child: Column(
             children: <Widget>[
               Text(
                 item,
-                textAlign: aligns[position],
+                textAlign: widget.aligns[position],
                 style: TextStyles.normal,
               ),
               _getSupWidget(position)
             ],
           ));
-    }).toList()
-    );
+    }).toList());
 
-    if(isCheck != null){
+    if (isCheck != null) {
       Widget checkBox = Expanded(
           flex: 1,
           child: Align(
             alignment: Alignment.center,
             child: Checkbox(
               value: isCheck,
-              onChanged: (value){
+              onChanged: (value) {
                 setState(() {
                   isCheck = value;
                 });
-                if(widget.onChange != null) widget.onChange(value);
+                if (widget.onChange != null) widget.onChange(value);
               },
             ),
-          )
-      );
+          ));
 
       list.add(checkBox);
     }
 
     return list;
   }
-
 }

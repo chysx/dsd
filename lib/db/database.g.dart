@@ -4253,6 +4253,15 @@ class _$MD_Product_Dao extends MD_Product_Dao {
   }
 
   @override
+  Future<List<MD_Product_Entity>> findEntityByEmpty(
+      String EbMobile__IsEmpty__c) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM MD_Product WHERE EbMobile__IsEmpty__c = ?',
+        arguments: <dynamic>[EbMobile__IsEmpty__c],
+        mapper: _mD_ProductMapper);
+  }
+
+  @override
   Future<void> deleteById(String id) async {
     await _queryAdapter.queryNoReturn('DELETE FROM MD_Product WHERE id = ?',
         arguments: <dynamic>[id]);

@@ -1,5 +1,7 @@
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/res/styles.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
+import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,26 +26,36 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
   List<TextEditingController> csList = [];
   List<TextEditingController> eaList = [];
 
-  void initControllerCs(List<BaseProductInfo> productList){
+  void initControllerCs(CheckoutInventoryPresenter presenter){
 //    if(csList.length > 0) return ;
     csList.clear();
-    for(BaseProductInfo info in productList){
-      TextEditingController controller = new TextEditingController();
-      controller.text = info.actualCs.toString();
+    for(BaseProductInfo info in presenter.productList){
+      TextEditingController controller = TextEditingController.fromValue(TextEditingValue(
+        // 设置内容
+          text: (info.actualCs ?? '').toString(),
+          // 保持光标在最后
+          selection: TextSelection.fromPosition(
+              TextPosition(affinity: TextAffinity.downstream, offset: (info.actualCs ?? 0).toString().length))));
       controller.addListener((){
         info.actualCs = int.tryParse(controller.text);
+        presenter.onEvent(CheckOutInventoryEvent.OnInput, info);
       });
       csList.add(controller);
     }
   }
-  void initControllerEa(List<BaseProductInfo> productList){
+  void initControllerEa(CheckoutInventoryPresenter presenter){
 //    if(eaList.length > 0) return ;
       eaList.clear();
-    for(BaseProductInfo info in productList){
-      TextEditingController controller = new TextEditingController();
-      controller.text = info.actualEa.toString();
+    for(BaseProductInfo info in presenter.productList){
+      TextEditingController controller = TextEditingController.fromValue(TextEditingValue(
+        // 设置内容
+          text: (info.actualEa ?? '').toString(),
+          // 保持光标在最后
+          selection: TextSelection.fromPosition(
+              TextPosition(affinity: TextAffinity.downstream, offset: (info.actualEa ?? 0).toString().length))));
       controller.addListener((){
         info.actualEa = int.tryParse(controller.text);
+        presenter.onEvent(CheckOutInventoryEvent.OnInput, info);
       });
       eaList.add(controller);
     }
@@ -61,31 +73,51 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
       ],
       isCheck: false,
       onChange: (value){
+        print('onChange value = $value');
         presenter.onEvent(CheckOutInventoryEvent.SelectOrCancelAll,value);
       },
     );
   }
 
+  Widget createListFooterWidget(CheckoutInventoryPresenter presenter) {
+    return ListHeaderWidget(
+      names: [
+        'toal:',
+        presenter.getPlanTotal(presenter.productList),
+        presenter.getActualTotal(presenter.productList),
+        ''
+      ],
+      supNames: ['', '', '', ''],
+      weights: [2, 1, 1, 1],
+      aligns: [
+        TextAlign.left,
+        TextAlign.center,
+        TextAlign.center,
+        TextAlign.center,
+      ],
+      onChange: (value) {},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("build***");
+
     return Scaffold(
         appBar: AppBar(
           title: Text('INVENTORY COUNT'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.arrow_forward),
-              onPressed: () async {
+              onPressed: () {
                 CheckoutInventoryPresenter presenter = Provider.of<CheckoutInventoryPresenter>(context);
-                await presenter.onClickRight();
-                Navigator.of(context).pop();
+                presenter.onClickRight(context);
               },
             )
           ],
         ),
         body: Consumer<CheckoutInventoryPresenter>(builder: (context, presenter, _) {
-          initControllerCs(presenter.productList);
-          initControllerEa(presenter.productList);
+          initControllerCs(presenter);
+          initControllerEa(presenter);
           return Column(
             children: <Widget>[
               createListHeaderWidget(presenter),
@@ -106,7 +138,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                             Expanded(
                               flex: 2,
                               child: Text(
-                                '${info.code} ${info.desc}',
+                                '${info.code} ${info.name}',
                                 textAlign: TextAlign.left,
                               ),
                             ),
@@ -128,6 +160,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                         data: ThemeData(primaryColor: Colors.grey),
                                         child: TextField(
                                           controller: csList.length > 0 ? csList[index] : new TextEditingController(),
+                                          keyboardType: TextInputType.number,
                                           style: TextStyles.normal,
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.only(top: 6, bottom: 6, left: 2, right: 2),
@@ -139,6 +172,9 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                       ),
                                     ),
                                   ),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 2),
+                                  ),
                                   Expanded(
                                     child: SizedBox(
 //                                height: 36,
@@ -146,6 +182,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                         data: ThemeData(primaryColor: Colors.grey),
                                         child: TextField(
                                           controller: eaList.length > 0 ? eaList[index] : new TextEditingController(),
+                                          keyboardType: TextInputType.number,
                                           style: TextStyles.normal,
                                           decoration: InputDecoration(
                                             contentPadding: EdgeInsets.only(top: 6, bottom: 6, left: 2, right: 2),
@@ -162,14 +199,33 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                             ),
                             Expanded(
                               flex: 1,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Checkbox(
-                                  value: info.isCheck,
-                                  onChanged: (value){
-                                    presenter.selectOrCancel(info, value);
-                                  },
-                                ),
+                              child: Stack(
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Checkbox(
+                                      value: info.isCheck,
+                                      onChanged: (value){
+                                        presenter.selectOrCancel(info, value);
+                                      },
+                                    ),
+                                  ),
+
+                                    Positioned(
+                                      right: 0,
+                                      bottom: 16,
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        onTap: (){
+                                          presenter.showReasonDialog(context, info);
+                                        },
+                                        child: Offstage(
+                                          offstage: info.isEqual(),
+                                            child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 18,)),
+                                      ),
+                                    ),
+
+                                ],
                               ),
                             ),
                           ],
@@ -177,6 +233,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                       );
                     }),
               ),
+              createListFooterWidget(presenter),
             ],
           );
         }));

@@ -58,4 +58,17 @@ class BaseProductInfo {
       }
       return '$actualCs/$actualEa';
    }
+
+   bool isEqual(){
+      return (plannedCs ?? 0) == (actualCs ?? 0) && (plannedEa ?? 0) == (actualEa ?? 0);
+   }
+
+   bool isRedReasonIcon(){
+      return (reasonValue ?? '').isEmpty;
+   }
+
+   bool isPass(){
+      return isEqual() || !isRedReasonIcon();
+   }
+
 }

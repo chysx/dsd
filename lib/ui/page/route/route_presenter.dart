@@ -59,6 +59,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   List<CustomerInfo> customerList = [];
   List<ShipmentInfo> shipmentList = [];
   ShipmentInfo currentShipment;
+  String shipmentNoByCheckoutPage;
   RouteConfigInfo configInfo = new RouteConfigInfo();
   RouteTitle routeTitle = new RouteTitle();
 
@@ -82,11 +83,20 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     super.onEvent(event, data);
   }
 
+  void setPageParams(Map<String, List<String>> params) {
+    try{
+      shipmentNoByCheckoutPage = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
+    }catch(e){
+
+    }
+  }
+
   Future initData() async {
     await initConfig();
 
     await fillShipmentList();
     await fillCurShipment();
+    await setCurShipmentByCheckoutPage();
     await fillCustomerData();
   }
 
@@ -120,10 +130,6 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
 
     sortShipmentList();
 
-    print('print shipmentList');
-    shipmentList.forEach((item) {
-      print(item);
-    });
   }
 
   void sortShipmentList() {
@@ -158,6 +164,10 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         currentShipment = null;
       }
     }
+  }
+
+  Future setCurShipmentByCheckoutPage() async {
+    if(shipmentNoByCheckoutPage != null && shipmentNoByCheckoutPage.isNotEmpty) await setCurShipment(shipmentNoByCheckoutPage);
   }
 
   Future fillCustomerData() async {

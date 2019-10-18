@@ -47,6 +47,21 @@ class IsReturn {
   static const String FALSE = "0";
 }
 
+///
+/// 根据配置控制（MD_Product表中的ebMobile__IsEmpty__c字段）
+///
+class Empty {
+  ///
+  /// 空瓶产品
+  ///
+  static const String TRUE = "True";
+
+  ///
+  /// 非空瓶产品
+  ///
+  static const String FALSE = "False";
+}
+
 class ProductUnit {
   static const String CS_EA = "CS_EA";
   static const String CS = "CS";

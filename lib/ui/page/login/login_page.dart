@@ -63,7 +63,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     if(state == AppLifecycleState.resumed){
-      curPage = ConstantMenu.CHECK_OUT;
+
     }
   }
 

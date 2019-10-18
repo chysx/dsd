@@ -17,6 +17,9 @@ abstract class MD_Product_Dao {
   @Query('SELECT * FROM MD_Product WHERE ProductCode = :ProductCode')
   Future<MD_Product_Entity> findEntityByCode(String ProductCode);
 
+  @Query('SELECT * FROM MD_Product WHERE EbMobile__IsEmpty__c = :EbMobile__IsEmpty__c')
+  Future<List<MD_Product_Entity>> findEntityByEmpty(String EbMobile__IsEmpty__c);
+
   @insert
   Future<void> insertEntity(MD_Product_Entity entity);
 

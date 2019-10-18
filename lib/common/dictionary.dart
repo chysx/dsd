@@ -83,3 +83,11 @@ class AccountMasterFields {
   static const String Account_ebMobile__TradeChannel__c = "Account_ebMobile__TradeChannel__c";
   static const String Account_ebMobile__Classification__c = "Account_ebMobile__Classification__c";
 }
+
+class CheckOutDiffReason {
+  static const String CATEGORY = "CODiffReason";
+}
+
+class CheckInDiffReason {
+  static const String CATEGORY = "CIDiffReason";
+}

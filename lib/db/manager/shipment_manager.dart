@@ -1,8 +1,6 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/dictionary.dart';
-import 'package:dsd/db/manager/dictionary_manager.dart';
-import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
@@ -71,7 +69,7 @@ class ShipmentManager {
   /// 2.做了inventory或是finance，但是没有下一步，即没有完全做完checkout，此时dsd_t_shipmentheader有记录，其中status是null的
   ///
   ///
-  static Future<List<ShipmentInfo>> getMShipmentHeaderByLastDay() async {
+  static Future<List<ShipmentInfo>> getMShipmentHeaderByAll() async {
     String sql = ''' 
             SELECT
             m.shipmentno,
@@ -84,45 +82,8 @@ class ShipmentManager {
             dsd_t_shipmentheader t                   
                 on m.shipmentno = t.shipmentno          
         WHERE
-            m.shipmentdate < ? 
-            and t.status is null 
+            t.status is null 
             and m.Valid = 'True'
-     ''';
-    String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
-    SqlUtil.log(sql, [date]);
-    List<ShipmentInfo> result = [];
-    var db = Application.database.database;
-    List<Map<String, dynamic>> list = await db.rawQuery(sql, [date]);
-    for (Map<String, dynamic> map in list) {
-      ShipmentInfo info = new ShipmentInfo();
-      List values = map.values.toList();
-      info
-        ..no = values[0]
-        ..type = values[1]
-        ..shipmentDate = values[2]
-        ..sequence = values[3]
-        ..status = ShipmentStatus.RELE;
-      result.add(info);
-    }
-    return result;
-  }
-
-  ///
-  /// 获取所有未做checkout和checkIn的Shipment数据（即MShipmentHeader表）
-  /// 主要包含两部分:
-  /// 1.没有做任何东西（inventory和finance），此时dsd_t_shipmentheader表没有记录;
-  /// 2.做了inventory或是finance，但是没有下一步，即没有完全做完checkout，此时dsd_t_shipmentheader有记录，其中status是null的
-  ///
-  ///
-  static Future<List<ShipmentInfo>> getMShipmentHeaderByAll() async {
-    String sql = ''' 
-        SELECT m.shipmentno,
-               m.shipmenttype
-        FROM   dsd_m_shipmentheader m
-        LEFT JOIN dsd_t_shipmentheader t
-                 ON m.shipmentno = t.shipmentno
-        WHERE  t.status IS NULL 
-               and m.Valid = 'True'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -133,9 +94,10 @@ class ShipmentManager {
       List values = map.values.toList();
       info
         ..no = values[0]
-        ..type = values[1];
-      info.status = ShipmentStatus.RELE;
-      info.description = await DictionaryManager.getDictionaryDescription(ShipmentStatus.CATEGORY,ShipmentStatus.RELE);
+        ..type = values[1]
+        ..shipmentDate = values[2]
+        ..sequence = values[3]
+        ..status = ShipmentStatus.RELE;
       result.add(info);
     }
     return result;
@@ -246,30 +208,14 @@ class ShipmentManager {
   }
 
   ///
-  /// 获取今天计划内的shipment数据，和过去已经CheckOut了但是没有CheckIn的shipment数据
+  /// 获取已经CheckOut了但是没有CheckIn的shipment数据和今天做了CheckIn的shipment数据
   ///
-  static Future<List<ShipmentInfo>> getShipmentListByToday() async {
+  static Future<List<ShipmentInfo>> getShipmentHeaderByCheckOutAndIn() async {
     List<ShipmentInfo> resultList = [];
 
-    List<ShipmentInfo> releaseByTodayList = [];
     List<ShipmentInfo> checkOutByAllList = await getShipmentHeaderByCheckOut();
     List<ShipmentInfo> checkInByTodayList = await getShipmentHeaderByCheckInByToday();
     List<ShipmentInfo> checkInByLastList = await getShipmentHeaderByCheckInByLast();
-
-    String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
-    List<DSD_M_ShipmentHeader_Entity> defaultList =
-        await Application.database.mShipmentHeaderDao.findByByToday(date, Valid.EXIST);
-
-    for (DSD_M_ShipmentHeader_Entity entity in defaultList) {
-      ShipmentInfo info = new ShipmentInfo();
-      info.no = entity.ShipmentNo;
-      info.type = entity.ShipmentType;
-      info.status = ShipmentStatus.RELE;
-      info.description = await DictionaryManager.getDictionaryDescription(ShipmentStatus.CATEGORY, ShipmentStatus.RELE);
-      info.shipmentDate = entity.ShipmentDate;
-      info.sequence = entity.LoadingSequence;
-      releaseByTodayList.add(info);
-    }
 
     //将当天以前已经CheckIn的shipment过滤掉
     checkOutByAllList.removeWhere((item) {
@@ -291,29 +237,14 @@ class ShipmentManager {
       }
     }
     resultList.addAll(checkOutByAllList);
-
-    //添加当天默认release状态的shipment
-    for (ShipmentInfo releaseInfo in releaseByTodayList) {
-      bool isFind = false;
-      for (ShipmentInfo checkOutInfo in checkOutByAllList) {
-        if (checkOutInfo.no == releaseInfo.no) {
-          isFind = true;
-          break;
-        }
-      }
-      if (!isFind) {
-        resultList.add(releaseInfo);
-      }
-    }
-
     return resultList;
   }
 
   static Future<List<ShipmentInfo>> getShipmentList() async {
     List<ShipmentInfo> resultList = [];
-    List<ShipmentInfo> releaseByTodayList = await getShipmentListByToday();
-    List<ShipmentInfo> releaseByLastList = await getMShipmentHeaderByLastDay();
-    resultList.addAll(releaseByTodayList);
+    List<ShipmentInfo> checkOutAnIn = await getShipmentHeaderByCheckOutAndIn();
+    List<ShipmentInfo> releaseByLastList = await getMShipmentHeaderByAll();
+    resultList.addAll(checkOutAnIn);
     //为什么事过滤而不是直接addAll,是因为存在这样一种情况（之前测出来的一个bug）:
     //比如：过去lastDay,M表有shipmentNo = 123,T表有对应有两条数据（shipmentNO也是123）,一条是
     //已经做完checkout，status为CHKO，另一条是checkin，但是没有做完，只是actionType为CHKI，status
@@ -329,10 +260,6 @@ class ShipmentManager {
       if (!isFind) {
         resultList.add(info);
       }
-    }
-
-    for(var info in resultList){
-      print(info);
     }
     return resultList;
   }
@@ -443,5 +370,91 @@ class ShipmentManager {
     return result;
   }
 
+  static Future<List<BaseProductInfo>> getShipmentItemProductStockByNo(String shipmentNo) async {
+    String sql = ''' 
+            SELECT 
+            DISTINCT 
+            T4.ShipmentNo,
+            T4.ProductCode,
+            T4.ProductUnit,
+            T2.Name, 
+            T4.StockQty,
+            T4.SaleableQty    
+        FROM
+            DSD_T_TruckStock AS T4    
+        LEFT JOIN 
+            DSD_T_ShipmentItem AS T1 
+              ON T1.ProductCode = T4.ProductCode     
+              AND T1.ProductUnit = T4.ProductUnit 
+        LEFT JOIN 
+            DSD_T_ShipmentHeader AS T5 
+              ON T1.HeaderID = T5.ID  
+              and T5.ShipmentNo = T4.ShipmentNo   
+        LEFT JOIN 
+            MD_Product AS T2 
+              ON T4.ProductCode = T2.ProductCode  
+        WHERE
+            T4.ShipmentNo = ? 
+            AND T2.ebMobile__IsEmpty__c != ? 
+        ORDER BY T4.StockQty DESC,T4.SaleableQty DESC
+     ''';
+
+    SqlUtil.log(sql, [shipmentNo,Empty.TRUE]);
+    Map<String,BaseProductInfo> mapData = {};
+    var db = Application.database.database;
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, [shipmentNo,Empty.TRUE]);
+    for (Map<String, dynamic> map in list) {
+      List values = map.values.toList();
+      String code = values[1];
+      String unit = values[2];
+      BaseProductInfo info = mapData[code];
+      if(info == null) {
+        info = new BaseProductInfo();
+        mapData[code] = info;
+        info.code = code;
+        info.name = values[3];
+      }
+      if(ProductUnit.CS == unit){
+        info.plannedCs = values[4];
+      }else if(ProductUnit.EA == unit){
+        info.plannedEa = values[4];
+      }
+    }
+    List<BaseProductInfo> result = [];
+    result.addAll(mapData.values);
+    return result;
+  }
+
+  static Future<List<BaseProductInfo>> getEmptyProductByShipmentNo(String shipmentNo) async {
+    String sql = ''' 
+            SELECT
+            t2.ProductCode,
+            T2.name,
+            T1.stockqty     
+        FROM
+            dsd_t_truckstock AS T1    
+        INNER JOIN 
+            MD_Product AS T2 
+              ON T1.ProductCode = T2.ProductCode        
+        WHERE
+            t2.ebmobile__isempty__c = ? 
+            AND t1.productunit = ? 
+            AND t1.shipmentno = ?
+     ''';
+
+    List<BaseProductInfo> result = [];
+    SqlUtil.log(sql, [Empty.TRUE, ProductUnit.CS,shipmentNo]);
+    var db = Application.database.database;
+    List<Map<String, dynamic>> list = await db.rawQuery(sql, [Empty.TRUE, ProductUnit.CS,shipmentNo]);
+    for (Map<String, dynamic> map in list) {
+      List values = map.values.toList();
+      BaseProductInfo info = BaseProductInfo();
+      info.code = values[0];
+      info.name = values[1];
+      info.plannedCs = values[2];
+      result.add(info);
+    }
+    return result;
+  }
 
 }

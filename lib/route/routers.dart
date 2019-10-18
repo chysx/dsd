@@ -16,6 +16,8 @@ class Routers {
   static const check_out = '/check_out';
   static const check_out_inventory = '/check_out_inventory';
   static const check_in_shipment = '/check_in_shipment';
+  static const check_in = '/check_in';
+  static const check_in_inventory = '/check_in_inventory';
   static const sync = '/sync';
   static const route_plan = '/route_plan';
   static const task_list = '/task_list';
@@ -31,6 +33,8 @@ class Routers {
     router.define(check_out_shipment, handler: checkoutShipmentHandler);
     router.define(check_out, handler: checkoutHandler);
     router.define(check_in_shipment, handler: checkInShipmentHandler);
+    router.define(check_in_inventory, handler: checkInInventoryHandler);
+    router.define(check_in, handler: checkInHandler);
     router.define(sync, handler: syncHandler);
     router.define(route_plan, handler: routePlanHandler);
     router.define(task_list, handler: taskListHandler);
