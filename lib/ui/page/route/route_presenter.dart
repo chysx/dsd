@@ -70,7 +70,6 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         await initData();
         break;
       case RouteEvent.SelectShipment:
-        print('*********SelectShipment');
         eventBus.fire(new SearchEvent());
         await setCurShipment(data);
         await fillCustomerData();
@@ -98,6 +97,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     await fillCurShipment();
     await setCurShipmentByCheckoutPage();
     await fillCustomerData();
+    routeTitle.makeRouteTitle(customerList);
   }
 
   Future initConfig() async {
