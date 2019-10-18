@@ -1,7 +1,6 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
-import 'package:dsd/db/table/entity/dsd_m_delivery_item_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';

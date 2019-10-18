@@ -83,8 +83,8 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
     return ListHeaderWidget(
       names: [
         'toal:',
-        presenter.getPlanTotal(presenter.productList),
-        presenter.getActualTotal(presenter.productList),
+        BaseProductInfo.getPlanTotal(presenter.productList),
+        BaseProductInfo.getActualTotal(presenter.productList),
         ''
       ],
       supNames: ['', '', '', ''],

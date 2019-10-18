@@ -31,58 +31,59 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
         title: Text('DeliverySummary'),
       ),
       body: Consumer<DeliverySummaryPresenter>(builder: (context, presenter, _) {
-        return Column(
-          children: <Widget>[
-            FoldWidget(
-              msg: 'DELIVERY INFO',
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text('Delivery No:',style: TextStyles.normal,),
-                        Spacer(),
-                        Text('1234567890',style: TextStyles.normal,),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10),),
-                    Row(
-                      children: <Widget>[
-                        Text('Delivery Date:',style: TextStyles.normal,),
-                        Spacer(),
-                        Text('1234567890',style: TextStyles.normal,),
-                      ],
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10),),
-                    Row(
-                      children: <Widget>[
-                        Text('Delivery Note:',style: TextStyles.normal,),
-                        Spacer(),
-                        Text('1234567890',style: TextStyles.normal,),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            FoldWidget(
-              msg: 'DELIVERY PRODUCTS',
-              isMore: true,
-              child: Column(
-                children: <Widget>[
-                  ListHeaderWidget(
-                    names: ['Product', 'Qty'],
-                    supNames: ['', 'cs/ea'],
-                    weights: [1, 1],
-                    aligns: [
-                      TextAlign.center,
-                      TextAlign.center,
+        return SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              FoldWidget(
+                msg: 'DELIVERY INFO',
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Text('Delivery No:',style: TextStyles.normal,),
+                          Spacer(),
+                          Text('1234567890',style: TextStyles.normal,),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 10),),
+                      Row(
+                        children: <Widget>[
+                          Text('Delivery Date:',style: TextStyles.normal,),
+                          Spacer(),
+                          Text('1234567890',style: TextStyles.normal,),
+                        ],
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 10),),
+                      Row(
+                        children: <Widget>[
+                          Text('Delivery Note:',style: TextStyles.normal,),
+                          Spacer(),
+                          Text('1234567890',style: TextStyles.normal,),
+                        ],
+                      )
                     ],
                   ),
-                  Container(
-                    height: 300,
-                    child: ListView.separated(
+                ),
+              ),
+              FoldWidget(
+                msg: 'DELIVERY PRODUCTS',
+                isMore: true,
+                child: Column(
+                  children: <Widget>[
+                    ListHeaderWidget(
+                      names: ['Product', 'Qty'],
+                      supNames: ['', 'cs/ea'],
+                      weights: [1, 1],
+                      aligns: [
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: presenter.showProductList.length,
                       itemBuilder: (context, index){
                         BaseProductInfo info = presenter.showProductList[index];
@@ -107,12 +108,12 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                           height: 2,
                         );
                       },
-                    ),
-                  ),
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       })
     );

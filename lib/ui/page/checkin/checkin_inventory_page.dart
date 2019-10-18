@@ -94,8 +94,8 @@ class CheckInInventoryPage extends StatelessWidget {
     return ListHeaderWidget(
       names: [
         'toal:',
-        presenter.getStockTotal(presenter.productList),
-        presenter.getActualTotal(presenter.productList),
+        BaseProductInfo.getPlanTotal(presenter.productList),
+        BaseProductInfo.getActualTotal(presenter.productList),
         ''
       ],
       supNames: ['', '', '', ''],
@@ -131,8 +131,8 @@ class CheckInInventoryPage extends StatelessWidget {
     return ListHeaderWidget(
       names: [
         'toal:',
-        presenter.getStockTotal(presenter.emptyProductList),
-        presenter.getActualTotal(presenter.emptyProductList),
+        BaseProductInfo.getPlanTotal(presenter.emptyProductList),
+        BaseProductInfo.getActualTotal(presenter.emptyProductList),
         ''
       ],
       supNames: ['', '', '', ''],
@@ -157,10 +157,9 @@ class CheckInInventoryPage extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.arrow_forward),
-            onPressed: () async {
+            onPressed: () {
               CheckInInventoryPresenter presenter = Provider.of<CheckInInventoryPresenter>(context);
-              await presenter.onClickRight();
-              Navigator.of(context).pop();
+              presenter.onClickRight(context);
             },
           )
         ],
@@ -259,14 +258,33 @@ class CheckInInventoryPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Checkbox(
-                                        value: info.isCheck ?? false,
-                                        onChanged: (value) {
-                                          presenter.selectOrCancel(info, value);
-                                        },
-                                      ),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Checkbox(
+                                            value: info.isCheck,
+                                            onChanged: (value){
+                                              presenter.selectOrCancel(info, value);
+                                            },
+                                          ),
+                                        ),
+
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 16,
+                                          child: GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: (){
+                                              presenter.showReasonDialog(context, info);
+                                            },
+                                            child: Offstage(
+                                                offstage: info.isEqual(),
+                                                child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 18,)),
+                                          ),
+                                        ),
+
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -345,14 +363,33 @@ class CheckInInventoryPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Align(
-                                      alignment: Alignment.center,
-                                      child: Checkbox(
-                                        value: info.isCheck ?? false,
-                                        onChanged: (value) {
-                                          presenter.selectOrCancel(info, value);
-                                        },
-                                      ),
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Checkbox(
+                                            value: info.isCheck,
+                                            onChanged: (value){
+                                              presenter.selectOrCancel(info, value);
+                                            },
+                                          ),
+                                        ),
+
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 16,
+                                          child: GestureDetector(
+                                            behavior: HitTestBehavior.opaque,
+                                            onTap: (){
+                                              presenter.showReasonDialog(context, info);
+                                            },
+                                            child: Offstage(
+                                                offstage: info.isEqual(),
+                                                child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 18,)),
+                                          ),
+                                        ),
+
+                                      ],
                                     ),
                                   ),
                                 ],

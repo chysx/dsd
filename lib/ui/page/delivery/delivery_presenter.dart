@@ -8,6 +8,7 @@ import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/manager/truck_stock_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_item_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
+import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/product_total_info.dart';
@@ -28,12 +29,13 @@ import 'package:flutter/material.dart';
 
 enum DeliveryEvent {
   InitData,
+  OnInput,
 }
 
 class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
-  List<BaseProductInfo> showProductList = [];
+  List<BaseProductInfo> productList = [];
+  List<BaseProductInfo> emptyProductList = [];
   TaskVisitItemModel visitItem;
-  ProductTotalInfo productTotalInfo = new ProductTotalInfo();
   List<TruckStockProductInfo> stockList = [];
   String deliveryNo;
   String shipmentNo;
@@ -47,6 +49,9 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     switch (event) {
       case DeliveryEvent.InitData:
         await initData();
+        break;
+      case DeliveryEvent.OnInput:
+        onInput(data);
         break;
     }
     super.onEvent(event, data);
@@ -63,7 +68,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     visitItem = TaskVisitModel().getVisitItemByDeliveryNo(deliveryNo);
     await initConfig();
     await fillProductData();
-    fillProductSummaryData();
+    await fillEmptyProductData();
     await fillStockData();
   }
 
@@ -84,7 +89,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   }
 
   Future fillProductData() async {
-    showProductList.clear();
+    productList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList =
         await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(deliveryNo);
@@ -102,7 +107,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         info.actualEa = int.tryParse(mItem.PlanQty);
       }
       info.isInMDelivery = true;
-      showProductList.add(info);
+      productList.add(info);
 //      for (DSD_T_DeliveryItem_Entity tItem in tList) {
 //        if (mItem.ProductCode == tItem.ProductCode) {
 //          if (tItem.ProductUnit == ProductUnit.CS) {
@@ -115,13 +120,21 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     }
   }
 
-  void fillProductSummaryData() {
-    productTotalInfo.clear();
-    for (BaseProductInfo info in showProductList) {
-      productTotalInfo.totalPlanCs += info.plannedCs;
-      productTotalInfo.totalPlanEa += info.plannedEa;
-      productTotalInfo.totalActualCs += info.actualCs;
-      productTotalInfo.totalActualEa += info.actualEa;
+   Future fillEmptyProductData() async {
+    emptyProductList.clear();
+    List<MD_Product_Entity> list = await Application.database.productDao.findEntityByEmpty(Empty.TRUE);
+    List<DSD_T_DeliveryItem_Entity> tList = await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(this.deliveryNo);
+    for (MD_Product_Entity product in list) {
+      BaseProductInfo info = new BaseProductInfo();
+      for(DSD_T_DeliveryItem_Entity entity in tList){
+        if(product.ProductCode == entity.ProductCode){
+          info.actualEa = int.tryParse(entity.ActualQty);
+          break;
+        }
+      }
+      info.code = product.ProductCode;
+      info.name = product.Name;
+      emptyProductList.add(info);
     }
   }
 
@@ -130,7 +143,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   ///
   Future fillStockData() async {
     stockList = await TruckStockManager.getProductStock(this.shipmentNo);
-    for (BaseProductInfo item in showProductList) {
+    for (BaseProductInfo item in productList) {
       for (TruckStockProductInfo stock in stockList) {
         if (stock.productCode == item.code) {
           stock.csStockQty += item.actualCs;
@@ -138,6 +151,10 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         }
       }
     }
+  }
+
+  onInput(BaseProductInfo info){
+    info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
 
   void doNext() {
@@ -150,7 +167,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   ///
   void cacheDeliveryHeader() {
     bool isSameQty = true;
-    for (BaseProductInfo item in showProductList) {
+    for (BaseProductInfo item in productList) {
       if (item.plannedCs != item.actualCs || item.plannedEa != item.actualEa) {
         isSameQty = false;
       }
@@ -169,7 +186,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   void cacheDeliveryItems() {
     visitItem.tDeliveryItemList.clear();
 
-    for (BaseProductInfo item in showProductList) {
+    for (BaseProductInfo item in productList) {
       if (productUnitValue == ProductUnit.CS_EA || productUnitValue == ProductUnit.CS) {
         if (item.plannedCs != 0 || item.actualCs != 0) {
           DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();

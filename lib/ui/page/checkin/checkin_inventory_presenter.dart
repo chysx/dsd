@@ -1,12 +1,18 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/common/dictionary.dart';
+import 'package:dsd/db/manager/reason_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/db/table/entity/dsd_t_shipment_item_entity.dart';
 import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
+import 'package:dsd/ui/dialog/list_dialog.dart';
+import 'package:dsd/ui/dialog/model/key_value_info.dart';
+import 'package:flutter/material.dart';
 
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -26,6 +32,7 @@ enum CheckInInventoryEvent {
 class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
   List<BaseProductInfo> productList = [];
   List<BaseProductInfo> emptyProductList = [];
+  List<KeyValueInfo> reasonList = [];
   String shipmentNo;
   String productUnitValue;
 
@@ -58,6 +65,7 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
     productUnitValue = ProductUnit.CS_EA;
     await fillProductData();
     await fillEmptyProductData();
+    await fillReasonData();
   }
 
   Future<void> fillProductData() async {
@@ -96,6 +104,17 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
     }
   }
 
+  Future fillReasonData() async {
+    reasonList = await ReasonManager.getReasonData(CheckInDiffReason.CATEGORY);
+  }
+
+  void showReasonDialog(BuildContext context,BaseProductInfo info){
+    ListDialog.show(context,title: 'title',data: reasonList,onSelect: (reason){
+      info.reasonValue = reason.value;
+      notifyListeners();
+    });
+  }
+
   void selectOrCancelAll(List<BaseProductInfo> productList,bool isCheck){
     for(BaseProductInfo info in productList){
       info.isCheck = isCheck;
@@ -113,31 +132,31 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
     notifyListeners();
   }
 
-  String getActualTotal(List<BaseProductInfo> productList){
-    int totalCs = 0;
-    int totalEa = 0;
-    for(BaseProductInfo info in productList){
-      totalCs += info.actualCs ?? 0;
-      totalEa += info.actualEa ?? 0;
-    }
-    return '$totalCs/$totalEa';
-  }
-
-  String getStockTotal(List<BaseProductInfo> productList){
-    int totalCs = 0;
-    int totalEa = 0;
-    for(BaseProductInfo info in productList){
-      totalCs += info.plannedCs;
-      totalEa += info.plannedEa;
-    }
-    return '$totalCs/$totalEa';
-  }
-
   onInput(BaseProductInfo info){
     info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
 
-  onClickRight() async {
+  onClickRight(BuildContext context) async {
+    if(isPass()){
+      await saveData();
+      Navigator.of(context).pop();
+    }else{
+      CustomerDialog.show(context,msg: 'Please select a difference reason.');
+    }
+  }
+
+  bool isPass(){
+    for(BaseProductInfo info in productList){
+      if(!info.isPass()) return false;
+    }
+
+    for(BaseProductInfo info in emptyProductList){
+      if(!info.isPass()) return false;
+    }
+    return true;
+  }
+
+  Future saveData() async {
     await CheckInModel().saveShipmentHeader();
     CheckInModel().setShipmentItemList(productList, productUnitValue);
     await CheckInModel().saveShipmentItems();

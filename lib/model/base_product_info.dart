@@ -71,4 +71,24 @@ class BaseProductInfo {
       return isEqual() || !isRedReasonIcon();
    }
 
+   static String getActualTotal(List<BaseProductInfo> productList){
+     int totalCs = 0;
+     int totalEa = 0;
+     for(BaseProductInfo info in productList){
+       totalCs += info.actualCs ?? 0;
+       totalEa += info.actualEa ?? 0;
+     }
+     return '$totalCs/$totalEa';
+   }
+
+   static String getPlanTotal(List<BaseProductInfo> productList){
+     int totalCs = 0;
+     int totalEa = 0;
+     for(BaseProductInfo info in productList){
+       totalCs += info.plannedCs;
+       totalEa += info.plannedEa;
+     }
+     return '$totalCs/$totalEa';
+   }
+
 }

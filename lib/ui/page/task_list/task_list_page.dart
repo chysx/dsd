@@ -60,6 +60,7 @@ class _TaskListState extends State<TaskListPage> {
                         TaskInfo info = presenter.taskList[index];
 
                         return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: (){
                             presenter.onItemClick(context, info);
                           },

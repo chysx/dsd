@@ -124,26 +124,6 @@ class CheckoutInventoryPresenter extends EventNotifier<CheckOutInventoryEvent> {
     notifyListeners();
   }
 
-  String getActualTotal(List<BaseProductInfo> productList){
-    int totalCs = 0;
-    int totalEa = 0;
-    for(BaseProductInfo info in productList){
-      totalCs += info.actualCs ?? 0;
-      totalEa += info.actualEa ?? 0;
-    }
-    return '$totalCs/$totalEa';
-  }
-
-  String getPlanTotal(List<BaseProductInfo> productList){
-    int totalCs = 0;
-    int totalEa = 0;
-    for(BaseProductInfo info in productList){
-      totalCs += info.plannedCs;
-      totalEa += info.plannedEa;
-    }
-    return '$totalCs/$totalEa';
-  }
-
   onInput(BaseProductInfo info){
     info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
