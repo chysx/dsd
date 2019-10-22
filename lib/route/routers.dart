@@ -23,6 +23,8 @@ class Routers {
   static const task_list = '/task_list';
   static const delivery = '/delivery';
   static const delivery_summary = '/delivery_summary';
+  static const visit_summary = '/visit_summary';
+  static const visit_summary_detail = '/visit_summary_detail';
   static const profile = '/profile';
 
   static configRouters(Router router) {
@@ -42,5 +44,7 @@ class Routers {
     router.define(delivery_summary, handler: deliverySummaryHandler);
     router.define(profile, handler: profileHandler);
     router.define(check_out_inventory, handler: checkoutInventoryHandler);
+    router.define(visit_summary, handler: visitSummaryHandler);
+    router.define(visit_summary_detail, handler: visitSummaryDetailHandler);
   }
 }

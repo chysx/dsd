@@ -64,6 +64,7 @@ class CheckOutAndInModel {
 
   void clear() {
     _shipmentNo = null;
+    mShipmentHeader = null;
     shipmentHeader = null;
     shipmentItemList.clear();
   }

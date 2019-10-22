@@ -44,6 +44,35 @@ class DeliveryStatus {
   static const String HOLD_VALUE = "4";
   static const String CANCEL_VALUE = "5";
   static const String SALES_VALUE = "6";
+
+  static String getDeliveryStatusDescription(String value) {
+    if (value == null) return "";
+    String des;
+    switch (value) {
+      case DeliveryStatus.NOT_COMPLETE_VALUE:
+        des = DeliveryStatus.NOT_COMPLETE;
+        break;
+      case DeliveryStatus.PARTIAL_DELIVERED_VALUE:
+        des = DeliveryStatus.PARTIAL_DELIVERED;
+        break;
+      case DeliveryStatus.TOTAL_DELIVERED_VALUE:
+        des = DeliveryStatus.TOTAL_DELIVERED;
+        break;
+      case DeliveryStatus.REBOOK_VALUE:
+        des = DeliveryStatus.REBOOK;
+        break;
+      case DeliveryStatus.HOLD_VALUE:
+        des = DeliveryStatus.HOLD;
+        break;
+      case DeliveryStatus.CANCEL_VALUE:
+        des = DeliveryStatus.CANCEL;
+        break;
+      case DeliveryStatus.SALES_VALUE:
+        des = DeliveryStatus.SALES;
+        break;
+    }
+    return des;
+  }
 }
 
 class TaskType {
@@ -91,3 +120,4 @@ class CheckOutDiffReason {
 class CheckInDiffReason {
   static const String CATEGORY = "CIDiffReason";
 }
+

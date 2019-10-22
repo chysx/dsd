@@ -44,6 +44,7 @@ class FragmentArg {
   static const String ARCOLLECTION_MODEL = "arcollection_models";
   static const String VISIT_TASK_NO = "visit_task_no";
   static const String VISIT_TASK_TYPE = "visit_task_type";
+  static const String DELIVERY_TYPE = "delivery_type";
   static const String MAP_CUSTOMER_LIST = "map_customer_list";
   static const String NAVIGATION_CUSTOMER = "navigation_customer";
   static const String PRE_SALES_SELECTITEMS = "pre_sales_selectitems";

@@ -14,6 +14,7 @@ class NoteInfo {
   String dsc;
 
   String getShowDate(){
+    if(date == null || date.isEmpty) return '';
     DateTime dateTime = DateUtil.getDateTime(date);
     return getMonth(dateTime.month) + ' ' + dateTime.day.toString() + ' ' + dateTime.year.toString();
   }

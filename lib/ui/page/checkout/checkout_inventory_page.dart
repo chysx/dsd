@@ -1,7 +1,5 @@
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/ui/dialog/customer_dialog.dart';
-import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

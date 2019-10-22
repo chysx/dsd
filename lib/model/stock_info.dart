@@ -7,10 +7,10 @@
 
 class StockInfo {
   String productCode;
-  int cs;
-  int ea;
-  int planCs;
-  int planEa;
+  int cs = 0;
+  int ea = 0;
+  int planCs = 0;
+  int planEa = 0;
 
   int getCsChange() {
     return planCs - cs;

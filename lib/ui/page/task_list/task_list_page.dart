@@ -42,7 +42,16 @@ class _TaskListState extends State<TaskListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TaskList'),
+        title: Text('TASKLIST'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.arrow_forward),
+            onPressed: () {
+              TaskListPresenter presenter = Provider.of<TaskListPresenter>(context);
+              presenter.onClickRight(context);
+            },
+          )
+        ],
       ),
       body: Consumer<TaskListPresenter>(
         builder: (context, presenter, _) {

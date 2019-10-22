@@ -17,11 +17,13 @@ class OrderInfo {
   String status;
 
   String getShowDay(){
+    if(date == null || date.isEmpty) return '';
     DateTime dateTime = DateUtil.getDateTime(date);
     return dateTime.day.toString();
   }
 
   String getShowDate(){
+    if(date == null || date.isEmpty) return '';
     DateTime dateTime = DateUtil.getDateTime(date);
     return getMonth(dateTime.month) + ' ' + dateTime.year.toString();
   }

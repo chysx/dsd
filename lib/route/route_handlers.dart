@@ -28,6 +28,10 @@ import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
 import 'package:dsd/ui/page/task_list/task_list_page.dart';
 import 'package:dsd/ui/page/task_list/task_list_presenter.dart';
+import 'package:dsd/ui/page/visit_summary/visit_summary_page.dart';
+import 'package:dsd/ui/page/visit_summary/visit_summary_presenter.dart';
+import 'package:dsd/ui/page/visit_summary_detail/visit_summary_detail_page.dart';
+import 'package:dsd/ui/page/visit_summary_detail/visit_summary_detail_presenter.dart';
 import 'package:fluro/fluro.dart';
 
 import '../application.dart';
@@ -210,5 +214,29 @@ Handler profileHandler = Handler(handlerFunc: (_, params) {
             ..onEvent(ProfileEvent.InitData)),
     ],
     child: ProfilePage(),
+  );
+});
+
+Handler visitSummaryHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new VisitSummaryPresenter()
+            ..setPageParams(params)
+            ..onEvent(VisitSummaryEvent.InitData)),
+    ],
+    child: VisitSummaryPage(),
+  );
+});
+
+Handler visitSummaryDetailHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new VisitSummaryDetailPresenter()
+            ..setPageParams(params)
+            ..onEvent(VisitSummaryDetailEvent.InitData)),
+    ],
+    child: VisitSummaryDetailPage(),
   );
 });

@@ -1,5 +1,4 @@
 import 'package:dsd/application.dart';
-import 'package:dsd/business/visit/task_visit_util.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
@@ -11,13 +10,11 @@ import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
-import 'package:dsd/model/product_total_info.dart';
-import 'package:dsd/model/task_visit_model.dart';
+import 'package:dsd/model/delivery_model.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
+import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/routers.dart';
-import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -35,12 +32,12 @@ enum DeliveryEvent {
 class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   List<BaseProductInfo> productList = [];
   List<BaseProductInfo> emptyProductList = [];
-  TaskVisitItemModel visitItem;
   List<TruckStockProductInfo> stockList = [];
   String deliveryNo;
   String shipmentNo;
   String accountNumber;
   String customerName;
+  String deliveryType;
   String productUnitValue;
   bool isHold;
 
@@ -62,10 +59,11 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
     accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
     customerName = params[FragmentArg.TASK_CUSTOMER_NAME].first;
+    deliveryType = params[FragmentArg.DELIVERY_TYPE].first;
   }
 
   Future initData() async {
-    visitItem = TaskVisitModel().getVisitItemByDeliveryNo(deliveryNo);
+    await DeliveryModel().initData(deliveryNo);
     await initConfig();
     await fillProductData();
     await fillEmptyProductData();
@@ -85,14 +83,13 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         productUnitValue = ProductUnit.EA;
         break;
     }
-    isHold = DeliveryStatus.HOLD_VALUE == visitItem.tDeliveryHeader.DeliveryStatus;
   }
 
   Future fillProductData() async {
     productList.clear();
 
-    List<DSD_T_DeliveryItem_Entity> tList =
-        await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(deliveryNo);
+    List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
+
     List<DSD_M_DeliveryItem_Entity> mList =
         await Application.database.mDeliveryItemDao.findEntityByDeliveryNo(deliveryNo);
     for (DSD_M_DeliveryItem_Entity mItem in mList) {
@@ -108,26 +105,26 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
       }
       info.isInMDelivery = true;
       productList.add(info);
-//      for (DSD_T_DeliveryItem_Entity tItem in tList) {
-//        if (mItem.ProductCode == tItem.ProductCode) {
-//          if (tItem.ProductUnit == ProductUnit.CS) {
-//            info.actualCs = int.tryParse(tItem.ActualQty);
-//          } else {
-//            info.actualEa = int.tryParse(tItem.ActualQty);
-//          }
-//        }
-//      }
+      for (DSD_T_DeliveryItem_Entity tItem in tList) {
+        if (mItem.ProductCode == tItem.ProductCode) {
+          if (tItem.ProductUnit == ProductUnit.CS) {
+            info.actualCs = int.tryParse(tItem.ActualQty);
+          } else {
+            info.actualEa = int.tryParse(tItem.ActualQty);
+          }
+        }
+      }
     }
   }
 
-   Future fillEmptyProductData() async {
+  Future fillEmptyProductData() async {
     emptyProductList.clear();
     List<MD_Product_Entity> list = await Application.database.productDao.findEntityByEmpty(Empty.TRUE);
-    List<DSD_T_DeliveryItem_Entity> tList = await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(this.deliveryNo);
+    List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
     for (MD_Product_Entity product in list) {
       BaseProductInfo info = new BaseProductInfo();
-      for(DSD_T_DeliveryItem_Entity entity in tList){
-        if(product.ProductCode == entity.ProductCode){
+      for (DSD_T_DeliveryItem_Entity entity in tList) {
+        if (product.ProductCode == entity.ProductCode) {
           info.actualEa = int.tryParse(entity.ActualQty);
           break;
         }
@@ -153,85 +150,47 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     }
   }
 
-  onInput(BaseProductInfo info){
+  onInput(BaseProductInfo info) {
     info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
 
-  void doNext() {
-    cacheDeliveryHeader();
-    cacheDeliveryItems();
+  void cacheData() {
+    DeliveryModel().cacheDeliveryHeader(
+        visitId: VisitModel().visit.VisitId,
+        shipmentNo: shipmentNo,
+        accountNumber: accountNumber,
+        deliveryType: deliveryType,
+        deliveryStatus: getDeliveryStatus());
+    DeliveryModel().cacheDeliveryItemList(productList, productUnitValue);
   }
 
   ///
   /// 缓存DeliveryHeader数据
   ///
-  void cacheDeliveryHeader() {
-    bool isSameQty = true;
+  String getDeliveryStatus() {
+    bool isEqual = true;
     for (BaseProductInfo item in productList) {
-      if (item.plannedCs != item.actualCs || item.plannedEa != item.actualEa) {
-        isSameQty = false;
+      if (!item.isEqual()) {
+        isEqual = false;
+        break;
       }
     }
 
-    if (isSameQty) {
-      TaskVisitUtil.cacheDeliveryHeaderStatus(visitItem, DeliveryStatus.TOTAL_DELIVERED_VALUE);
-    } else {
-      TaskVisitUtil.cacheDeliveryHeaderStatus(visitItem, DeliveryStatus.PARTIAL_DELIVERED_VALUE);
-    }
+    return isEqual ? DeliveryStatus.TOTAL_DELIVERED_VALUE : DeliveryStatus.PARTIAL_DELIVERED_VALUE;
   }
 
-  ///
-  /// 缓存DeliveryItems数据
-  ///
-  void cacheDeliveryItems() {
-    visitItem.tDeliveryItemList.clear();
-
-    for (BaseProductInfo item in productList) {
-      if (productUnitValue == ProductUnit.CS_EA || productUnitValue == ProductUnit.CS) {
-        if (item.plannedCs != 0 || item.actualCs != 0) {
-          DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
-          add.DeliveryNo = deliveryNo;
-          add.ProductCode = item.code;
-          add.ProductUnit = ProductUnit.CS;
-          add.PlanQty = item.plannedCs.toString();
-          add.ActualQty = item.actualCs.toString();
-          add.DifferenceQty = (item.plannedCs - item.actualCs).toString();
-          add.Reason = item.reasonValue;
-          add.CreateUser = Application.user.userCode;
-          add.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
-          add.dirty = SyncDirtyStatus.DEFAULT;
-
-          visitItem.tDeliveryItemList.add(add);
-        }
-      }
-
-      if (productUnitValue == ProductUnit.CS_EA || productUnitValue == ProductUnit.EA) {
-        if (item.plannedCs != 0 || item.actualEa != 0) {
-          DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
-          add.DeliveryNo = deliveryNo;
-          add.ProductCode = item.code;
-          add.ProductUnit = ProductUnit.EA;
-          add.PlanQty = item.plannedEa.toString();
-          add.ActualQty = item.actualEa.toString();
-          add.DifferenceQty = (item.plannedEa - item.actualEa).toString();
-          add.Reason = item.reasonValue;
-          add.CreateUser = Application.user.userCode;
-          add.CreateTime = DateUtil.getDateStrByDateTime(DateTime.now());
-          add.dirty = SyncDirtyStatus.DEFAULT;
-
-          visitItem.tDeliveryItemList.add(add);
-        }
-      }
-    }
-  }
-
-  void onClickRight(BuildContext context){
-    doNext();
+  void onClickRight(BuildContext context) {
+    cacheData();
     String path =
-    '''${Routers.delivery_summary}?${FragmentArg.DELIVERY_NO}=$deliveryNo&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_SUMMARY_READONLY}=${false}
+        '''${Routers.delivery_summary}?${FragmentArg.DELIVERY_NO}=$deliveryNo&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=$deliveryType&${FragmentArg.DELIVERY_SUMMARY_READONLY}=${false}
     ''';
-    Application.router
-        .navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
+  @override
+  void dispose() {
+    DeliveryModel().clear();
+    super.dispose();
   }
 
 }

@@ -2,6 +2,8 @@ import 'package:dsd/application.dart';
 import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/utils/string_util.dart';
+import 'package:flustars/flustars.dart';
+import 'package:uuid/uuid.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -38,4 +40,34 @@ class VisitManager {
       await Application.database.tVisitDao.updateEntity(visit);
     }
   }
+
+  static Future<bool> isNeedCreateVisit(String shipmentNo, String accountNumber) async {
+    DSD_T_Visit_Entity visitEntity = await VisitManager.getVisitLastly(shipmentNo,accountNumber);
+    if (visitEntity != null
+        && visitEntity.dirty != SyncDirtyStatus.FAIL
+        && visitEntity.dirty != SyncDirtyStatus.SUCCESS
+        && visitEntity.dirty != SyncDirtyStatus.EXIST){
+      return false;
+    }
+    return true;
+  }
+
+  static DSD_T_Visit_Entity createVisit(String shipmentNo, String accountNumber) {
+    String nowTime = DateUtil.getDateStrByDateTime(DateTime.now());
+    DSD_T_Visit_Entity entity = DSD_T_Visit_Entity.Empty();
+    entity
+      ..VisitId = new Uuid().v1()
+      ..StartTime = nowTime
+      ..ShipmentNo = shipmentNo
+      ..EndTime = nowTime
+      ..UserCode = Application.user.userCode
+      ..AccountNumber = accountNumber
+      ..CreateUser = Application.user.userCode
+      ..CreateTime = nowTime
+      ..LastUpdateUser = Application.user.userCode
+      ..LastUpdateTime = nowTime
+      ..dirty = SyncDirtyStatus.DEFAULT;
+    return entity;
+  }
+
 }

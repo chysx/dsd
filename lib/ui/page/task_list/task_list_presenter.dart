@@ -9,14 +9,12 @@ import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/md_dictionary_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
-import 'package:dsd/model/task_visit_model.dart';
+import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/routers.dart';
-import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/page/task_list/config_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_info.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart' as material;
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -55,7 +53,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   Future initData() async {
     await initConfig();
     await configInfoRoute();
-    await loadVisitCacheData();
+    await VisitModel().initData(shipmentNo, accountNumber);
     await fillTaskListData();
   }
 
@@ -109,15 +107,6 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     routeConfigInfo.isEnableOpenAR = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_OPEN_AR);
     routeConfigInfo.isMustComplete = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.MUST_COMPLETE);
     routeConfigInfo.isPrintPickSlip = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.PRINT_PICK_SLIP);
-  }
-
-  ///
-  /// 加载当前拜访的数据
-  ///
-   Future loadVisitCacheData() async {
-    TaskVisitModel().clearData();
-    await TaskVisitModel().fillVisitData(shipmentNo, accountNumber);
-    TaskVisitModel().setNoScanReason(noScanReason);
   }
 
   ///
@@ -258,6 +247,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       case TaskType.Delivery:
         doDelivery(context,info);
         break;
+      case TaskType.Profile:
+        doProfile(context);
+        break;
     }
   }
 
@@ -272,29 +264,29 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
         break;
       default:
         readOnly = ReadyOnly.FALSE;
-        createDeliveryHeader(info);
         break;
     }
 
+    String page = (readOnly == ReadyOnly.TRUE ? Routers.delivery_summary : Routers.delivery);
     String path =
-    '''${Routers.delivery}?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
+    '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
     ''';
 
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
-  ///
-  /// 保存DeliveryHeader数据
-  ///
-   Future createDeliveryHeader(TaskInfo info) async {
-    TaskVisitItemModel visitItem = TaskVisitModel().getVisitItemByDeliveryNo(info.no);
-    visitItem.tDeliveryHeader.DeliveryNo = info.no;
-    visitItem.tDeliveryHeader.VisitId = TaskVisitModel().tVisit.VisitId;
-    visitItem.tDeliveryHeader.ShipmentNo = shipmentNo;
-    visitItem.tDeliveryHeader.AccountNumber = accountNumber;
-    visitItem.tDeliveryHeader.DeliveryType = info.type;
-    visitItem.tDeliveryHeader.StartTime = DateUtil.getDateStrByDateTime(DateTime.now());
-    visitItem.tDeliveryHeader.dirty = SyncDirtyStatus.DEFAULT;
+  void doProfile(material.BuildContext context) {
+    String path =
+    '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
+    ''';
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
+  void onClickRight(material.BuildContext context) {
+    String path =
+    '''${Routers.visit_summary}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
+    ''';
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
 }
