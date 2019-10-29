@@ -96,11 +96,11 @@ class DrawerWidget extends StatelessWidget {
       }
       if(goPage == ConstantMenu.SYNC){
         Application.router
-            .navigateTo(context, Routers.sync, replace: false, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.sync, replace: true, transition: TransitionType.inFromLeft);
       }
       if(goPage == ConstantMenu.SETTING){
         Application.router
-            .navigateTo(context, Routers.settings, replace: false, transition: TransitionType.inFromLeft);
+            .navigateTo(context, Routers.settings, replace: true, transition: TransitionType.inFromLeft);
       }
     }
   }

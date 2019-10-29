@@ -38,12 +38,16 @@ class LoadingDialog extends Dialog {
     );
   }
 
-  static show(BuildContext context,{String msg = 'sync data...'}) {
+  static show(BuildContext context, {String msg = 'sync data...'}) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          return new LoadingDialog(msg: msg);
+          return WillPopScope(
+              child: LoadingDialog(msg: msg),
+              onWillPop: () async {
+                return Future.value(false);
+              });
         });
   }
 

@@ -16,4 +16,9 @@ class SyncUploadEntity {
   String type;
   String status;
   String time;
+
+  SyncUploadEntity(this.id, this.uniqueIdValues, this.name, this.type, this.status, this.time);
+
+  SyncUploadEntity.Empty();
+
 }

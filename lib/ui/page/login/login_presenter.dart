@@ -1,5 +1,4 @@
 import 'package:dsd/application.dart';
-import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
@@ -16,13 +15,12 @@ import 'package:dsd/ui/page/login/login_request_bean.dart';
 import 'package:dsd/ui/page/login/login_status.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
-import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:package_info/package_info.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:uuid/uuid.dart';
 
 import 'login_response_bean.dart';
 
@@ -33,19 +31,55 @@ import 'login_response_bean.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/8/2 11:00
 
-class LoginPresenter extends EventNotifier<SettingEvent> {
+enum LoginEvent { InitData }
+
+class LoginPresenter extends EventNotifier<LoginEvent> {
   LoginInputInfo inputInfo = new LoginInputInfo();
   AppConfigEntity appConfigEntity;
   String version = "";
 
-  void initData() {
-    inputInfo.userCode = Application.user.userCode;
-    print('userCode = ${inputInfo.userCode}');
-    version = Application.deviceInfo.versionName;
+  @override
+  void onEvent(LoginEvent event, [dynamic data]) async {
+    switch (event) {
+      case LoginEvent.InitData:
+        await initData();
+        break;
+    }
+
+    super.onEvent(event, data);
+  }
+
+  Future initData() async {
+    await fillAppConfigEntity();
+    await fillVersion();
+  }
+
+  Future fillAppConfigEntity() async {
+    List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
+    if (!ObjectUtil.isEmptyList(list)) {
+      appConfigEntity = list[0];
+      Application.logger.i('appConfigEntity = ${appConfigEntity.toString()}');
+      fillInputData();
+      fillAppUser();
+    }
+  }
+
+  Future fillVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    version = packageInfo.version;
+  }
+
+  void fillInputData() {
+      inputInfo.userCode = appConfigEntity.userCode;
+  }
+
+  void fillAppUser() {
+    Application.user.userCode = appConfigEntity.userCode;
+    Application.user.userName = appConfigEntity.userName;
+    Application.user.passWord = appConfigEntity.password;
   }
 
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
-    await initAppConfigEntity();
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');
@@ -63,22 +97,20 @@ class LoginPresenter extends EventNotifier<SettingEvent> {
         loginByOnline(context, SyncType.SYNC_INIT, loginInputInfo);
         break;
       case LoginStatus.OffLine:
-        startNavigate(context);
+        onClickCheckout(context);
         break;
       default:
     }
   }
 
-  Future startNavigate(BuildContext context) async {
+  Future onClickCheckout(BuildContext context) async {
     await Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
   }
 
-  Future initAppConfigEntity() async {
-    print('22222222222222222');
-    List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
-    if (!ObjectUtil.isEmptyList(list)) {
-      appConfigEntity = list[0];
-      Application.logger.i('appConfigEntity = ${appConfigEntity.toString()}');
+  Future onClickSetting(BuildContext context) async {
+    String result = await Application.router.navigateTo(context, Routers.settings, transition: TransitionType.inFromLeft);
+    if(result == 'refresh'){
+      fillAppConfigEntity();
     }
   }
 
@@ -190,25 +222,24 @@ class LoginPresenter extends EventNotifier<SettingEvent> {
     } catch (e) {}
   }
 
-  void loginSuccess(BuildContext context, SyncType syncType, LoginResponseBean responseBean, LoginInputInfo inputInfo) {
-    saveUserToApp(responseBean, inputInfo);
-    saveUserToDb(responseBean, syncType, inputInfo);
+  Future loginSuccess(BuildContext context, SyncType syncType, LoginResponseBean responseBean, LoginInputInfo inputInfo) async {
+    await saveUserToDb(responseBean, syncType, inputInfo);
 
     syncData(context, syncType);
   }
 
   void syncData(BuildContext context, SyncType syncType) {
     SyncManager.start(syncType, context: context, onSuccessSync: () {
-      startNavigate(context);
-    }, onFailSync: (e) {
-      clearUserToDb();
+      onClickCheckout(context);
+    }, onFailSync: (e) async {
+      await clearUserToDb();
       appConfigEntity.syncInitFlag = null;
       CustomerDialog.show(context, msg: 'Sync fail');
     });
   }
 
-  void clearUserToDb() {
-    AppConfigManager.deleteAll();
+  Future clearUserToDb() async {
+    await AppConfigManager.deleteAll();
   }
 
   Future saveUserToDb(LoginResponseBean responseBean, SyncType syncType, LoginInputInfo inputInfo) async {
@@ -240,13 +271,7 @@ class LoginPresenter extends EventNotifier<SettingEvent> {
         ..lastUpdateTime = DateUtil.getNowDateStr();
       await AppConfigManager.update(entity);
     }
-    initAppConfigEntity();
+    await fillAppConfigEntity();
   }
 
-  void saveUserToApp(LoginResponseBean responseBean, LoginInputInfo inputInfo) {
-    Application.user
-      ..userCode = responseBean.loginName
-      ..userName = responseBean.result.userName
-      ..passWord = inputInfo.password;
-  }
 }

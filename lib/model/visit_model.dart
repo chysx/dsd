@@ -30,11 +30,11 @@ class VisitModel {
   DSD_T_Visit_Entity visit;
 
   Future initData(String shipmentNo,String accountNumber) async {
-    if (await VisitManager.isNeedCreateVisit(shipmentNo, accountNumber)) {
-      visit = VisitManager.createVisit(shipmentNo, accountNumber);
-      await Application.database.tVisitDao.insertEntity(visit);
-    } else {
+    if (await VisitManager.isVisitCompleteByCustomer(shipmentNo, accountNumber)) {
       visit = await VisitManager.getVisitLastly(shipmentNo, accountNumber);
+    } else {
+      visit = VisitManager.createVisit(shipmentNo, accountNumber,'');
+      await Application.database.tVisitDao.insertEntity(visit);
     }
   }
 

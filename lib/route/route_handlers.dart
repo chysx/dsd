@@ -26,6 +26,7 @@ import 'package:dsd/ui/page/route_plan/route_plan_presenter.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
+import 'package:dsd/ui/page/sync/sync_presenter.dart';
 import 'package:dsd/ui/page/task_list/task_list_page.dart';
 import 'package:dsd/ui/page/task_list/task_list_presenter.dart';
 import 'package:dsd/ui/page/visit_summary/visit_summary_page.dart';
@@ -52,7 +53,9 @@ Handler notFoundHandler = Handler(handlerFunc: (_, params) {
 Handler rootHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new LoginPresenter()..initData()),
+      ChangeNotifierProvider(
+          builder: (context) => new LoginPresenter()
+            ..onEvent(LoginEvent.InitData)),
     ],
     child: LoginPage(),
   );
@@ -61,7 +64,7 @@ Handler rootHandler = Handler(handlerFunc: (_, params) {
 Handler settingsHandler = Handler(handlerFunc: (_, params) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new SettingPresenter()..initData()),
+      ChangeNotifierProvider(builder: (context) => new SettingPresenter()..onEvent(SettingEvent.InitData)),
     ],
     child: SettingsPage(),
   );
@@ -154,7 +157,14 @@ Handler checkInShipmentHandler = Handler(handlerFunc: (_, params) {
 });
 
 Handler syncHandler = Handler(handlerFunc: (_, params) {
-  return SyncPage();
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new SyncPresenter()
+            ..onEvent(SyncEvent.InitData)),
+    ],
+    child: SyncPage(),
+  );
 });
 
 Handler routePlanHandler = Handler(handlerFunc: (_, params) {

@@ -11,6 +11,8 @@ SyncResponseBean _$SyncResponseBeanFromJson(Map<String, dynamic> json) {
     json['LoginName'] as String,
     json['Status'] as int,
     json['SyncType'] as int,
+    json['ExceptionCode'] as int,
+    json['Exception'] as String,
     json['Result'] == null
         ? null
         : Result.fromJson(json['Result'] as Map<String, dynamic>),
@@ -22,6 +24,8 @@ Map<String, dynamic> _$SyncResponseBeanToJson(SyncResponseBean instance) =>
       'LoginName': instance.loginName,
       'Status': instance.status,
       'SyncType': instance.syncType,
+      'ExceptionCode': instance.exceptionCode,
+      'Exception': instance.exception,
       'Result': instance.result,
     };
 

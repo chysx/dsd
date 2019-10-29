@@ -1,7 +1,10 @@
+import 'package:dsd/business/visit/visit_cancel_util.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/db/manager/visit_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
+import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/ui/page/route/customer_info.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/utils/sql_util.dart';
@@ -224,6 +227,85 @@ class RouteManager {
        }
      }
      return tDeliveryMap;
+   }
+
+   static Future<String> updateDeliveryStatusCancel(String shipmentNo, String accountNumber, String reasonValue) async {
+     String nowDate = DateUtil.getDateStrByDateTime(new DateTime.now());
+     ///已经做配送任务的集合
+     List<DSD_T_DeliveryHeader_Entity> tDeliveryHeaderList = await Application.database.tDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
+
+     ///计划做配送任务的集合
+     List<DSD_M_DeliveryHeader_Entity> mDeliveryHeaderList = await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
+
+     String visitId;
+     //已经做过配送任务
+     if (!ObjectUtil.isEmptyList(tDeliveryHeaderList)) {
+
+       /************************************************对已经做过配送的任务设置取消状态****************************************************/
+       for (DSD_T_DeliveryHeader_Entity entity in tDeliveryHeaderList) {
+         if (entity.DeliveryStatus != DeliveryStatus.CANCEL_VALUE) {
+           entity.DeliveryStatus = DeliveryStatus.CANCEL_VALUE;
+           entity.CancelReason = reasonValue;
+           entity.CancelTime = nowDate;
+
+           await VisitCancelUtil.saveData(entity, await VisitCancelUtil.copyDeliveryItemM2T(entity, reasonValue));
+
+         }
+         visitId = entity.VisitId;
+       }
+       /************************************************对已经做过配送的任务设置取消状态****************************************************/
+
+
+       /************************************************对未做过配送的任务创建空数据****************************************************/
+       for (DSD_M_DeliveryHeader_Entity mEntity in mDeliveryHeaderList) {
+         bool isFind = false;
+         for (DSD_T_DeliveryHeader_Entity tEntity in tDeliveryHeaderList) {
+           if (mEntity.DeliveryNo == tEntity.DeliveryNo) {
+             isFind = true;
+             break;
+           }
+         }
+         if (!isFind) {
+           DSD_T_DeliveryHeader_Entity tHeader = new DSD_T_DeliveryHeader_Entity.Empty();
+           tHeader.VisitId = visitId;
+           tHeader.ShipmentNo = shipmentNo;
+           tHeader.AccountNumber = accountNumber;
+           tHeader.DeliveryNo = mEntity.DeliveryNo;
+           tHeader.DeliveryType = mEntity.DeliveryType;
+           tHeader.DeliveryStatus = DeliveryStatus.CANCEL_VALUE;
+           tHeader.CancelReason = reasonValue;
+           tHeader.CancelTime = nowDate;
+           tHeader.CreateTime = nowDate;
+           tHeader.dirty = SyncDirtyStatus.DEFAULT;
+
+           await VisitCancelUtil.saveData(tHeader, await VisitCancelUtil.copyDeliveryItemM2T(tHeader, reasonValue));
+         }
+       }
+       /************************************************对未做过配送的任务创建空数据****************************************************/
+
+     } else {//未做过配送任务
+       DSD_T_Visit_Entity visitEntity = VisitManager.createVisit(shipmentNo, accountNumber, reasonValue);
+       await Application.database.tVisitDao.insertEntity(visitEntity);
+       visitId = visitEntity.VisitId;
+
+       for (DSD_M_DeliveryHeader_Entity entity in mDeliveryHeaderList) {
+         DSD_T_DeliveryHeader_Entity tHeader = new DSD_T_DeliveryHeader_Entity.Empty();
+         tHeader.VisitId = visitId;
+         tHeader.ShipmentNo = shipmentNo;
+         tHeader.AccountNumber = accountNumber;
+         tHeader.DeliveryNo = entity.DeliveryNo;
+         tHeader.DeliveryType = entity.DeliveryType;
+         tHeader.DeliveryStatus = DeliveryStatus.CANCEL_VALUE;
+         tHeader.CancelReason = reasonValue;
+         tHeader.CancelTime = nowDate;
+         tHeader.CreateTime = nowDate;
+         tHeader.dirty = SyncDirtyStatus.DEFAULT;
+
+         await VisitCancelUtil.saveData(tHeader, await VisitCancelUtil.copyDeliveryItemM2T(tHeader, reasonValue));
+
+       }
+     }
+     return visitId;
    }
 
 }

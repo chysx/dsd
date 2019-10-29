@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_parser.dart';
 import 'package:dsd/synchronization/base/i_parse_policy.dart';
 import 'package:dsd/synchronization/bean/sync_response_bean.dart';
@@ -17,6 +18,7 @@ class UploadParser extends AbstractParser<Response<Map<String, dynamic>>> {
   @override
   Future<bool> parse(Response<Map<String, dynamic>> response) async {
     SyncResponseBean syncDataBean = SyncResponseBean.fromJson(response.data);
+    Log().logger.i('*************upload response***************\n ${syncDataBean.toJson()}');
     return syncDataBean.status == SyncResponseStatus.SUCCESS;
   }
 }

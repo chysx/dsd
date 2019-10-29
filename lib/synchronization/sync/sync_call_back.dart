@@ -5,5 +5,5 @@
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/7/26 18:00
 
-typedef OnFailSync = void Function(Exception e);
+typedef OnFailSync = void Function(dynamic e);
 typedef OnSuccessSync = void Function();

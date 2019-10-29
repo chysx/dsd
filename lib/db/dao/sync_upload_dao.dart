@@ -19,6 +19,9 @@ abstract class SyncUploadDao {
   @Query('SELECT * FROM sync_upload WHERE uniqueIdValues = :unique and type = :type')
   Future<SyncUploadEntity> findEntityByUniqueIdAndType(String unique, String type);
 
+  @Query('SELECT * FROM sync_upload WHERE type = :type')
+  Future<List<SyncUploadEntity>> findEntityByType(String type);
+
   @insert
   Future<void> insertEntity(SyncUploadEntity entity);
 

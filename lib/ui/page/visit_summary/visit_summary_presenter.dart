@@ -4,7 +4,13 @@ import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
+import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/routers.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_parameter.dart';
+import 'package:dsd/synchronization/sync/sync_type.dart';
+import 'package:dsd/synchronization/sync_manager.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/visit_summary/visit_summary_info.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +96,25 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
 //    '''${Routers.delivery_summary}?${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
 //    ''';
 //    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    uploadData(context);
+  }
+
+  void uploadData(BuildContext context) {
+    SyncParameter syncParameter = new SyncParameter();
+    syncParameter.putUploadUniqueIdValues([VisitModel().visit.VisitId]).putUploadName([VisitModel().visit.AccountNumber]);
+
+    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT, context: context,syncParameter: syncParameter, onSuccessSync: () {
+      VisitModel().visit.dirty = SyncDirtyStatus.SUCCESS;
+      Navigator.of(context).pop();
+    }, onFailSync: (e) async {
+      VisitModel().visit.dirty = SyncDirtyStatus.FAIL;
+      CustomerDialog.show(context, msg: 'upload fail', onConfirm: () {
+//        Navigator.of(context).pop();
+      }, onCancel: () {
+//        Navigator.of(context).pop();
+      });
+    });
   }
 
 }

@@ -4,8 +4,10 @@ import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/net/http_config.dart';
 import 'package:dsd/net/http_service.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:flustars/flustars.dart';
+import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -18,7 +20,6 @@ import 'package:flustars/flustars.dart';
 enum SettingEvent{
   ChangeCheckBox,
   SelectEnv,
-  Save,
   InitData
 }
 
@@ -28,7 +29,7 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
 
 
   @override
-  void onEvent(SettingEvent event,[dynamic data]) {
+  Future onEvent(SettingEvent event,[dynamic data]) async {
     switch(event){
       case SettingEvent.ChangeCheckBox:
         setCurSsl(data);
@@ -36,18 +37,16 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
       case SettingEvent.SelectEnv:
         setCurSettingInfo(data);
         break;
-      case SettingEvent.Save:
-        save();
-        return;
       case SettingEvent.InitData:
+        await initData();
         break;
     }
     super.onEvent(event,data);
   }
 
-  Future initData() {
+  Future initData() async {
     initSettingList();
-    initCurSettingInfo();
+    await initCurSettingInfo();
   }
 
   void initSettingList() {
@@ -98,7 +97,6 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
 
   Future initCurSettingInfo() async {
     curSettingInfo = await getCurSettingInfo();
-    onEvent(SettingEvent.InitData);
   }
 
   static Future<SettingInfo> getCurSettingInfo() async {
@@ -174,6 +172,12 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
 
   bool isDisable() => curSettingInfo.env != 'OTHER';
 
+  void onClickSave(BuildContext context) {
+    CustomerDialog.show(context, msg:'save success',onConfirm: () async {
+      await save();
+      Navigator.of(context).pop('refresh');
+    });
+  }
 
   Future save() async {
     List<AppConfigEntity> list = await AppConfigManager.queryAll();
@@ -186,8 +190,7 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
         ..host = curSettingInfo.host
         ..port = curSettingInfo.port
         ..isSsl = SettingInfo.boolToStr(curSettingInfo.isSsl)
-        ..syncInitFlag = "";
-      print("111111111:$curSettingInfo");
+        ..syncInitFlag = null;
       await AppConfigManager.insert(entity);
     }else{
       entity = list[0];
@@ -195,13 +198,10 @@ class SettingPresenter extends EventNotifier<SettingEvent>{
         ..host = curSettingInfo.host
         ..port = curSettingInfo.port
         ..isSsl = SettingInfo.boolToStr(curSettingInfo.isSsl)
-        ..syncInitFlag = "";
-      print("222222222:$curSettingInfo");
+        ..syncInitFlag = null;
       await AppConfigManager.update(entity);
     }
-
     resetUrlConfig(curSettingInfo);
-
   }
 
   static void resetUrlConfig(SettingInfo settingInfo){

@@ -34,25 +34,14 @@ class VisitManager {
 
   static Future insertOrUpdateVisit(DSD_T_Visit_Entity visit) async {
     DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityByVisitId(visit.VisitId);
-    if(entity == null){
+    if (entity == null) {
       await Application.database.tVisitDao.insertEntity(visit);
-    }else{
+    } else {
       await Application.database.tVisitDao.updateEntity(visit);
     }
   }
 
-  static Future<bool> isNeedCreateVisit(String shipmentNo, String accountNumber) async {
-    DSD_T_Visit_Entity visitEntity = await VisitManager.getVisitLastly(shipmentNo,accountNumber);
-    if (visitEntity != null
-        && visitEntity.dirty != SyncDirtyStatus.FAIL
-        && visitEntity.dirty != SyncDirtyStatus.SUCCESS
-        && visitEntity.dirty != SyncDirtyStatus.EXIST){
-      return false;
-    }
-    return true;
-  }
-
-  static DSD_T_Visit_Entity createVisit(String shipmentNo, String accountNumber) {
+  static DSD_T_Visit_Entity createVisit(String shipmentNo, String accountNumber, String reasonValue) {
     String nowTime = DateUtil.getDateStrByDateTime(DateTime.now());
     DSD_T_Visit_Entity entity = DSD_T_Visit_Entity.Empty();
     entity
@@ -62,6 +51,7 @@ class VisitManager {
       ..EndTime = nowTime
       ..UserCode = Application.user.userCode
       ..AccountNumber = accountNumber
+      ..CancelReason = reasonValue
       ..CreateUser = Application.user.userCode
       ..CreateTime = nowTime
       ..LastUpdateUser = Application.user.userCode
@@ -69,5 +59,4 @@ class VisitManager {
       ..dirty = SyncDirtyStatus.DEFAULT;
     return entity;
   }
-
 }

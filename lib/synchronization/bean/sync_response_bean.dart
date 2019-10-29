@@ -13,6 +13,12 @@ class SyncResponseBean extends Object {
   @JsonKey(name: 'SyncType')
   int syncType;
 
+  @JsonKey(name: 'ExceptionCode')
+  int exceptionCode;
+
+  @JsonKey(name: 'Exception')
+  String exception;
+
   @JsonKey(name: 'Result')
   Result result;
 
@@ -20,6 +26,8 @@ class SyncResponseBean extends Object {
     this.loginName,
     this.status,
     this.syncType,
+    this.exceptionCode,
+    this.exception,
     this.result,
   );
 

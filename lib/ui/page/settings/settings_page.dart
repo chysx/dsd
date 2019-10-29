@@ -170,10 +170,7 @@ class _SettingState extends State<SettingsPage> {
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            presenter.onEvent(SettingEvent.Save);
-                            CustomerDialog.show(context, msg:'save success',onConfirm: () {
-                              Navigator.of(context).pop();
-                            });
+                            presenter.onClickSave(context);
                           },
                         ),
                       ),

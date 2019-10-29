@@ -1,23 +1,34 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/common/system_config.dart';
+import 'package:dsd/db/manager/reason_manager.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
+import 'package:dsd/db/table/sync_upload_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
+import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/route/routers.dart';
+import 'package:dsd/synchronization/sync/sync_parameter.dart';
+import 'package:dsd/synchronization/sync/sync_type.dart';
+import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
+import 'package:dsd/ui/dialog/list_dialog.dart';
+import 'package:dsd/ui/dialog/model/key_value_info.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart' as material;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:uuid/uuid.dart';
 
 import 'customer_info.dart';
 
@@ -83,11 +94,9 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   void setPageParams(Map<String, List<String>> params) {
-    try{
+    try {
       shipmentNoByCheckoutPage = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 
   Future initData() async {
@@ -129,7 +138,6 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     });
 
     sortShipmentList();
-
   }
 
   void sortShipmentList() {
@@ -167,7 +175,12 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   Future setCurShipmentByCheckoutPage() async {
-    if(shipmentNoByCheckoutPage != null && shipmentNoByCheckoutPage.isNotEmpty) await setCurShipment(shipmentNoByCheckoutPage);
+    //传过来的shipmentNo可能不在列表中
+    bool isInShipmentList = shipmentList.any((item) {
+      return item.no == shipmentNoByCheckoutPage;
+    });
+    if (shipmentNoByCheckoutPage != null && shipmentNoByCheckoutPage.isNotEmpty && isInShipmentList)
+      await setCurShipment(shipmentNoByCheckoutPage);
   }
 
   Future fillCustomerData() async {
@@ -233,13 +246,13 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
 
   void onClickPlan(material.BuildContext context, CustomerInfo info) {
     String path =
-    '''${Routers.route_plan}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
+        '''${Routers.route_plan}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
   void onClickProfile(material.BuildContext context, CustomerInfo info) {
     String path =
-    '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
+        '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
@@ -265,5 +278,40 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
       return true;
     }
     return false;
+  }
+
+  doClickCancel(material.BuildContext context, CustomerInfo info) async {
+    if(await isDoCheckIn(context,currentShipment.no)) return;
+    if(info.status != DeliveryStatus.DEFALUT_DELIVERY && info.status != DeliveryStatus.CANCEL){
+      Fluttertoast.showToast(msg: 'The customer had been visited which can’t cancel again.');
+      return;
+    }
+    if(info.status == DeliveryStatus.CANCEL){
+      Fluttertoast.showToast(msg: 'The customer had been cancelled.');
+      return;
+    }
+    showReasonDialog(context,info);
+  }
+
+  Future showReasonDialog(material.BuildContext context,CustomerInfo info) async {
+    List<KeyValueInfo> reasonList = await ReasonManager.getReasonData(CancelDelReasonExZF61.CATEGORY);
+    ListDialog.show(context,title: 'title',data: reasonList,onSelect: (reason) async {
+      info.cancelReason = reason.value;
+      String visitId = await RouteManager.updateDeliveryStatusCancel(currentShipment.no, info.accountNumber, info.cancelReason);
+      uploadData(context, visitId, info.accountNumber);
+    });
+  }
+
+  void uploadData(material.BuildContext context, String visitId, String accountNumber) {
+    SyncParameter syncParameter = new SyncParameter();
+    syncParameter.putUploadUniqueIdValues([visitId]).putUploadName([accountNumber]);
+
+    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT, context: context, syncParameter: syncParameter, onSuccessSync: () {
+      Fluttertoast.showToast(msg: 'upload success');
+      onEvent(RouteEvent.InitData);
+    }, onFailSync: (e) async {
+      Fluttertoast.showToast(msg: 'upload fail');
+      onEvent(RouteEvent.InitData);
+    });
   }
 }

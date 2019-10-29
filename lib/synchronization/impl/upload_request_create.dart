@@ -1,3 +1,4 @@
+import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_request_create.dart';
 import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
@@ -68,6 +69,7 @@ class UploadRequestCreate extends AbstractRequestCreate<Future<SyncRequestBean>>
     ReqContent syncContentBean = new ReqContent();
     syncContentBean.tables = syncTableBeanList;
     syncDataRequestBean.reqContent = syncContentBean;
+    Log().logger.i('*****************upload request*************\n${syncDataRequestBean.toJson()}');
     return syncDataRequestBean;
   }
 }

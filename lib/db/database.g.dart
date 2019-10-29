@@ -4433,8 +4433,14 @@ class _$SyncPhotoUploadDao extends SyncPhotoUploadDao {
 
   final QueryAdapter _queryAdapter;
 
-  static final _sync_photo_uploadMapper =
-      (Map<String, dynamic> row) => SyncPhotoUploadEntity();
+  static final _sync_photo_uploadMapper = (Map<String, dynamic> row) =>
+      SyncPhotoUploadEntity(
+          row['id'] as String,
+          row['filePath'] as String,
+          row['name'] as String,
+          row['type'] as String,
+          row['status'] as String,
+          row['time'] as String);
 
   final InsertionAdapter<SyncPhotoUploadEntity>
       _syncPhotoUploadEntityInsertionAdapter;
@@ -4491,8 +4497,14 @@ class _$SyncUploadDao extends SyncUploadDao {
 
   final QueryAdapter _queryAdapter;
 
-  static final _sync_uploadMapper =
-      (Map<String, dynamic> row) => SyncUploadEntity();
+  static final _sync_uploadMapper = (Map<String, dynamic> row) =>
+      SyncUploadEntity(
+          row['id'] as String,
+          row['uniqueIdValues'] as String,
+          row['name'] as String,
+          row['type'] as String,
+          row['status'] as String,
+          row['time'] as String);
 
   final InsertionAdapter<SyncUploadEntity> _syncUploadEntityInsertionAdapter;
 
@@ -4517,6 +4529,12 @@ class _$SyncUploadDao extends SyncUploadDao {
         'SELECT * FROM sync_upload WHERE uniqueIdValues = ? and type = ?',
         arguments: <dynamic>[unique, type],
         mapper: _sync_uploadMapper);
+  }
+
+  @override
+  Future<List<SyncUploadEntity>> findEntityByType(String type) async {
+    return _queryAdapter.queryList('SELECT * FROM sync_upload WHERE type = ?',
+        arguments: <dynamic>[type], mapper: _sync_uploadMapper);
   }
 
   @override

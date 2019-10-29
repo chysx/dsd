@@ -21,7 +21,7 @@ SyncRequestBean _$SyncRequestBeanFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$SyncRequestBeanToJson(SyncRequestBean instance) =>
     <String, dynamic>{
-      'ReqContent': instance.reqContent,
+      'ReqContent': instance.reqContent != null ? instance.reqContent.toJson() : null,
       'DomainId': instance.domainId,
       'IsGzip': instance.isGzip,
       'LoginName': instance.loginName,
@@ -40,7 +40,7 @@ ReqContent _$ReqContentFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$ReqContentToJson(ReqContent instance) =>
     <String, dynamic>{
-      'Tables': instance.tables,
+      'Tables': instance.tables != null? instance.tables.map((i) => i.toJson()).toList():null,
     };
 
 Tables _$TablesFromJson(Map<String, dynamic> json) {

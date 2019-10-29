@@ -121,3 +121,6 @@ class CheckInDiffReason {
   static const String CATEGORY = "CIDiffReason";
 }
 
+class CancelDelReasonExZF61 {
+  static const String CATEGORY = "CancelDelReasonExZF61";
+}

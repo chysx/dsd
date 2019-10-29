@@ -1,4 +1,3 @@
-
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
@@ -7,10 +6,13 @@ import 'package:dsd/common/system_config.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
+import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
 import 'package:dsd/db/table/entity/md_dictionary_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/routers.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/page/task_list/config_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_info.dart';
@@ -57,7 +59,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     await fillTaskListData();
   }
 
-  void setPageParams(Map<String,List<String>> params) {
+  void setPageParams(Map<String, List<String>> params) {
     shipmentNo = params[FragmentArg.TASK_SHIPMENT_NO][0];
     accountNumber = params[FragmentArg.TASK_ACCOUNT_NUMBER][0];
     noScanReason = params[FragmentArg.TASK_NO_SCAN_REASON][0];
@@ -100,10 +102,12 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     routeConfigInfo.isEnableBarcode = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_BARCODE);
     routeConfigInfo.isEnableGeo = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_GEO);
     routeConfigInfo.isEnableHisOrder = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_HIS_ORDER);
-    routeConfigInfo.isEnableNewCustomer = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_NEW_CUSTOMER);
+    routeConfigInfo.isEnableNewCustomer =
+        await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_NEW_CUSTOMER);
     routeConfigInfo.isVanNewCustomer = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.VANS_NEW_CUSTOMER);
     routeConfigInfo.isDelNewCustomer = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.DEL_NEW_CUSTOMER);
-    routeConfigInfo.isEnableNewShipment = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_NEW_SHIPMENT1);
+    routeConfigInfo.isEnableNewShipment =
+        await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_NEW_SHIPMENT1);
     routeConfigInfo.isEnableOpenAR = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.ENABLE_OPEN_AR);
     routeConfigInfo.isMustComplete = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.MUST_COMPLETE);
     routeConfigInfo.isPrintPickSlip = await SystemManager.getValueByBoolean(Route.CATEGORY, Route.PRINT_PICK_SLIP);
@@ -112,10 +116,12 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   ///
   /// 获取TaskList列表
   ///
-   Future fillTaskListData() async {
+  Future fillTaskListData() async {
     taskList.clear();
-    List<DSD_M_DeliveryHeader_Entity> mList = await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
-    List<DSD_T_DeliveryHeader_Entity> tList = await Application.database.tDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
+    List<DSD_M_DeliveryHeader_Entity> mList =
+        await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
+    List<DSD_T_DeliveryHeader_Entity> tList =
+        await Application.database.tDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
 
     await fillDeliveryData(mList, tList);
     await fillEmptyReturnData(mList, tList);
@@ -123,10 +129,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     fillProfileData();
   }
 
-   Future fillDeliveryData(List<DSD_M_DeliveryHeader_Entity> mList, List<DSD_T_DeliveryHeader_Entity> tList) async {
+  Future fillDeliveryData(List<DSD_M_DeliveryHeader_Entity> mList, List<DSD_T_DeliveryHeader_Entity> tList) async {
     bool hasDelivery = false;
     for (DSD_M_DeliveryHeader_Entity item in mList) {
-
       if (TaskType.Delivery == item.DeliveryType) {
         TaskInfo delivery = new TaskInfo();
         delivery.no = item.DeliveryNo;
@@ -147,7 +152,8 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
         //获取已做数据的状态
         DSD_T_DeliveryHeader_Entity hasTDelivery = getDeliveryHeaderByNo(tList, item.DeliveryNo);
         if (hasTDelivery != null) {
-          MD_Dictionary_Entity entity =  await Application.database.dictionaryDao.findEntityByCon(DeliveryStatus.CATEGORY,hasTDelivery.DeliveryStatus,Valid.EXIST);
+          MD_Dictionary_Entity entity = await Application.database.dictionaryDao
+              .findEntityByCon(DeliveryStatus.CATEGORY, hasTDelivery.DeliveryStatus, Valid.EXIST);
           delivery.status = entity?.Description;
 
           switch (delivery.status) {
@@ -165,10 +171,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     }
   }
 
-   Future fillEmptyReturnData(List<DSD_M_DeliveryHeader_Entity> mList, List<DSD_T_DeliveryHeader_Entity> tList) async {
+  Future fillEmptyReturnData(List<DSD_M_DeliveryHeader_Entity> mList, List<DSD_T_DeliveryHeader_Entity> tList) async {
     bool hasEmptyReturn = false;
     for (DSD_M_DeliveryHeader_Entity item in mList) {
-
       if (TaskType.EmptyReturn == item.DeliveryType) {
         TaskInfo emptyreturn = new TaskInfo();
         emptyreturn.no = item.DeliveryNo;
@@ -188,7 +193,8 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
         //获取已做数据的状态
         DSD_T_DeliveryHeader_Entity hasTDelivery = getDeliveryHeaderByNo(tList, item.DeliveryNo);
         if (hasTDelivery != null) {
-          MD_Dictionary_Entity entity =  await Application.database.dictionaryDao.findEntityByCon(DeliveryStatus.CATEGORY,hasTDelivery.DeliveryStatus,Valid.EXIST);
+          MD_Dictionary_Entity entity = await Application.database.dictionaryDao
+              .findEntityByCon(DeliveryStatus.CATEGORY, hasTDelivery.DeliveryStatus, Valid.EXIST);
           emptyreturn.status = entity?.Description;
 
           switch (emptyreturn.status) {
@@ -204,10 +210,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
         }
       }
     }
-
   }
 
-   void fillDocumentData() {
+  void fillDocumentData() {
     TaskInfo document = new TaskInfo();
     document.imgPath = 'assets/imgs/task_documents.png';
     document.name = 'Documents';
@@ -220,7 +225,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     taskList.add(document);
   }
 
-   void fillProfileData() {
+  void fillProfileData() {
     TaskInfo document = new TaskInfo();
     document.imgPath = 'assets/imgs/task_documents.png';
     document.name = 'Customer Profile';
@@ -236,16 +241,16 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   ///
   /// 根据DeliveryNo查找集合中的DeliveryHeader
   ///
-   DSD_T_DeliveryHeader_Entity getDeliveryHeaderByNo(List<DSD_T_DeliveryHeader_Entity> list, String deliveryNo) {
-    return list.firstWhere((item){
+  DSD_T_DeliveryHeader_Entity getDeliveryHeaderByNo(List<DSD_T_DeliveryHeader_Entity> list, String deliveryNo) {
+    return list.firstWhere((item) {
       return item.DeliveryNo == deliveryNo;
-    },orElse: () => null);
+    }, orElse: () => null);
   }
 
-  void onItemClick(material.BuildContext context,TaskInfo info) {
+  void onItemClick(material.BuildContext context, TaskInfo info) {
     switch (info.type) {
       case TaskType.Delivery:
-        doDelivery(context,info);
+        doDelivery(context, info);
         break;
       case TaskType.Profile:
         doProfile(context);
@@ -253,7 +258,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     }
   }
 
-   void doDelivery(material.BuildContext context,TaskInfo info) {
+  Future doDelivery(material.BuildContext context, TaskInfo info) async {
     if (!info.isMust) return;
     String readOnly;
     switch (info.status) {
@@ -269,24 +274,56 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
 
     String page = (readOnly == ReadyOnly.TRUE ? Routers.delivery_summary : Routers.delivery);
     String path =
-    '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
+        '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
     ''';
 
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    onResume();
+  }
+
+  void onResume() {
+    onEvent(TaskListEvent.InitData);
   }
 
   void doProfile(material.BuildContext context) {
     String path =
-    '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
+        '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
     ''';
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
   void onClickRight(material.BuildContext context) {
+    if(!isPass(context)) return;
     String path =
-    '''${Routers.visit_summary}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
+        '''${Routers.visit_summary}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
     ''';
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
+  bool isPass(material.BuildContext context) {
+    if(isNeedDoMustItem()){
+      CustomerDialog.show(context,msg: 'Please finish the mandatory tasks before finishing visit.');
+      return false;
+    }
+    if(isVisited()){
+      material.Navigator.of(context).pop();
+      return false;
+    }
+    return true;
+  }
+
+  ///是否需要做必填项
+  bool isNeedDoMustItem() {
+    return taskList.any((item) {
+      return item.isMust && item.status == TaskDeliveryStatus.NotComplete;
+    });
+  }
+
+  bool isVisited() {
+    DSD_T_Visit_Entity entity = VisitModel().visit;
+    return entity.dirty == SyncDirtyStatus.FAIL ||
+        entity.dirty == SyncDirtyStatus.SUCCESS ||
+        entity.dirty == SyncDirtyStatus.EXIST;
+  }
 }

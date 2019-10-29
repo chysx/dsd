@@ -187,12 +187,11 @@ class _RouteState extends State<RoutePage> {
               actionPane: SlidableDrawerActionPane(),
               secondaryActions: <Widget>[
                 SlideAction(
-                  child: Text('Print'),
-                  color: Colors.grey.shade200,
-                ),
-                SlideAction(
-                  child: Text('Delete'),
+                  child: Text('CANCEL'),
                   color: Colors.red,
+                  onTap: (){
+                    presenter.doClickCancel(context,info);
+                  },
                 ),
               ],
               child: Column(
@@ -204,69 +203,72 @@ class _RouteState extends State<RoutePage> {
                         info.isMore = !info.isMore;
                       });
                     },
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                        ),
-                        Text(
-                          info?.index?? '',
-                          style: TextStyles.normal,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                              ),
-                              Text(
-                                info?.name?? '',
-                                style: TextStyles.normal,
-                              ),
-                              Text(
-                                info?.address?? '',
-                                style: TextStyles.small,
-                              ),
-                              Text(
-                                info?.timeSlotFrom?? '',
-                                style: TextStyles.small,
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.person,
-                                    size: 15,
-                                  ),
-                                  Text(
-                                    info?.contactName?? '',
-                                    style: TextStyles.small,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(Icons.phone_iphone, size: 15),
-                                  Icon(Icons.phone, size: 15),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 10),
-                              ),
-                            ],
+                    child: Container(
+                      color: info.isVisitComplete ? ColorsRes.gray_normal : Colors.white,
+                      child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
                           ),
-                        ),
-                        Text(
-                          'D',
-                          style: TextStyles.normal,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 10),
-                        ),
-                      ],
+                          Text(
+                            info?.index?? '',
+                            style: TextStyles.normal,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                ),
+                                Text(
+                                  info?.name?? '',
+                                  style: TextStyles.normal,
+                                ),
+                                Text(
+                                  info?.address?? '',
+                                  style: TextStyles.small,
+                                ),
+                                Text(
+                                  info?.timeSlotFrom?? '',
+                                  style: TextStyles.small,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.person,
+                                      size: 15,
+                                    ),
+                                    Text(
+                                      info?.contactName?? '',
+                                      style: TextStyles.small,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Icon(Icons.phone_iphone, size: 15),
+                                    Icon(Icons.phone, size: 15),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            info.status,
+                            style: TextStyles.normal,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   child

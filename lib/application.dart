@@ -37,7 +37,6 @@ class Application {
     Future.delayed(new Duration(seconds: 5),(){
       database = new DbHelper().database;
       print('database = $database');
-      initAppConfigEntity();
       makeProductMap();
     });
     logger = new Log().logger;
@@ -45,17 +44,6 @@ class Application {
     router = new Router();
     DirectoryUtil.getInstance();
     user = new User();
-  }
-
-  static Future initAppConfigEntity() async {
-    List<AppConfigEntity> list = await Application.database.appConfigDao.findAll();
-    if (!ObjectUtil.isEmptyList(list)) {
-      appConfigEntity = list[0];
-      Application.logger.i('appConfigEntity = ${appConfigEntity.toString()}');
-      user.userCode = appConfigEntity.userCode;
-      user.userName = appConfigEntity.userName;
-      user.passWord = appConfigEntity.password;
-    }
   }
 
   static Future makeProductMap() async {

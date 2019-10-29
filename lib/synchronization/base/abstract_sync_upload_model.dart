@@ -82,13 +82,13 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncReque
     sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
     database.transaction((txn) async {
       for (TableUploadBean uploadBean in uploadBeanList) {
-        await sqfliteDb.execute(uploadBean.getSqlUpdateBuild(), [dirty]);
+        await txn.execute(uploadBean.getSqlUpdateBuild(), [dirty]);
       }
     });
   }
 
   void updateStatus(SyncStatus syncStatus) {
-    SyncUploadEntity syncUploadEntity = new SyncUploadEntity();
+    SyncUploadEntity syncUploadEntity = new SyncUploadEntity.Empty();
     if (syncParameter.getUploadUniqueIdValues() == null || syncParameter.getUploadUniqueIdValues().length == 0) {
       syncUploadEntity.uniqueIdValues = null;
     } else {

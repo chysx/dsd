@@ -139,8 +139,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    Application.router
-                                        .navigateTo(context, '/settings', transition: TransitionType.inFromLeft);
+                                    presenter.onClickSetting(context);
                                   },
                                   child: Container(
                                     child: Row(

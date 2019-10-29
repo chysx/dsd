@@ -16,4 +16,8 @@ class SyncPhotoUploadEntity {
   String type;
   String status;
   String time;
+
+  SyncPhotoUploadEntity(this.id, this.filePath, this.name, this.type, this.status, this.time);
+
+
 }

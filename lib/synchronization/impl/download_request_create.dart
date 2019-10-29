@@ -1,6 +1,7 @@
 import 'package:dsd/db/dao/sync_download_logic_dao.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/db/table/sync_download_logic_entity.dart';
+import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/utils/sync_util.dart';
@@ -35,6 +36,8 @@ class DownloadRequestCreate extends AbstractRequestCreate<Future<SyncRequestBean
       syncContentBean.tables = await createSyncTableBeanListByCon(tableList, syncDownloadModel.syncParameter);
     }
     syncDataRequestBean.reqContent = syncContentBean;
+
+    Log().logger.i('*****************download request*************\n${syncDataRequestBean.toJson()}');
 
     return syncDataRequestBean;
   }
