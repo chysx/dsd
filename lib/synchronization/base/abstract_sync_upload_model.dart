@@ -43,24 +43,24 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncReque
     });
   }
 
-  void onSuccess() {
+  Future onSuccess() async {
     super.onSuccess();
 
-    updateDirty(SyncDirtyStatus.SUCCESS);
-    updateStatus(SyncStatus.SYNC_SUCCESS);
+    await updateDirty(SyncDirtyStatus.SUCCESS);
+    await updateStatus(SyncStatus.SYNC_SUCCESS);
   }
 
-  void onFail() {
+  Future onFail() async {
     super.onFail();
 
-    updateDirty(SyncDirtyStatus.FAIL);
-    updateStatus(SyncStatus.SYNC_FAIL);
+    await updateDirty(SyncDirtyStatus.FAIL);
+    await updateStatus(SyncStatus.SYNC_FAIL);
   }
 
-  void onLoad() {
+  Future onLoad() async {
     super.onLoad();
 
-    updateStatus(SyncStatus.SYNC_LOAD);
+    await updateStatus(SyncStatus.SYNC_LOAD);
   }
 
   List<String> getUploadUniqueIdValues() {
@@ -73,8 +73,8 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncReque
     return false;
   }
 
-  void updateDirty(String syncDirtyStatus) {
-    updateUploadDirty(getTableUploadList(), syncDirtyStatus);
+  Future updateDirty(String syncDirtyStatus) async {
+    await updateUploadDirty(getTableUploadList(), syncDirtyStatus);
   }
 
   Future updateUploadDirty(List<TableUploadBean> uploadBeanList, String dirty) async {
@@ -87,7 +87,7 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncReque
     });
   }
 
-  void updateStatus(SyncStatus syncStatus) {
+  Future updateStatus(SyncStatus syncStatus) async {
     SyncUploadEntity syncUploadEntity = new SyncUploadEntity.Empty();
     if (syncParameter.getUploadUniqueIdValues() == null || syncParameter.getUploadUniqueIdValues().length == 0) {
       syncUploadEntity.uniqueIdValues = null;
@@ -98,6 +98,6 @@ abstract class AbstractSyncUploadModel extends AbstractSyncMode<Future<SyncReque
     syncUploadEntity.status = syncStatus.toString();
     syncUploadEntity.type = syncType.toString();
     syncUploadEntity.time = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.NORMAL);
-    SyncUploadManager.deleteAndInsert(syncUploadEntity);
+    await SyncUploadManager.deleteAndInsert(syncUploadEntity);
   }
 }

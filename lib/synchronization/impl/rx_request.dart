@@ -18,8 +18,8 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
   RxRequest(AbstractSyncMode syncMode) : super(syncMode);
 
   @override
-  void execute(Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) {
-    AppLogManager.insert(ExceptionType.INFO.toString(), msg: syncMode.syncType.toString());
+  Future execute(Observable<Response<Map<String, dynamic>>> observable, {onSuccessSync, onFailSync}) async {
+    await AppLogManager.insert(ExceptionType.INFO.toString(), msg: syncMode.syncType.toString());
 
     observable.flatMap((syncDataBean) {
       return Observable.fromFuture(syncMode.parser.parse(syncDataBean));
@@ -29,9 +29,9 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
 //            ExceptionType.WARN.toString(), syncDataBean.toString());
       }
       return isSuccess;
-    }).listen((isSuccess) {
+    }).listen((isSuccess) async {
       if (isSuccess) {
-        AppLogManager.insert(
+        await AppLogManager.insert(
             ExceptionType.INFO.toString(), msg: syncMode.syncType.toString() + ":" + SyncStatus.SYNC_SUCCESS.toString());
         syncMode.onSuccess();
         if (onSuccessSync != null) {
@@ -45,27 +45,30 @@ class RxRequest extends AbstractRequest<Response<Map<String, dynamic>>> {
           onFailSync(new Exception("False"));
         }
       }
-    }, onError: (e) {
-      try {
-        if (onFailSync != null) {
-          onFailSync(e);
-        }
-      } catch (ex) {
-        Log().logger.e(ex.toString());
-        AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
-      }
+    }, onError: (e) async {
+
       syncMode.onFinish();
 
-      AppLogManager.insert(ExceptionType.WARN.toString(), error: e);
+      await AppLogManager.insert(ExceptionType.WARN.toString(), error: e);
       Log().logger.e(e.toString());
       try {
-        AppLogManager.insert(
+        await AppLogManager.insert(
             ExceptionType.INFO.toString(), msg: syncMode.syncType.toString() + ":" + SyncStatus.SYNC_FAIL.toString());
         syncMode.onFail();
       } catch (ex) {
         Log().logger.e(e.toString());
         AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
       }
+
+      try {
+        if (onFailSync != null) {
+          onFailSync(e);
+        }
+      } catch (ex) {
+        Log().logger.e(ex.toString());
+        await AppLogManager.insert(ExceptionType.WARN.toString(), error: ex);
+      }
+
     }, onDone: () {
       syncMode.onFinish();
     });

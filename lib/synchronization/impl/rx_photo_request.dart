@@ -14,7 +14,10 @@ class RxPhotoRequest extends AbstractRequest<void> {
   RxPhotoRequest(AbstractSyncMode syncMode) : super(syncMode);
 
   @override
-  void execute(Observable<void> observable, {onSuccessSync, onFailSync}) {
+  Future execute(Observable<void> observable, {onSuccessSync, onFailSync}) {
     // TODO: implement execute
+    return null;
   }
+
+
 }

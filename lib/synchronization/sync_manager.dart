@@ -1,13 +1,12 @@
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
-import 'package:dsd/synchronization/sync/sync_constant.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_factory.dart';
 import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:rxdart/rxdart.dart';
 import 'base/abstract_sync_mode.dart';
-import 'model/sync_init_model.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -38,24 +37,51 @@ class SyncManager {
     syncMode.start();
   }
 
+  static int _getCompleteSyncCount(List<AbstractSyncMode> syncModeList){
+    int count = 0;
+    for(AbstractSyncMode syncMode in syncModeList){
+      if(syncMode.syncStatus == SyncStatus.SYNC_FAIL || syncMode.syncStatus == SyncStatus.SYNC_SUCCESS){
+        count++;
+      }
+    }
+    return count;
+  }
+
   static Future startAll(List<AbstractSyncMode> syncModeList,{OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) async {
     if (context != null) LoadingDialog.show(context);
+    final BehaviorSubject<int> subject = BehaviorSubject<int>();
     for(AbstractSyncMode syncMode in syncModeList){
-      await syncMode.start();
+      syncMode
+        ..onSuccessSync = () {
+          int completeSyncCount = _getCompleteSyncCount(syncModeList);
+          subject.add(completeSyncCount);
+        }
+        ..onFailSync = (e) {
+          int completeSyncCount = _getCompleteSyncCount(syncModeList);
+          subject.add(completeSyncCount);
+        };
+      syncMode.start();
     }
-    if (context != null) LoadingDialog.dismiss(context);
 
-    bool isSuccess = syncModeList.every((syncMode){
-      return syncMode.syncStatus == SyncStatus.SYNC_SUCCESS;
+    subject.listen((data){
+      if(data == syncModeList.length){
+        subject.close();
+        if (context != null) LoadingDialog.dismiss(context);
+        bool isSuccess = syncModeList.every((syncMode){
+          return syncMode.syncStatus == SyncStatus.SYNC_SUCCESS;
+        });
+
+        if(isSuccess) {
+          onSuccessSync();
+        }else{
+          onFailSync('sync fail');
+        }
+      }
     });
 
-    if(isSuccess) {
-      onSuccessSync();
-    }else{
-      onFailSync('sync fail');
-    }
 
   }
 }
+
 
 

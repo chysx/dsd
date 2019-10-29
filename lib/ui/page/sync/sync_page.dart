@@ -24,11 +24,7 @@ class SyncPage extends StatefulWidget {
 
 class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
   TabController tabController;
-  final List<Tab> myTabs = <Tab>[
-    Tab(text: 'CheckOut'),
-    Tab(text: 'Visit'),
-    Tab(text: 'CheckIn')
-  ];
+  final List<Tab> myTabs = <Tab>[Tab(text: 'CheckOut'), Tab(text: 'Visit'), Tab(text: 'CheckIn')];
 
   @override
   void initState() {
@@ -63,19 +59,19 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
                         child: Text(
                       info.name,
                       style: TextStyles.normal,
-                          textAlign: TextAlign.left,
+                      textAlign: TextAlign.left,
                     )),
                     Expanded(
                         child: Text(
                       info.getStatusMsg(),
                       style: TextStyles.normal,
-                          textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                     )),
                     Expanded(
                         child: Text(
                       info.time,
                       style: TextStyles.normal,
-                          textAlign: TextAlign.right,
+                      textAlign: TextAlign.right,
                     ))
                   ],
                 ),
@@ -107,19 +103,19 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          info.name,
-                          style: TextStyles.normal,
-                        )),
+                      info.name,
+                      style: TextStyles.normal,
+                    )),
                     Expanded(
                         child: Text(
-                          info.getStatusMsg(),
-                          style: TextStyles.normal,
-                        )),
+                      info.getStatusMsg(),
+                      style: TextStyles.normal,
+                    )),
                     Expanded(
                         child: Text(
-                          info.time,
-                          style: TextStyles.normal,
-                        ))
+                      info.time,
+                      style: TextStyles.normal,
+                    ))
                   ],
                 ),
               );
@@ -150,19 +146,19 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
                   children: <Widget>[
                     Expanded(
                         child: Text(
-                          info.name,
-                          style: TextStyles.normal,
-                        )),
+                      info.name,
+                      style: TextStyles.normal,
+                    )),
                     Expanded(
                         child: Text(
-                          info.getStatusMsg(),
-                          style: TextStyles.normal,
-                        )),
+                      info.getStatusMsg(),
+                      style: TextStyles.normal,
+                    )),
                     Expanded(
                         child: Text(
-                          info.time,
-                          style: TextStyles.normal,
-                        ))
+                      info.time,
+                      style: TextStyles.normal,
+                    ))
                   ],
                 ),
               );
@@ -222,7 +218,7 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
                 ),
                 RaisedButton(
                   onPressed: () {
-                    presenter.onClickUpload(context,tabController.index);
+                    presenter.onClickUpload(context, tabController.index);
                   },
                   child: Text(
                     'UPLOAD',
