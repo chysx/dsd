@@ -1,3 +1,4 @@
+import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,11 @@ class ListHeaderWidget extends StatefulWidget {
   final List<String> supNames;
   final List<int> weights;
   final List<TextAlign> aligns;
-  final isCheck;
+  final bool isCheck;
+  final bool isBold;
   final Function(bool) onChange;
 
-  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns, this.isCheck, this.onChange, Key key})
+  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns, this.isCheck, this.isBold = false, this.onChange, Key key})
       : super(key: key);
 
   @override
@@ -30,6 +32,10 @@ class _ListHeaderState extends State<ListHeaderWidget> {
   bool isCheck;
 
   _ListHeaderState({this.isCheck});
+
+  TextStyle _getTextStyle(){
+    return widget.isBold ? TextStyle(fontSize: Dimens.font_normal,fontWeight: FontWeight.bold) : TextStyles.normal;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +53,7 @@ class _ListHeaderState extends State<ListHeaderWidget> {
       return Text(
         widget.supNames[position],
         textAlign: widget.aligns[position],
-        style: TextStyles.small,
+        style: widget.isBold ? TextStyle(fontSize: Dimens.font_small,fontWeight: FontWeight.bold) : TextStyles.small,
       );
     }
     return Container();
@@ -65,7 +71,7 @@ class _ListHeaderState extends State<ListHeaderWidget> {
               Text(
                 item,
                 textAlign: widget.aligns[position],
-                style: TextStyles.normal,
+                style: widget.isBold ? TextStyle(fontSize: Dimens.font_normal,fontWeight: FontWeight.bold) : TextStyles.normal,
               ),
               _getSupWidget(position)
             ],

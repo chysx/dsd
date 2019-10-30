@@ -26,6 +26,8 @@ class Routers {
   static const visit_summary = '/visit_summary';
   static const visit_summary_detail = '/visit_summary_detail';
   static const profile = '/profile';
+  static const document = '/document';
+  static const print_delivery_slip = '/print_delivery_slip';
 
   static configRouters(Router router) {
     router.notFoundHandler = notFoundHandler;
@@ -46,5 +48,7 @@ class Routers {
     router.define(check_out_inventory, handler: checkoutInventoryHandler);
     router.define(visit_summary, handler: visitSummaryHandler);
     router.define(visit_summary_detail, handler: visitSummaryDetailHandler);
+    router.define(document, handler: documentHandler);
+    router.define(print_delivery_slip, handler: printDeliverySlipHandler);
   }
 }

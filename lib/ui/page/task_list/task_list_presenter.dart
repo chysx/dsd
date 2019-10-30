@@ -256,6 +256,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       case TaskType.Profile:
         doProfile(context);
         break;
+      case TaskType.Document:
+        doDocument(context, info);
+        break;
     }
   }
 
@@ -283,6 +286,13 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     onResume();
   }
 
+  doDocument(material.BuildContext context, TaskInfo info) {
+    String path =
+        '''${Routers.document}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName''';
+
+    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
   void onResume() {
     onEvent(TaskListEvent.InitData);
   }
@@ -295,7 +305,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   }
 
   void onClickRight(material.BuildContext context) {
-    if(!isPass(context)) return;
+    if (!isPass(context)) return;
     String path =
         '''${Routers.visit_summary}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
     ''';
@@ -303,11 +313,11 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   }
 
   bool isPass(material.BuildContext context) {
-    if(isNeedDoMustItem()){
-      CustomerDialog.show(context,msg: 'Please finish the mandatory tasks before finishing visit.');
+    if (isNeedDoMustItem()) {
+      CustomerDialog.show(context, msg: 'Please finish the mandatory tasks before finishing visit.');
       return false;
     }
-    if(VisitManager.isVisitCompleteByVisit(VisitModel().visit)){
+    if (VisitManager.isVisitCompleteByVisit(VisitModel().visit)) {
       material.Navigator.of(context).pop();
       return false;
     }
@@ -320,5 +330,4 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       return item.isMust && item.status == TaskDeliveryStatus.NotComplete;
     });
   }
-
 }

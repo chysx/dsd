@@ -91,6 +91,7 @@ flutter:
     - assets/imgs/task_survey.png
     - assets/imgs/task_trade_return.png
     - assets/imgs/task_van_sales.png
+    - assets/imgs/pick_slip.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

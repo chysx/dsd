@@ -15,8 +15,12 @@ import 'package:dsd/ui/page/delivery/delivery_page.dart';
 import 'package:dsd/ui/page/delivery/delivery_presenter.dart';
 import 'package:dsd/ui/page/delivery_summary/delivery_summary_page.dart';
 import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
+import 'package:dsd/ui/page/document/document_page.dart';
+import 'package:dsd/ui/page/document/document_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/page/print/print_delivery_slip_page.dart';
+import 'package:dsd/ui/page/print/print_delivery_slip_presenter.dart';
 import 'package:dsd/ui/page/profile/profile_page.dart';
 import 'package:dsd/ui/page/profile/profile_presenter.dart';
 import 'package:dsd/ui/page/route/route_page.dart';
@@ -248,5 +252,29 @@ Handler visitSummaryDetailHandler = Handler(handlerFunc: (_, params) {
             ..onEvent(VisitSummaryDetailEvent.InitData)),
     ],
     child: VisitSummaryDetailPage(),
+  );
+});
+
+Handler documentHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new DocumentPresenter()
+            ..setPageParams(params)
+            ..onEvent(DocumentEvent.InitData)),
+    ],
+    child: DocumentPage(),
+  );
+});
+
+Handler printDeliverySlipHandler = Handler(handlerFunc: (_, params) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new PrintDeliverySlipPresenter()
+            ..setPageParams(params)
+            ..onEvent(PrintDeliverySlipEvent.InitData)),
+    ],
+    child: PrintDeliverySlipPage(),
   );
 });
