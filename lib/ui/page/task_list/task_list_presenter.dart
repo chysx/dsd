@@ -4,6 +4,7 @@ import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/common/system_config.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
+import 'package:dsd/db/manager/visit_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
@@ -265,6 +266,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       case TaskDeliveryStatus.TotalDelivered:
       case TaskDeliveryStatus.PartialDelivered:
       case TaskDeliveryStatus.Rebook:
+      case TaskDeliveryStatus.Cancel:
         readOnly = ReadyOnly.TRUE;
         break;
       default:
@@ -274,8 +276,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
 
     String page = (readOnly == ReadyOnly.TRUE ? Routers.delivery_summary : Routers.delivery);
     String path =
-        '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly}
-    ''';
+        '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly''';
 
     await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
 
@@ -306,7 +307,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       CustomerDialog.show(context,msg: 'Please finish the mandatory tasks before finishing visit.');
       return false;
     }
-    if(isVisited()){
+    if(VisitManager.isVisitCompleteByVisit(VisitModel().visit)){
       material.Navigator.of(context).pop();
       return false;
     }
@@ -320,10 +321,4 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     });
   }
 
-  bool isVisited() {
-    DSD_T_Visit_Entity entity = VisitModel().visit;
-    return entity.dirty == SyncDirtyStatus.FAIL ||
-        entity.dirty == SyncDirtyStatus.SUCCESS ||
-        entity.dirty == SyncDirtyStatus.EXIST;
-  }
 }

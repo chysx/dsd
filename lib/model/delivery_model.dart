@@ -107,9 +107,32 @@ class DeliveryModel {
     }
   }
 
-  void cacheDeliveryItemList(List<BaseProductInfo> productList, String productUnitValue) {
+  void cacheDeliveryItemList(List<BaseProductInfo> productList, String productUnitValue,{List<BaseProductInfo> emptyList}) {
     deliveryItemList.clear();
     String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+
+    /***********************************Empty Product********************************************/
+    for (BaseProductInfo info in emptyList) {
+      if (info.actualCs != 0) {
+        DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
+
+        add.DeliveryNo = _deliveryNo;
+        add.ProductCode = info.code;
+        add.ProductUnit = ProductUnit.CS;
+        add.PlanQty = info.plannedCs.toString();
+        add.ActualQty = info.actualCs.toString();
+        add.DifferenceQty = (info.plannedCs - info.actualCs).toString();
+        add.Reason = "24";
+        add.IsReturn = IsReturn.TRUE;
+        add.CreateUser = Application.user.userCode;
+        add.CreateTime = notTime;
+        add.dirty = SyncDirtyStatus.DEFAULT;
+
+        deliveryItemList.add(add);
+      }
+    }
+    /***********************************Empty Product********************************************/
+
     for (BaseProductInfo info in productList) {
       if (productUnitValue == ProductUnit.CS_EA || productUnitValue == ProductUnit.CS) {
         if (info.plannedCs != 0 || info.actualCs != 0) {

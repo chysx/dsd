@@ -158,7 +158,7 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
 
   Future saveData() async {
     await CheckInModel().saveShipmentHeader();
-    CheckInModel().setShipmentItemList(productList, productUnitValue);
+    CheckInModel().cacheShipmentItemList(productList, productUnitValue,emptyList: emptyProductList);
     await CheckInModel().saveShipmentItems();
   }
 

@@ -3,6 +3,7 @@ import 'package:dsd/synchronization/base/abstract_sync_mode.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/synchronization/utils/sync_manager_util.dart';
+import 'package:dsd/ui/dialog/signature_dialog.dart';
 import 'package:dsd/ui/page/sync/sync_info.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,13 +42,17 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
   void onClickInit(BuildContext context) {
     SyncManager.start(SyncType.SYNC_INIT, context: context, onSuccessSync: () {
       Fluttertoast.showToast(msg: "onSuccessSync");
+      onEvent(SyncEvent.InitData);
     }, onFailSync: (e) {
 //      appConfigEntity.syncInitFlag = null;
       Fluttertoast.showToast(msg: "onFailSync");
+      onEvent(SyncEvent.InitData);
     });
   }
 
-  void onClickUpdate(BuildContext context) {}
+  void onClickUpdate(BuildContext context) {
+    SignatureDialog.show(context);
+  }
 
   void onClickUpload(BuildContext context, int index) {
     List<AbstractSyncMode> syncModeList = [];

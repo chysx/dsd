@@ -26,6 +26,10 @@ class VisitManager {
   ///
   static Future<bool> isVisitCompleteByCustomer(String shipmentNo, String accountNumber) async {
     DSD_T_Visit_Entity visitEntity = await getVisitLastly(shipmentNo, accountNumber);
+    return isVisitCompleteByVisit(visitEntity);
+  }
+
+  static isVisitCompleteByVisit(DSD_T_Visit_Entity visitEntity) {
     if (visitEntity == null) return false;
     if (StringUtil.isEmpty(visitEntity.dirty) ||
         StringUtil.equalsIgnoreCase(visitEntity.dirty, SyncDirtyStatus.DEFAULT)) return false;

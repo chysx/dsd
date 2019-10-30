@@ -146,7 +146,7 @@ class CheckoutInventoryPresenter extends EventNotifier<CheckOutInventoryEvent> {
 
   Future saveData() async {
     await CheckOutModel().saveShipmentHeader();
-    CheckOutModel().setShipmentItemList(productList, productUnitValue);
+    CheckOutModel().cacheShipmentItemList(productList, productUnitValue);
     await CheckOutModel().saveShipmentItems();
   }
 

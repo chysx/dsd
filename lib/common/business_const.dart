@@ -40,11 +40,11 @@ class Show {
 class IsReturn {
   /// 显示
 
-  static const String TRUE = "1";
+  static const String TRUE = "True";
 
   /// 隐藏
 
-  static const String FALSE = "0";
+  static const String FALSE = "False";
 }
 
 ///

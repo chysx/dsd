@@ -31,13 +31,16 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
       appBar: AppBar(
         title: Text('DeliverySummary'),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.arrow_forward),
-            onPressed: () {
-              DeliverySummaryPresenter presenter = Provider.of<DeliverySummaryPresenter>(context);
-              presenter.onClickRight(context);
-            },
-          )
+          Builder(builder: (context)  {
+            DeliverySummaryPresenter presenter = Provider.of<DeliverySummaryPresenter>(context);
+            Widget icon = IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                presenter.onClickRight(context);
+              },
+            );
+            return presenter.isHideNextButton() ? Container() : icon;
+          }),
         ],
       ),
       body: Consumer<DeliverySummaryPresenter>(builder: (context, presenter, _) {
@@ -62,7 +65,7 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                         children: <Widget>[
                           Text('Delivery Date:',style: TextStyles.normal,),
                           Spacer(),
-                          Text(DeliveryModel().mDeliveryHeader.PlanDeliveryDate,style: TextStyles.normal,),
+                          Text(DeliveryModel().mDeliveryHeader?.PlanDeliveryDate ?? '',style: TextStyles.normal,),
                         ],
                       ),
                       Padding(padding: EdgeInsets.only(top: 10),),
@@ -70,7 +73,7 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                         children: <Widget>[
                           Text('Delivery Note:',style: TextStyles.normal,),
                           Spacer(),
-                          Text(DeliveryModel().mDeliveryHeader.DeliveryNote,style: TextStyles.normal,),
+                          Text(DeliveryModel().mDeliveryHeader?.DeliveryNote ?? '',style: TextStyles.normal,),
                         ],
                       )
                     ],
@@ -94,9 +97,9 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                     ListView.separated(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: presenter.showProductList.length,
+                      itemCount: presenter.productList.length,
                       itemBuilder: (context, index){
-                        BaseProductInfo info = presenter.showProductList[index];
+                        BaseProductInfo info = presenter.productList[index];
                         return Padding(
                           padding: const EdgeInsets.all(10),
                           child: Row(
@@ -107,7 +110,52 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                               ),
                               Expanded(
                                 flex: 1,
-                                child: Text(info.getPlanShowStr(TaskType.Delivery),textAlign:TextAlign.center,style: TextStyles.small,),
+                                child: Text(info.getActualShowStrByType(TaskType.Delivery),textAlign:TextAlign.center,style: TextStyles.small,),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          height: 2,
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ),
+              FoldWidget(
+                msg: 'EMPTY PRODUCTS',
+                isMore: true,
+                child: Column(
+                  children: <Widget>[
+                    ListHeaderWidget(
+                      names: ['Product', 'Qty'],
+                      supNames: ['', ''],
+                      weights: [1, 1],
+                      aligns: [
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
+                    ),
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: presenter.emptyProductList.length,
+                      itemBuilder: (context, index){
+                        BaseProductInfo info = presenter.emptyProductList[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Text('${info.code} ${info.name??''}',textAlign:TextAlign.left,style: TextStyles.small,),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Text(info.getActualShowStrByType(TaskType.EmptyReturn),textAlign:TextAlign.center,style: TextStyles.small,),
                               ),
                             ],
                           ),

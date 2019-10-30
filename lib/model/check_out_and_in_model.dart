@@ -69,8 +69,31 @@ class CheckOutAndInModel {
     shipmentItemList.clear();
   }
 
-  void setShipmentItemList(List<BaseProductInfo> productList, String productUnitValue){
+  void cacheShipmentItemList(List<BaseProductInfo> productList, String productUnitValue,{List<BaseProductInfo> emptyList}){
     String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+
+    for (BaseProductInfo info in emptyList) {
+      if (info.actualCs != 0) {
+        DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
+
+        add.HeaderId = shipmentHeader.Id;
+        add.ProductCode = info.code;
+        add.ProductUnit = ProductUnit.CS;
+
+        add.PlanQty = info.plannedCs;
+        add.ActualQty = info.actualCs;
+        add.DifferenceQty = info.plannedCs - info.actualCs;
+
+        add.DifferenceReason = info.reasonValue;
+        add.CreateUser = Application.user.userCode;
+        add.CreateTime = notTime;
+        add.dirty = SyncDirtyStatus.DEFAULT;
+
+        shipmentItemList.add(add);
+      }
+    }
+
+
     for (BaseProductInfo info in productList) {
       if (productUnitValue == ProductUnit.CS_EA || productUnitValue == ProductUnit.CS) {
         if (info.plannedCs != 0 || info.actualCs != 0) {

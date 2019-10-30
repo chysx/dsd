@@ -1,10 +1,12 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/db/manager/visit_manager.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/delivery_model.dart';
+import 'package:dsd/model/visit_model.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -19,7 +21,8 @@ enum DeliverySummaryEvent {
 }
 
 class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
-  List<BaseProductInfo> showProductList = [];
+  List<BaseProductInfo> productList = [];
+  List<BaseProductInfo> emptyProductList = [];
   String deliveryNo;
   String shipmentNo;
   String accountNumber;
@@ -51,15 +54,17 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
     if(!DeliveryModel().isInitData()){
       await DeliveryModel().initData(deliveryNo);
     }
-    await fillProductData();
+    fillProductData();
+    fillEmptyProductData();
   }
 
-  Future fillProductData() async {
-    showProductList.clear();
+  void fillProductData() {
+    productList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
 
     for (DSD_T_DeliveryItem_Entity tItem in tList) {
+      if(tItem.IsReturn == IsReturn.TRUE) continue;
       if (int.tryParse(tItem.ActualQty) == 0) continue;
 
       BaseProductInfo info = new BaseProductInfo();
@@ -73,8 +78,29 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
         info.actualEa = int.tryParse(tItem.ActualQty);
       }
       info.isInMDelivery = true;
-      showProductList.add(info);
+      productList.add(info);
     }
+  }
+
+  void fillEmptyProductData() {
+    emptyProductList.clear();
+
+    List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
+
+    for (DSD_T_DeliveryItem_Entity tItem in tList) {
+      if(tItem.IsReturn != IsReturn.TRUE) continue;
+      if (int.tryParse(tItem.ActualQty) == 0) continue;
+
+      BaseProductInfo info = new BaseProductInfo();
+      info.code = tItem.ProductCode;
+      info.name = Application.productMap[tItem.ProductCode];
+      info.actualCs = int.tryParse(tItem.ActualQty);
+      emptyProductList.add(info);
+    }
+  }
+
+  bool isHideNextButton() {
+    return VisitManager.isVisitCompleteByVisit(VisitModel().visit);
   }
 
   Future onClickRight(BuildContext context) async {
@@ -87,6 +113,15 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
   Future saveData() async {
     await DeliveryModel().saveDeliveryHeader();
     await DeliveryModel().saveDeliveryItems();
+  }
+
+  @override
+  void dispose() {
+    if(isReadOnly) {
+      DeliveryModel().clear();
+      print('****************dispose:DeliveryModel().clear()**********************');
+    }
+    super.dispose();
   }
 
 }

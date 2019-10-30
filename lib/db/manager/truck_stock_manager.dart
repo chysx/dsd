@@ -94,16 +94,16 @@ class TruckStockManager {
             break;
         }
         break;
-      case StockTracking.TRET:
+      case StockTracking.ERET:
         switch (stockType) {
           case StockType.DO:
-            eaStockQtyTo += eaChange;
+            csStockQtyTo += csChange;
             break;
           case StockType.CANCEL:
-            eaStockQtyTo -= eaChange;
+            csStockQtyTo -= csChange;
             break;
         }
-        csStockQtyTo = 0; //空瓶箱产品没有CS，所以这里存储为0
+        eaStockQtyTo = 0; //空瓶箱产品没有EA，所以这里存储为0
         break;
       case StockTracking.CHKI:
         switch (stockType) {

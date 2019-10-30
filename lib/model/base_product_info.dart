@@ -47,14 +47,14 @@ class BaseProductInfo {
 
     String getPlanShowStrByType(String taskType){
       if(taskType == TaskType.EmptyReturn){
-         return plannedEa.toString();
+         return plannedCs.toString();
       }
       return '$plannedCs/$plannedEa';
    }
 
     String getActualShowStrByType(String taskType){
       if(taskType == TaskType.EmptyReturn){
-         return actualEa.toString();
+         return actualCs.toString();
       }
       return '$actualCs/$actualEa';
    }

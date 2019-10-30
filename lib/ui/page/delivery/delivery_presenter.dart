@@ -161,7 +161,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         accountNumber: accountNumber,
         deliveryType: deliveryType,
         deliveryStatus: getDeliveryStatus());
-    DeliveryModel().cacheDeliveryItemList(productList, productUnitValue);
+    DeliveryModel().cacheDeliveryItemList(productList, productUnitValue,emptyList: emptyProductList);
   }
 
   ///
@@ -190,6 +190,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   @override
   void dispose() {
     DeliveryModel().clear();
+    print('****************dispose:DeliveryModel().clear()**********************');
     super.dispose();
   }
 

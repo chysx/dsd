@@ -281,13 +281,17 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   doClickCancel(material.BuildContext context, CustomerInfo info) async {
-    if(await isDoCheckIn(context,currentShipment.no)) return;
-    if(info.status != DeliveryStatus.DEFALUT_DELIVERY && info.status != DeliveryStatus.CANCEL){
-      Fluttertoast.showToast(msg: 'The customer had been visited which can’t cancel again.');
-      return;
-    }
+//    if(await isDoCheckIn(context,currentShipment.no)) return;
+//    if(info.status != DeliveryStatus.DEFALUT_DELIVERY && info.status != DeliveryStatus.CANCEL){
+//      Fluttertoast.showToast(msg: 'The customer had been visited which can’t cancel again.');
+//      return;
+//    }
     if(info.status == DeliveryStatus.CANCEL){
       Fluttertoast.showToast(msg: 'The customer had been cancelled.');
+      return;
+    }
+    if(info.isVisitComplete) {
+      Fluttertoast.showToast(msg: 'The customer had been visited which can’t cancel again.');
       return;
     }
     showReasonDialog(context,info);

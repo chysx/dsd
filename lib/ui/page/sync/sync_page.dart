@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
@@ -5,7 +9,9 @@ import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/page/sync/sync_info.dart';
 import 'package:dsd/ui/page/sync/sync_presenter.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -25,6 +31,30 @@ class SyncPage extends StatefulWidget {
 class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
   TabController tabController;
   final List<Tab> myTabs = <Tab>[Tab(text: 'CheckOut'), Tab(text: 'Visit'), Tab(text: 'CheckIn')];
+
+  void _save(Uint8List data) {
+    String storagePath = DirectoryUtil.getStoragePath();
+    String dstDir = storagePath + '/img';
+    print('dstDir = $dstDir');
+    DirectoryUtil.createDirSync(dstDir);
+    File file = new File(dstDir + '/print.png');
+    file.writeAsBytes(data);
+  }
+
+  Future<Uint8List> _capturePng() async {
+    try {
+      RenderRepaintBoundary boundary =
+      rootWidgetKey.currentContext.findRenderObject();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      _save(pngBytes);
+      return pngBytes;//这个对象就是图片数据
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
 
   @override
   void initState() {
@@ -170,69 +200,75 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
     ;
   }
 
+  GlobalKey rootWidgetKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('SYNC'),
-        bottom: TabBar(
-          controller: tabController,
-          tabs: myTabs,
+    return RepaintBoundary(
+      key: rootWidgetKey,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('SYNC'),
+          bottom: TabBar(
+            controller: tabController,
+            tabs: myTabs,
+          ),
         ),
-      ),
-      body: Consumer<SyncPresenter>(builder: (context, presenter, _) {
-        return Column(
-          children: <Widget>[
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: <Widget>[
-                  createCheckOut(presenter),
-                  createVisit(presenter),
-                  createCheckIn(presenter),
-                ],
+        body: Consumer<SyncPresenter>(builder: (context, presenter, _) {
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: TabBarView(
+                  controller: tabController,
+                  children: <Widget>[
+                    createCheckOut(presenter),
+                    createVisit(presenter),
+                    createCheckIn(presenter),
+                  ],
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    presenter.onClickUpdate(context);
-                  },
-                  child: Text(
-                    'UPDATE',
-                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                      presenter.onClickUpdate(context);
+                      _capturePng();
+                    },
+                    child: Text(
+                      'UPDATE',
+                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                    ),
+                    color: ColorsRes.brown_normal,
                   ),
-                  color: ColorsRes.brown_normal,
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    presenter.onClickInit(context);
-                  },
-                  child: Text(
-                    'INIT',
-                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                  RaisedButton(
+                    onPressed: () {
+                      presenter.onClickInit(context);
+                    },
+                    child: Text(
+                      'INIT',
+                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                    ),
+                    color: ColorsRes.brown_normal,
                   ),
-                  color: ColorsRes.brown_normal,
-                ),
-                RaisedButton(
-                  onPressed: () {
-                    presenter.onClickUpload(context, tabController.index);
-                  },
-                  child: Text(
-                    'UPLOAD',
-                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
-                  ),
-                  color: ColorsRes.brown_normal,
-                )
-              ],
-            )
-          ],
-        );
-      }),
-      drawer: DrawerWidget(
-        page: ConstantMenu.SYNC,
+                  RaisedButton(
+                    onPressed: () {
+                      presenter.onClickUpload(context, tabController.index);
+                    },
+                    child: Text(
+                      'UPLOAD',
+                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                    ),
+                    color: ColorsRes.brown_normal,
+                  )
+                ],
+              )
+            ],
+          );
+        }),
+        drawer: DrawerWidget(
+          page: ConstantMenu.SYNC,
+        ),
       ),
     );
   }
