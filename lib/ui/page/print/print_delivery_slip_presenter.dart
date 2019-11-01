@@ -1,10 +1,21 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/delivery_model.dart';
+import 'package:dsd/ui/dialog/list_dialog.dart';
+import 'package:dsd/ui/dialog/model/key_value_info.dart';
+import 'package:dsd/ui/page/print/blue_manager.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_blue/flutter_blue.dart';
+
 
 import '../../../application.dart';
 
@@ -92,12 +103,55 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     }
   }
 
-  void onClickRight(BuildContext context) {
+  Future onClickRight(BuildContext context,GlobalKey rootWidgetKey) async {
+    await capturePng(rootWidgetKey);
+    showBlueDialog(context);
+  }
 
+  void showBlueDialog(BuildContext context){
+    BlueManager().scan((deviceList){
+      List<KeyValueInfo> list = deviceList.map((device){
+        return new KeyValueInfo()
+          ..name = device.name
+          ..value = device.name
+          ..data = device;
+      }).toList();
+
+      ListDialog.show(context,title: 'title',data: list,onSelect: (reason) async {
+        BluetoothDevice device = reason.data;
+        BlueManager().sendAddress(device.id.toString());
+      });
+    });
+
+  }
+
+  Future savePng(Uint8List data) async {
+    String storagePath = DirectoryUtil.getStoragePath();
+    String dstDir = storagePath + '/img';
+    print('dstDir = $dstDir');
+    DirectoryUtil.createDirSync(dstDir);
+    File file = new File(dstDir + '/print.png');
+    await file.writeAsBytes(data);
+  }
+
+  Future<Uint8List> capturePng(GlobalKey rootWidgetKey) async {
+    try {
+      RenderRepaintBoundary boundary =
+      rootWidgetKey.currentContext.findRenderObject();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      await savePng(pngBytes);
+      return pngBytes;//这个对象就是图片数据
+    } catch (e) {
+      print(e);
+    }
+    return null;
   }
 
   @override
   void dispose() {
+    BlueManager().cancel();
     DeliveryModel().clear();
     print('****************dispose:DeliveryModel().clear()**********************');
     super.dispose();

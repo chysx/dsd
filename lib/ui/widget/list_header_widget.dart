@@ -1,3 +1,4 @@
+import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/utils/string_util.dart';
@@ -41,7 +42,7 @@ class _ListHeaderState extends State<ListHeaderWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(10),
-      color: Colors.white,
+//      color: Colors.white,
       child: Row(
         children: _makeWidgets(),
       ),

@@ -258,6 +258,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.20.1"
+  flutter_blue:
+    dependency: "direct main"
+    description:
+      name: flutter_blue
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.2"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -464,6 +471,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.4.0"
+  protobuf:
+    dependency: transitive
+    description:
+      name: protobuf
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.14.4"
   provider:
     dependency: transitive
     description:
