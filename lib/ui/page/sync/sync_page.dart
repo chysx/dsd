@@ -32,30 +32,6 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
   TabController tabController;
   final List<Tab> myTabs = <Tab>[Tab(text: 'CheckOut'), Tab(text: 'Visit'), Tab(text: 'CheckIn')];
 
-  void _save(Uint8List data) {
-    String storagePath = DirectoryUtil.getStoragePath();
-    String dstDir = storagePath + '/img';
-    print('dstDir = $dstDir');
-    DirectoryUtil.createDirSync(dstDir);
-    File file = new File(dstDir + '/print.png');
-    file.writeAsBytes(data);
-  }
-
-  Future<Uint8List> _capturePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-      rootWidgetKey.currentContext.findRenderObject();
-      var image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
-      _save(pngBytes);
-      return pngBytes;//这个对象就是图片数据
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -197,78 +173,71 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
         )
       ],
     );
-    ;
   }
-
-  GlobalKey rootWidgetKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      key: rootWidgetKey,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('SYNC'),
-          bottom: TabBar(
-            controller: tabController,
-            tabs: myTabs,
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SYNC'),
+        bottom: TabBar(
+          controller: tabController,
+          tabs: myTabs,
         ),
-        body: Consumer<SyncPresenter>(builder: (context, presenter, _) {
-          return Column(
-            children: <Widget>[
-              Expanded(
-                child: TabBarView(
-                  controller: tabController,
-                  children: <Widget>[
-                    createCheckOut(presenter),
-                    createVisit(presenter),
-                    createCheckIn(presenter),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+      ),
+      body: Consumer<SyncPresenter>(builder: (context, presenter, _) {
+        return Column(
+          children: <Widget>[
+            Expanded(
+              child: TabBarView(
+                controller: tabController,
                 children: <Widget>[
-                  RaisedButton(
-                    onPressed: () {
-                      presenter.onClickUpdate(context);
-                      _capturePng();
-                    },
-                    child: Text(
-                      'UPDATE',
-                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
-                    ),
-                    color: ColorsRes.brown_normal,
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      presenter.onClickInit(context);
-                    },
-                    child: Text(
-                      'INIT',
-                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
-                    ),
-                    color: ColorsRes.brown_normal,
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      presenter.onClickUpload(context, tabController.index);
-                    },
-                    child: Text(
-                      'UPLOAD',
-                      style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
-                    ),
-                    color: ColorsRes.brown_normal,
-                  )
+                  createCheckOut(presenter),
+                  createVisit(presenter),
+                  createCheckIn(presenter),
                 ],
-              )
-            ],
-          );
-        }),
-        drawer: DrawerWidget(
-          page: ConstantMenu.SYNC,
-        ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                RaisedButton(
+                  onPressed: () {
+                    presenter.onClickUpdate(context);
+                  },
+                  child: Text(
+                    'UPDATE',
+                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                  ),
+                  color: ColorsRes.brown_normal,
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    presenter.onClickInit(context);
+                  },
+                  child: Text(
+                    'INIT',
+                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                  ),
+                  color: ColorsRes.brown_normal,
+                ),
+                RaisedButton(
+                  onPressed: () {
+                    presenter.onClickUpload(context, tabController.index);
+                  },
+                  child: Text(
+                    'UPLOAD',
+                    style: TextStyle(color: Colors.white, fontSize: Dimens.font_large),
+                  ),
+                  color: ColorsRes.brown_normal,
+                )
+              ],
+            )
+          ],
+        );
+      }),
+      drawer: DrawerWidget(
+        page: ConstantMenu.SYNC,
       ),
     );
   }

@@ -38,6 +38,11 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   String customerName;
   String deliveryNo;
 
+  String address;
+  String orderNo;
+  String phone;
+  String data;
+
 
   @override
   Future onEvent(PrintDeliverySlipEvent event, [dynamic data]) async {
@@ -60,6 +65,11 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     await DeliveryModel().initData(deliveryNo);
     fillProductData();
     fillEmptyProductData();
+    address = DeliveryModel().mDeliveryHeader.DeliveryAddress;
+    orderNo = DeliveryModel().mDeliveryHeader.OrderNo;
+//    phone = DeliveryModel().mDeliveryHeader.DeliveryPhone;
+    phone = '123456789';
+    data = DateUtil.getDateStrByDateTime(DateTime.now());
   }
 
   void fillProductData() {
@@ -117,6 +127,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
           ..data = device;
       }).toList();
 
+      //添加弹出框消失回调方法
       ListDialog.show(context,title: 'title',data: list,onSelect: (reason) async {
         BluetoothDevice device = reason.data;
         BlueManager().sendAddress(device.id.toString());

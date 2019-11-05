@@ -8,6 +8,7 @@ import 'package:fluintl/fluintl.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signature/signature.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -68,7 +69,6 @@ class SignatureDialog extends StatelessWidget {
                                 style: TextStyles.normal,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
-                                  hintText: IntlUtil.getString(context, Ids.userName),
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -91,7 +91,6 @@ class SignatureDialog extends StatelessWidget {
                                 style: TextStyles.normal,
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
-                                  hintText: IntlUtil.getString(context, Ids.userName),
                                   border: OutlineInputBorder(),
                                 ),
                               ),
@@ -116,12 +115,18 @@ class SignatureDialog extends StatelessWidget {
             if (signature.isNotEmpty) {
               Uint8List data = await signature.exportBytes();
               _save(data);
+              dismiss(context);
+            } else {
+              Fluttertoast.showToast(msg: 'You must signature.');
             }
+
           },
         ),
         FlatButton(
           child: Text('cancel'),
-          onPressed: () {},
+          onPressed: () {
+            dismiss(context);
+          },
         )
       ],
     );
@@ -134,5 +139,9 @@ class SignatureDialog extends StatelessWidget {
         builder: (context) {
           return new SignatureDialog();
         });
+  }
+
+  static dismiss(BuildContext context) {
+    Navigator.of(context).pop();
   }
 }

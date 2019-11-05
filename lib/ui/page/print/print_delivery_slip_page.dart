@@ -80,7 +80,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'Kunde:value',
+                                '''${presenter.accountNumber}\n${presenter.address} ''',
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Padding(
@@ -91,7 +91,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'Tel:value',
+                              presenter.phone,
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             )
                           ],
@@ -100,22 +100,22 @@ class PrintDeliverySlipPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Kunde:',
+                              'Lieferungs-Nr:',
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'Kunde:value',
+                              presenter.orderNo,
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Padding(
                               padding: EdgeInsets.only(top: 10),
                             ),
                             Text(
-                              'Tel:',
+                              'Lieferungsdatum:',
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              'Tel:value',
+                              presenter.data,
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             )
                           ],

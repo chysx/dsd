@@ -29,6 +29,7 @@ class BlueManager {
   Map<String, BluetoothDevice> map = {};
 
   void scan(Function(List<BluetoothDevice> result) call) {
+    cancel();
     map.clear();
     flutterBlue.startScan(timeout: Duration(seconds: 4));
     flutterBlue.scanResults.listen((scanResult) {

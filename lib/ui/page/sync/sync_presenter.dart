@@ -51,7 +51,15 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
   }
 
   void onClickUpdate(BuildContext context) {
-    SignatureDialog.show(context);
+//    SignatureDialog.show(context);
+    SyncManager.start(SyncType.SYNC_UPDATE, context: context, onSuccessSync: () {
+      Fluttertoast.showToast(msg: "onSuccessSync");
+      onEvent(SyncEvent.InitData);
+    }, onFailSync: (e) async {
+//      appConfigEntity.syncInitFlag = null;
+      Fluttertoast.showToast(msg: "onFailSync");
+      onEvent(SyncEvent.InitData);
+    });
   }
 
   void onClickUpload(BuildContext context, int index) {
