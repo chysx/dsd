@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/res/styles.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,14 +21,6 @@ import 'package:signature/signature.dart';
 ///  Date:         2019/8/27 11:10
 
 class SignatureDialog extends StatelessWidget {
-  void _save(Uint8List data) {
-    String storagePath = DirectoryUtil.getStoragePath();
-    String dstDir = storagePath + '/img';
-    print('dstDir = $dstDir');
-    DirectoryUtil.createDirSync(dstDir);
-    File file = new File(dstDir + '/test.png');
-    file.writeAsBytes(data);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +108,7 @@ class SignatureDialog extends StatelessWidget {
           onPressed: () async {
             if (signature.isNotEmpty) {
               Uint8List data = await signature.exportBytes();
-              _save(data);
+              FileUtil.saveFileData(data, Constant.WORK_IMG, 'signature.png');
               dismiss(context);
             } else {
               Fluttertoast.showToast(msg: 'You must signature.');

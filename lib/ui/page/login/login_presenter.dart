@@ -162,14 +162,14 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
           DateTime serviceTime = DateUtil.getDateTime(responseBean.result.serverTime);
           DateTime localTime = DateTime.now();
           Duration diff = localTime.difference(serviceTime);
-          if (diff.inMinutes.abs() > 15) {
-            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
-            CustomerDialog.show(context,
-                msg: 'Your phone time is incorrect.\n'
-                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
-                    'Server time ${responseBean.result.serverTime}');
-            return;
-          }
+//          if (diff.inMinutes.abs() > 15) {
+//            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
+//            CustomerDialog.show(context,
+//                msg: 'Your phone time is incorrect.\n'
+//                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
+//                    'Server time ${responseBean.result.serverTime}');
+//            return;
+//          }
           loginSuccess(context, syncType, responseBean, loginInputInfo);
         } else {
           AppLogManager.insert(ExceptionType.WARN.toString(), msg: response.toString());

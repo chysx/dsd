@@ -3,6 +3,7 @@ import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/common/system_config.dart';
+import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/db/manager/reason_manager.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
@@ -26,6 +27,7 @@ import 'package:dsd/ui/widget/search_widget.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uuid/uuid.dart';
@@ -262,6 +264,9 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
         '''${Routers.task_list}?${FragmentArg.TASK_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.TASK_ACCOUNT_NUMBER}=${info.accountNumber}&${FragmentArg.TASK_NO_SCAN_REASON}=''&${FragmentArg.TASK_SHIPMENT_TYPE}=${currentShipment.type}&${FragmentArg.TASK_CUSTOMER_NAME}=${info.name}&${FragmentArg.TASK_CUSTOMER_TYPE}=${info.customerType}&${FragmentArg.TASK_IS_BLOCK}=${info.block}''';
 
     Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+  }
+
+  void onClickNavigation(material.BuildContext context, CustomerInfo info) {
   }
 
   ///

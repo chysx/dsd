@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dsd/common/constant.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,14 +14,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class DbUtil{
   static void copyDb(){
+    if(!Platform.isAndroid) return;
+
+    String packageName = 'com.ebest.dsd';
     String appDocPath = DirectoryUtil.getAppDocPath();
-    String dbPath = appDocPath.substring(0,appDocPath.lastIndexOf('com.ebest.dsd')) + 'com.ebest.dsd' + '/databases/dsd.db';
-    String storagePath = DirectoryUtil.getStoragePath();
-    String dstDir = storagePath + '/db';
+    String dbPath = appDocPath.substring(0,appDocPath.lastIndexOf(packageName)) + packageName + '/databases/' + Constant.DB_NAME;
+    String dstDir = DirectoryUtil.getStoragePath(category: Constant.WORK_DB);
     print('dstDir = $dstDir');
     DirectoryUtil.createDirSync(dstDir);
     File file = File(dbPath);
-    file.copySync(dstDir + '/dsd.db');
+    file.copySync(dstDir + '/' + Constant.DB_NAME);
 
     Fluttertoast.showToast(
         msg: "copy db",

@@ -34,7 +34,7 @@ class AppLogManager {
       ..id = Uuid().v1()
       ..versionName = packageInfo.version
       ..type = type
-      ..device = await _createDeviceInfo()
+      ..device = await createDeviceInfo()
       ..content = content
       ..stackTrace = ""
       ..time = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.NORMAL)
@@ -42,12 +42,12 @@ class AppLogManager {
     return entity;
   }
 
-  static Future<String> _createDeviceInfo() async {
+  static Future<String> createDeviceInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
     StringBuffer sb = new StringBuffer();
     if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       sb..write("VersionName = ")..write(packageInfo.version)..write(";");
       sb..write("VersionCode = ")..write(packageInfo.buildNumber)..write(";");
       sb..write("SdkLevel = ")..write(androidInfo.version.sdkInt)..write(";");

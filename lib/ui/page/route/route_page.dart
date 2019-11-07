@@ -156,7 +156,7 @@ class _RouteState extends State<RoutePage> {
                   child: FlatButton(
                     padding: EdgeInsets.only(left: 0),
                     onPressed: (){
-
+                      presenter.onClickNavigation(context, info);
                     },
                     color: Colors.blue,
                     child: Text(

@@ -11,6 +11,7 @@ import 'package:dsd/model/delivery_model.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
 import 'package:dsd/ui/page/print/blue_manager.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -136,14 +137,6 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 
   }
 
-  Future savePng(Uint8List data) async {
-    String storagePath = DirectoryUtil.getStoragePath();
-    String dstDir = storagePath + '/img';
-    print('dstDir = $dstDir');
-    DirectoryUtil.createDirSync(dstDir);
-    File file = new File(dstDir + '/print.png');
-    await file.writeAsBytes(data);
-  }
 
   Future<Uint8List> capturePng(GlobalKey rootWidgetKey) async {
     try {
@@ -152,7 +145,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
       var image = await boundary.toImage(pixelRatio: 3.0);
       ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
       Uint8List pngBytes = byteData.buffer.asUint8List();
-      await savePng(pngBytes);
+      await FileUtil.saveFileData(pngBytes,Constant.WORK_IMG,'print.png');
       return pngBytes;//这个对象就是图片数据
     } catch (e) {
       print(e);

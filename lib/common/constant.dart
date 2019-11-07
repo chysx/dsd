@@ -7,6 +7,8 @@
 
 class Constant {
   static const String DB_NAME = "dsd.db";
+  static const String WORK_DB = 'db';
+  static const String WORK_IMG = 'img';
 }
 
 class ConstantMenu {
