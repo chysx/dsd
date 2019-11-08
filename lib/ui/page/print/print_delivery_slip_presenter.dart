@@ -64,8 +64,8 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 
   Future initData() async {
     await DeliveryModel().initData(deliveryNo);
-    fillProductData();
-    fillEmptyProductData();
+    await fillProductData();
+    await fillEmptyProductData();
     address = DeliveryModel().mDeliveryHeader.DeliveryAddress;
     orderNo = DeliveryModel().mDeliveryHeader.OrderNo;
 //    phone = DeliveryModel().mDeliveryHeader.DeliveryPhone;
@@ -73,7 +73,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     data = DateUtil.getDateStrByDateTime(DateTime.now());
   }
 
-  void fillProductData() {
+  Future fillProductData() async {
     productList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
@@ -84,7 +84,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 
       BaseProductInfo info = new BaseProductInfo();
       info.code = tItem.ProductCode;
-      info.name = Application.productMap[tItem.ProductCode];
+      info.name = (await Application.productMap)[tItem.ProductCode];
       if (tItem.ProductUnit == ProductUnit.CS) {
         info.plannedCs = int.tryParse(tItem.PlanQty);
         info.actualCs = int.tryParse(tItem.ActualQty);
@@ -97,7 +97,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     }
   }
 
-  void fillEmptyProductData() {
+  Future fillEmptyProductData() async {
     emptyProductList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
@@ -108,14 +108,14 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 
       BaseProductInfo info = new BaseProductInfo();
       info.code = tItem.ProductCode;
-      info.name = Application.productMap[tItem.ProductCode];
+      info.name = (await Application.productMap)[tItem.ProductCode];
       info.actualCs = int.tryParse(tItem.ActualQty);
       emptyProductList.add(info);
     }
   }
 
   Future onClickRight(BuildContext context,GlobalKey rootWidgetKey) async {
-    await capturePng(rootWidgetKey);
+    await savePrintPng(rootWidgetKey);
     showBlueDialog(context);
   }
 
@@ -138,7 +138,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   }
 
 
-  Future<Uint8List> capturePng(GlobalKey rootWidgetKey) async {
+  Future<Uint8List> savePrintPng(GlobalKey rootWidgetKey) async {
     try {
       RenderRepaintBoundary boundary =
       rootWidgetKey.currentContext.findRenderObject();
@@ -151,6 +151,14 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
       print(e);
     }
     return null;
+  }
+
+  Uint8List getCustomerSign() {
+    return FileUtil.readFileData(Constant.WORK_IMG, 'signature.png');
+  }
+
+  Uint8List getDriverSign() {
+    return FileUtil.readFileData(Constant.WORK_IMG, 'signature2.png');
   }
 
   @override

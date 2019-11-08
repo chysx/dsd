@@ -82,7 +82,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                 padding: const EdgeInsets.only(top: 30),
                 child: Center(
                   child: Image.asset(
-                    'assets/imgs/login_logo.png',
+                    'assets/imgs/login_logo_960.png',
                     height: 100,
                     fit: BoxFit.cover,
                   ),
@@ -179,10 +179,5 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
       ),
     );
   }
-
-//  color: Color(0xFFFDF2E4),
-//  child: Image.asset('assets/imgs/login_logo.png',
-//  height: 100,
-//  fit: BoxFit.cover,),
 
 }

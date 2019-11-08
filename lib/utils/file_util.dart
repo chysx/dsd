@@ -12,7 +12,8 @@ import 'package:flustars/flustars.dart';
 ///  Date:         2019-11-07 14:23
 
 class FileUtil {
-  static Future saveFileData(Uint8List data,String fileDir,String fileName) async {
+
+  static String getFilePath(String fileDir) {
     String dstDir;
     if(Platform.isAndroid){
       dstDir = DirectoryUtil.getStoragePath(category: fileDir);
@@ -20,11 +21,29 @@ class FileUtil {
       dstDir = DirectoryUtil.getAppDocPath(category: fileDir);
     }
 
-    if(dstDir == null) return;
-
     Application.logger.i('dstDir = $dstDir');
+
+    return dstDir;
+
+  }
+
+  static Future saveFileData(Uint8List data,String fileDir,String fileName) async {
+    String dstDir = getFilePath(fileDir);
+    if(dstDir == null) return;
     DirectoryUtil.createDirSync(dstDir);
     File file = new File(dstDir + '/' + fileName);
     await file.writeAsBytes(data);
+  }
+
+  static Uint8List readFileData(String fileDir,String fileName) {
+    String dstDir = getFilePath(fileDir);
+    Uint8List result;
+    try{
+      File file = new File(dstDir + '/' + fileName);
+      result =  file.readAsBytesSync();
+    }catch(e) {
+      Application.logger.e(e.toString());
+    }
+    return result;
   }
 }

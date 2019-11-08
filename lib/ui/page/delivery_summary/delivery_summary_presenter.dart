@@ -54,11 +54,11 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
     if(!DeliveryModel().isInitData()){
       await DeliveryModel().initData(deliveryNo);
     }
-    fillProductData();
-    fillEmptyProductData();
+    await fillProductData();
+    await fillEmptyProductData();
   }
 
-  void fillProductData() {
+  Future fillProductData() async {
     productList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
@@ -69,7 +69,7 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
 
       BaseProductInfo info = new BaseProductInfo();
       info.code = tItem.ProductCode;
-      info.name = Application.productMap[tItem.ProductCode];
+      info.name = (await Application.productMap)[tItem.ProductCode];
       if (tItem.ProductUnit == ProductUnit.CS) {
         info.plannedCs = int.tryParse(tItem.PlanQty);
         info.actualCs = int.tryParse(tItem.ActualQty);
@@ -82,7 +82,7 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
     }
   }
 
-  void fillEmptyProductData() {
+  Future fillEmptyProductData() async {
     emptyProductList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
@@ -93,7 +93,7 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
 
       BaseProductInfo info = new BaseProductInfo();
       info.code = tItem.ProductCode;
-      info.name = Application.productMap[tItem.ProductCode];
+      info.name = (await Application.productMap)[tItem.ProductCode];
       info.actualCs = int.tryParse(tItem.ActualQty);
       emptyProductList.add(info);
     }

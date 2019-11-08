@@ -19,7 +19,8 @@ import '../../application.dart';
 class DrawerWidget extends StatelessWidget {
   final List<MenuInfo> menuInfoList = [];
   final String page;
-  DrawerWidget({this.page,Key key}): super(key: key) {
+
+  DrawerWidget({this.page, Key key}) : super(key: key) {
     MenuInfo menuInfo1 = new MenuInfo();
     menuInfo1
       ..page = ConstantMenu.CHECK_OUT
@@ -66,9 +67,9 @@ class DrawerWidget extends StatelessWidget {
     _setCurMenuInfo();
   }
 
-  _setCurMenuInfo(){
-    for(MenuInfo menuInfo in menuInfoList){
-      if(menuInfo.page == page){
+  _setCurMenuInfo() {
+    for (MenuInfo menuInfo in menuInfoList) {
+      if (menuInfo.page == page) {
         menuInfo.isSelect = true;
       }
     }
@@ -81,26 +82,26 @@ class DrawerWidget extends StatelessWidget {
 
   void _onTap(BuildContext context, String goPage) {
     print('page = $goPage');
-    if(page != goPage){
-      if(goPage == ConstantMenu.CHECK_OUT){
-        Application.router
-            .navigateTo(context, Routers.check_out_shipment, replace: true, transition: TransitionType.inFromLeft);
+    if (page != goPage) {
+      if (goPage == ConstantMenu.CHECK_OUT) {
+        Application.router.navigateTo(context, Routers.check_out_shipment,
+            replace: true, transition: TransitionType.inFromLeft);
       }
-      if(goPage == ConstantMenu.CHECK_IN){
-        Application.router
-            .navigateTo(context, Routers.check_in_shipment, replace: true, transition: TransitionType.inFromLeft);
+      if (goPage == ConstantMenu.CHECK_IN) {
+        Application.router.navigateTo(context, Routers.check_in_shipment,
+            replace: true, transition: TransitionType.inFromLeft);
       }
-      if(goPage == ConstantMenu.ROUTE){
-        Application.router
-            .navigateTo(context, Routers.route, replace: true, transition: TransitionType.inFromLeft);
+      if (goPage == ConstantMenu.ROUTE) {
+        Application.router.navigateTo(context, Routers.route,
+            replace: true, transition: TransitionType.inFromLeft);
       }
-      if(goPage == ConstantMenu.SYNC){
-        Application.router
-            .navigateTo(context, Routers.sync, replace: true, transition: TransitionType.inFromLeft);
+      if (goPage == ConstantMenu.SYNC) {
+        Application.router.navigateTo(context, Routers.sync,
+            replace: true, transition: TransitionType.inFromLeft);
       }
-      if(goPage == ConstantMenu.SETTING){
-        Application.router
-            .navigateTo(context, Routers.settings, replace: true, transition: TransitionType.inFromLeft);
+      if (goPage == ConstantMenu.SETTING) {
+        Application.router.navigateTo(context, Routers.settings,
+            replace: true, transition: TransitionType.inFromLeft);
       }
     }
   }
@@ -111,7 +112,7 @@ class DrawerWidget extends StatelessWidget {
         child: Container(
           color: Colors.blue,
           child: Stack(
-            alignment: FractionalOffset.bottomLeft,
+            alignment: FractionalOffset.centerLeft,
             children: <Widget>[
               Container(
                 height: 80,
@@ -120,21 +121,17 @@ class DrawerWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Image.asset('assets/imgs/icon_user.png'),
-                    Container(
-                      margin: EdgeInsets.only(left: 20),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Phil',
-                            style: TextStyles.normal,
-                          ),
-                          Text(
-                            'phil@ebest.mobile',
-                            style: TextStyles.small,
-                          )
-                        ],
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                    ),
+                    Image.asset('assets/imgs/login_logo_480.png'),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                    ),
+                    Expanded(
+                      child: Text(
+                        Application.user.userName,
+                        style: TextStyles.normal,
                       ),
                     )
                   ],
@@ -146,7 +143,7 @@ class DrawerWidget extends StatelessWidget {
   }
 
   List<Widget> _buildContent(BuildContext context) {
-    return menuInfoList.map((menu){
+    return menuInfoList.map((menu) {
       return Container(
         color: menu.isSelect ? Colors.blue : Colors.grey,
         child: ListTile(
@@ -162,7 +159,6 @@ class DrawerWidget extends StatelessWidget {
       );
     }).toList();
   }
-
 
   Widget _buildDrawer(BuildContext context) {
     List<Widget> list = [];

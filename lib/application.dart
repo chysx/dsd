@@ -29,16 +29,11 @@ class Application {
   static DeviceInfo deviceInfo;
   static User user;
   static AppConfigEntity appConfigEntity;
-  static Map<String,String> productMap = {};
+  static Map<String,String> _productMap = {};
 
   static void install() {
     new DbHelper();
-    deviceInfo = new DeviceInfo();
-    Future.delayed(new Duration(seconds: 5),(){
-      database = new DbHelper().database;
-      print('database = $database');
-      makeProductMap();
-    });
+    new DeviceInfo();
     logger = new Log().logger;
     httpService = new HttpService().dio;
     router = new Router();
@@ -46,11 +41,18 @@ class Application {
     user = new User();
   }
 
-  static Future makeProductMap() async {
-    productMap.clear();
+  static void initDataBase() {
+    database = new DbHelper().database;
+    print('database = $database');
+  }
+
+  static Future<Map<String, String>> get productMap async {
+    if(_productMap.length > 0) return _productMap;
     List<MD_Product_Entity> list = await database.productDao.findAll();
     for(MD_Product_Entity entity in list){
-      productMap[entity.ProductCode] = entity.Name;
+      _productMap[entity.ProductCode] = entity.Name;
     }
+    return _productMap;
   }
+
 }

@@ -45,7 +45,7 @@ class VisitSummaryDetailPresenter extends EventNotifier<VisitSummaryDetailEvent>
     for(DSD_T_DeliveryItem_Entity entity in list){
       BaseProductInfo info = new BaseProductInfo();
       info.code = entity.ProductCode;
-      info.name = Application.productMap[info.code];
+      info.name = (await Application.productMap)[info.code];
       if(entity.ProductUnit == ProductUnit.CS){
         info.plannedCs = int.tryParse(entity.PlanQty);
         info.actualCs = int.tryParse(entity.ActualQty);

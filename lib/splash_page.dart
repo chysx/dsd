@@ -14,7 +14,8 @@ import 'application.dart';
 class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(new Duration(seconds: 6),(){
+    Future.delayed(new Duration(seconds: 3),(){
+      Application.initDataBase();
       Application.router
           .navigateTo(context, Routers.root, replace:true,transition: TransitionType.inFromLeft);
     });
@@ -23,7 +24,7 @@ class SplashPage extends StatelessWidget {
         color: Color(0xFFFDF2E4),
         child: Center(
           child: Image.asset(
-            'assets/imgs/login_logo.png',
+            'assets/imgs/login_logo_960.png',
             height: 100,
             fit: BoxFit.cover,
           ),

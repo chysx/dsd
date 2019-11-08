@@ -95,7 +95,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     for (DSD_M_DeliveryItem_Entity mItem in mList) {
       BaseProductInfo info = new BaseProductInfo();
       info.code = mItem.ProductCode;
-      info.name = Application.productMap[mItem.ProductCode];
+      info.name = (await Application.productMap)[mItem.ProductCode];
       if (mItem.ProductUnit == ProductUnit.CS) {
         info.plannedCs = int.tryParse(mItem.PlanQty);
         info.actualCs = int.tryParse(mItem.PlanQty);

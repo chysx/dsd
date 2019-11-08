@@ -17,6 +17,16 @@ import 'package:provider/provider.dart';
 class PrintDeliverySlipPage extends StatelessWidget {
   final GlobalKey rootWidgetKey = GlobalKey();
 
+  Widget getCustomerSign(PrintDeliverySlipPresenter presenter) {
+    var sign = presenter.getCustomerSign();
+    return sign != null ? Image.memory(sign) : Container();
+  }
+
+  Widget getDriveSign(PrintDeliverySlipPresenter presenter) {
+    var sign = presenter.getDriverSign();
+    return sign != null ? Image.memory(sign) : Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +59,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Image.asset(
-                          'assets/imgs/login_logo.png',
+                          'assets/imgs/login_logo_480.png',
                           height: 50,
                           fit: BoxFit.cover,
                         ),
@@ -242,6 +252,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10),
                     ),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Expanded(
                           child: Column(
@@ -250,7 +261,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(top: 10),
                               ),
-                              Image.asset('assets/imgs/pick_slip.png'),
+                              getCustomerSign(presenter),
                             ],
                           ),
                         ),
@@ -261,7 +272,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(top: 10),
                               ),
-                              Image.asset('assets/imgs/pick_slip.png'),
+                              getDriveSign(presenter),
                             ],
                           ),
                         ),

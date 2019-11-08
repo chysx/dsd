@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:android_intent/android_intent.dart';
 import 'package:dsd/application.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/manager/app_log_manager.dart';
@@ -15,6 +18,7 @@ import 'package:dsd/ui/page/login/login_request_bean.dart';
 import 'package:dsd/ui/page/login/login_status.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
+import 'package:dsd/utils/device_info.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
@@ -159,19 +163,33 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
         response = ${response.data}''');
         LoginResponseBean responseBean = LoginResponseBean.fromJson(response.data);
         if (responseBean.status == 1) {
+
+
           DateTime serviceTime = DateUtil.getDateTime(responseBean.result.serverTime);
           DateTime localTime = DateTime.now();
           Duration diff = localTime.difference(serviceTime);
-//          if (diff.inMinutes.abs() > 15) {
-//            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
-//            CustomerDialog.show(context,
-//                msg: 'Your phone time is incorrect.\n'
-//                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
-//                    'Server time ${responseBean.result.serverTime}');
-//            return;
-//          }
+          if (diff.inMinutes.abs() > 15) {
+            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
+            CustomerDialog.show(context,
+                msg: 'Your phone time is incorrect.\n'
+                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
+                    'Server time ${responseBean.result.serverTime}',
+                onConfirm: (){
+                  if(Platform.isAndroid){
+                    AndroidIntent intent = const AndroidIntent(
+                      action: 'android.settings.DATE_SETTINGS',
+                    );
+                    intent.launch();
+                  }
+                });
+            return;
+          }
           loginSuccess(context, syncType, responseBean, loginInputInfo);
+
+
         } else {
+
+
           AppLogManager.insert(ExceptionType.WARN.toString(), msg: response.toString());
           responseStatus = LoginResponseStatus.OnLineError;
           int exceptionCode = responseBean.exceptionCode;
@@ -213,6 +231,8 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
           }
 
           CustomerDialog.show(context, msg: 'Login failed. Please check your network and try again.');
+
+
         }
       }, onError: (e) {
         LoadingDialog.dismiss(context);
@@ -253,7 +273,7 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
         ..userName = responseBean.result.userName
         ..password = inputInfo.password
         ..syncInitFlag = syncType.toString()
-        ..version = Application.deviceInfo.versionName
+        ..version = DeviceInfo().versionName
         ..lastUpdateTime = DateUtil.getNowDateStr()
         ..host = settingInfo.host
         ..port = settingInfo.port
@@ -267,7 +287,7 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
         ..userName = responseBean.result.userName
         ..password = inputInfo.password
         ..syncInitFlag = syncType.toString()
-        ..version = Application.deviceInfo.versionName
+        ..version = DeviceInfo().versionName
         ..lastUpdateTime = DateUtil.getNowDateStr();
       await AppConfigManager.update(entity);
     }

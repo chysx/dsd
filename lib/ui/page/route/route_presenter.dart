@@ -3,17 +3,14 @@ import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/common/system_config.dart';
-import 'package:dsd/db/manager/app_log_manager.dart';
 import 'package:dsd/db/manager/reason_manager.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
-import 'package:dsd/db/table/sync_upload_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
-import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/res/strings.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
@@ -22,15 +19,17 @@ import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
+import 'package:dsd/ui/dialog/signature_dialog.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
+import 'package:dsd/utils/map_launch_util.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:fluintl/fluintl.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:uuid/uuid.dart';
+import 'package:android_intent/android_intent.dart';
 
 import 'customer_info.dart';
 
@@ -267,6 +266,8 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   void onClickNavigation(material.BuildContext context, CustomerInfo info) {
+    MapLaunchUtil.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
+
   }
 
   ///
