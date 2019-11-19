@@ -41,13 +41,13 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    deliveryNo = params[FragmentArg.DELIVERY_NO].first;
-    shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
-    accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
-    customerName = params[FragmentArg.TASK_CUSTOMER_NAME].first;
-    deliveryType = params[FragmentArg.DELIVERY_TYPE].first;
-    this.isReadOnly = params[FragmentArg.DELIVERY_SUMMARY_READONLY].first == ReadyOnly.TRUE;
+  void setBundle(Map<String,dynamic> bundle){
+    deliveryNo = bundle[FragmentArg.DELIVERY_NO];
+    shipmentNo = bundle[FragmentArg.DELIVERY_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.DELIVERY_ACCOUNT_NUMBER];
+    customerName = bundle[FragmentArg.TASK_CUSTOMER_NAME];
+    deliveryType = bundle[FragmentArg.DELIVERY_TYPE];
+    this.isReadOnly = bundle[FragmentArg.DELIVERY_SUMMARY_READONLY] == ReadyOnly.TRUE;
   }
 
   Future initData() async {

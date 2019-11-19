@@ -43,7 +43,7 @@ class ListDialog<T> extends StatelessWidget {
   static show<T>(BuildContext context, {String title,List<KeyValueInfo<T>> data,Function(KeyValueInfo<T> info) onSelect}) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        barrierDismissible: true,
         builder: (context) {
           return new ListDialog(title: title,data: data,onSelect: onSelect,);
         });

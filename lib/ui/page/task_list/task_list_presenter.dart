@@ -7,17 +7,14 @@ import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/manager/visit_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
-import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
 import 'package:dsd/db/table/entity/md_dictionary_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/visit_model.dart';
-import 'package:dsd/route/routers.dart';
-import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/route/config_info.dart';
 import 'package:dsd/ui/page/task_list/config_info.dart';
 import 'package:dsd/ui/page/task_list/task_list_info.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart' as material;
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -60,14 +57,15 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     await fillTaskListData();
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.TASK_SHIPMENT_NO][0];
-    accountNumber = params[FragmentArg.TASK_ACCOUNT_NUMBER][0];
-    noScanReason = params[FragmentArg.TASK_NO_SCAN_REASON][0];
-    shipmentType = params[FragmentArg.TASK_SHIPMENT_TYPE][0];
-    customerName = params[FragmentArg.TASK_CUSTOMER_NAME][0];
-    customerType = params[FragmentArg.TASK_CUSTOMER_TYPE][0];
-    block = params[FragmentArg.TASK_IS_BLOCK][0];
+
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.TASK_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.TASK_ACCOUNT_NUMBER];
+    noScanReason = bundle[FragmentArg.TASK_NO_SCAN_REASON];
+    shipmentType = bundle[FragmentArg.TASK_SHIPMENT_TYPE];
+    customerName = bundle[FragmentArg.TASK_CUSTOMER_NAME];
+    customerType = bundle[FragmentArg.TASK_CUSTOMER_TYPE];
+    block = bundle[FragmentArg.TASK_IS_BLOCK];
   }
 
   Future initConfig() async {
@@ -277,20 +275,30 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
         break;
     }
 
-    String page = (readOnly == ReadyOnly.TRUE ? Routers.delivery_summary : Routers.delivery);
-    String path =
-        '''$page?${FragmentArg.DELIVERY_NO}=${info.no}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=${info.type}&${FragmentArg.DELIVERY_SUMMARY_READONLY}=$readOnly''';
+    var page = (readOnly == ReadyOnly.TRUE ? PageName.delivery_summary : PageName.delivery);
 
-    await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_NO: info.no,
+      FragmentArg.DELIVERY_SHIPMENT_NO: shipmentNo,
+      FragmentArg.DELIVERY_ACCOUNT_NUMBER: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+      FragmentArg.DELIVERY_TYPE: info.type,
+      FragmentArg.DELIVERY_SUMMARY_READONLY: readOnly,
+    };
+    await material.Navigator.pushNamed(context, page.toString(),arguments: bundle);
 
     onResume();
+
   }
 
   doDocument(material.BuildContext context, TaskInfo info) {
-    String path =
-        '''${Routers.document}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName''';
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_SHIPMENT_NO: shipmentNo,
+      FragmentArg.DELIVERY_ACCOUNT_NUMBER: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+    };
+    material.Navigator.pushNamed(context, PageName.document.toString(),arguments: bundle);
 
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
   void onResume() {
@@ -298,18 +306,24 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   }
 
   void doProfile(material.BuildContext context) {
-    String path =
-        '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
-    ''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: shipmentNo,
+      FragmentArg.ROUTE_SHIPMENT_NO: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+    };
+    material.Navigator.pushNamed(context, PageName.profile.toString(),arguments: bundle);
+
   }
 
   void onClickRight(material.BuildContext context) {
     if (!isPass(context)) return;
-    String path =
-        '''${Routers.visit_summary}?${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
-    ''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_SHIPMENT_NO: shipmentNo,
+      FragmentArg.DELIVERY_ACCOUNT_NUMBER: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+    };
+    material.Navigator.pushNamed(context, PageName.visit_summary.toString(),arguments: bundle);
+
   }
 
   bool isPass(material.BuildContext context) {

@@ -12,6 +12,7 @@ import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/res/strings.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
@@ -94,10 +95,10 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
+  void setBundle(Map<String,dynamic> bundle){
     try {
-      shipmentNoByCheckoutPage = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
-    } catch (e) {}
+      shipmentNoByCheckoutPage = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
+    }catch (e) {}
   }
 
   Future initData() async {
@@ -246,23 +247,36 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   void onClickPlan(material.BuildContext context, CustomerInfo info) {
-    String path =
-        '''${Routers.route_plan}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: currentShipment.no,
+      FragmentArg.ROUTE_ACCOUNT_NUMBER: info.accountNumber,
+    };
+    material.Navigator.pushNamed(context, PageName.route_plan.toString(),arguments: bundle);
+
   }
 
   void onClickProfile(material.BuildContext context, CustomerInfo info) {
-    String path =
-        '''${Routers.profile}?${FragmentArg.ROUTE_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.ROUTE_ACCOUNT_NUMBER}=${info.accountNumber}''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: currentShipment.no,
+      FragmentArg.ROUTE_ACCOUNT_NUMBER: info.accountNumber,
+    };
+    material.Navigator.pushNamed(context, PageName.profile.toString(),arguments: bundle);
+
   }
 
   Future onClickStartCall(material.BuildContext context, CustomerInfo info) async {
     if (await isDoCheckIn(context, currentShipment.no)) return;
-    String path =
-        '''${Routers.task_list}?${FragmentArg.TASK_SHIPMENT_NO}=${currentShipment.no}&${FragmentArg.TASK_ACCOUNT_NUMBER}=${info.accountNumber}&${FragmentArg.TASK_NO_SCAN_REASON}=''&${FragmentArg.TASK_SHIPMENT_TYPE}=${currentShipment.type}&${FragmentArg.TASK_CUSTOMER_NAME}=${info.name}&${FragmentArg.TASK_CUSTOMER_TYPE}=${info.customerType}&${FragmentArg.TASK_IS_BLOCK}=${info.block}''';
+    Map<String,dynamic> bundle = {
+      FragmentArg.TASK_SHIPMENT_NO: currentShipment.no,
+      FragmentArg.TASK_ACCOUNT_NUMBER: info.accountNumber,
+      FragmentArg.TASK_NO_SCAN_REASON: '',
+      FragmentArg.TASK_SHIPMENT_TYPE: currentShipment.type,
+      FragmentArg.TASK_CUSTOMER_NAME: info.name,
+      FragmentArg.TASK_CUSTOMER_TYPE: info.customerType,
+      FragmentArg.TASK_IS_BLOCK: info.block,
+    };
+    material.Navigator.pushNamed(context, PageName.task_list.toString(),arguments: bundle);
 
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
   void onClickNavigation(material.BuildContext context, CustomerInfo info) {

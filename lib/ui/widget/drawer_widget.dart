@@ -1,9 +1,7 @@
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/route/routers.dart';
-import 'package:dsd/ui/dialog/customer_dialog.dart';
-import 'package:fluro/fluro.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -84,24 +82,23 @@ class DrawerWidget extends StatelessWidget {
     print('page = $goPage');
     if (page != goPage) {
       if (goPage == ConstantMenu.CHECK_OUT) {
-        Application.router.navigateTo(context, Routers.check_out_shipment,
-            replace: true, transition: TransitionType.inFromLeft);
+        Navigator.pushReplacementNamed(context, PageName.check_out_shipment.toString(),arguments: <String,dynamic>{});
       }
       if (goPage == ConstantMenu.CHECK_IN) {
-        Application.router.navigateTo(context, Routers.check_in_shipment,
-            replace: true, transition: TransitionType.inFromLeft);
+        Navigator.pushReplacementNamed(context, PageName.check_in_shipment.toString(),arguments: <String,dynamic>{});
+
       }
       if (goPage == ConstantMenu.ROUTE) {
-        Application.router.navigateTo(context, Routers.route,
-            replace: true, transition: TransitionType.inFromLeft);
+        Navigator.pushReplacementNamed(context, PageName.route.toString(),arguments: <String,dynamic>{});
+
       }
       if (goPage == ConstantMenu.SYNC) {
-        Application.router.navigateTo(context, Routers.sync,
-            replace: true, transition: TransitionType.inFromLeft);
+        Navigator.pushReplacementNamed(context, PageName.sync.toString(),arguments: <String,dynamic>{});
+
       }
       if (goPage == ConstantMenu.SETTING) {
-        Application.router.navigateTo(context, Routers.settings,
-            replace: true, transition: TransitionType.inFromLeft);
+        Navigator.pushReplacementNamed(context, PageName.settings.toString(),arguments: <String,dynamic>{});
+
       }
     }
   }

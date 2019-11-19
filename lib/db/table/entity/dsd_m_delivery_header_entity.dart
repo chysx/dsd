@@ -46,6 +46,10 @@ class DSD_M_DeliveryHeader_Entity {
   String OnlineDiscount;
   String OtherDiscount;
   String APDiscount;
+  String PickupEmpties__c;
+  String EmptyRefund__c;
+  String ArrivalTime__c;
+  String FinishTime__c;
 
 
   DSD_M_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.ShipmentNo, this.DeliveryType, this.DeliveryStatus,
@@ -54,7 +58,7 @@ class DSD_M_DeliveryHeader_Entity {
       this.PlanDeliveryQty, this.DeliveryAddress, this.Contact, this.Telephone, this.BasePrice, this.Tax, this.Tax2,
       this.NetPrice, this.Deposit, this.DataSource, this.DeliveryNote, this.Discount, this.MarketDeveloper,
       this.DeliverySequence, this.DeliveryTimeSlotFrom, this.DeliveryTimeSlotTo, this.OnlineDiscount,
-      this.OtherDiscount, this.APDiscount);
+      this.OtherDiscount, this.APDiscount,this.PickupEmpties__c,this.EmptyRefund__c,this.ArrivalTime__c,this.FinishTime__c);
 
 
   static Map<String, dynamic> toJson(
@@ -94,6 +98,10 @@ class DSD_M_DeliveryHeader_Entity {
         'OnlineDiscount': instance.OnlineDiscount,
         'OtherDiscount': instance.OtherDiscount,
         'APDiscount': instance.APDiscount,
+        'PickupEmpties__c': instance.PickupEmpties__c,
+        'EmptyRefund__c': instance.EmptyRefund__c,
+        'ArrivalTime__c': instance.ArrivalTime__c,
+        'FinishTime__c': instance.FinishTime__c,
       };
 
   DSD_M_DeliveryHeader_Entity.Empty();

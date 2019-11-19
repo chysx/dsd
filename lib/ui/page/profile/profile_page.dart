@@ -37,10 +37,11 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
               style: TextStyles.normal,
             ),
             Spacer(),
-            Text(
+            Expanded(child:             Text(
               item.value,
               style: TextStyles.normal,
-            ),
+            ),)
+
           ],
         ),
       );

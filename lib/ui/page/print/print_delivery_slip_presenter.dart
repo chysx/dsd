@@ -55,11 +55,11 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    deliveryNo = params[FragmentArg.DELIVERY_NO].first;
-    shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
-    accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
-    customerName = params[FragmentArg.TASK_CUSTOMER_NAME].first;
+  void setBundle(Map<String,dynamic> bundle){
+    deliveryNo = bundle[FragmentArg.DELIVERY_NO];
+    shipmentNo = bundle[FragmentArg.DELIVERY_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.DELIVERY_ACCOUNT_NUMBER];
+    customerName = bundle[FragmentArg.TASK_CUSTOMER_NAME];
   }
 
   Future initData() async {

@@ -56,8 +56,9 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
+
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
   }
 
   Future initData() async {

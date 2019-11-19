@@ -1,5 +1,4 @@
-import 'package:dsd/route/routers.dart';
-import 'package:fluro/fluro.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:flutter/material.dart';
 
 import 'application.dart';
@@ -16,8 +15,9 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(new Duration(seconds: 3),(){
       Application.initDataBase();
-      Application.router
-          .navigateTo(context, Routers.root, replace:true,transition: TransitionType.inFromLeft);
+      Map<String,dynamic> bundle = {};
+      Navigator.pushReplacementNamed(context, PageName.root.toString(),arguments: bundle);
+
     });
     return Scaffold(
       body: Container(

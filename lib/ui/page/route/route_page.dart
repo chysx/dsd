@@ -95,15 +95,6 @@ class _RouteState extends State<RoutePage> {
                 presenter.onEvent(RouteEvent.SelectShipment, newValue);
               },
               items: makeDropList(presenter)),
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.map,
-                color: ColorsRes.brown_normal,
-              ),
-            ),
-          ),
         ],
       ),
     );

@@ -1,11 +1,8 @@
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
-import 'package:dsd/route/routers.dart';
-import 'package:fluro/fluro.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:flutter/material.dart';
-
-import '../../../application.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -32,8 +29,8 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
   }
 
   Future initData() async {
@@ -52,9 +49,11 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
   }
 
   Future onClickItem(BuildContext context,String shipmentNo) async {
-    String path =
-    '''${Routers.check_in_inventory}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo''';
-    await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: shipmentNo,
+    };
+    await Navigator.pushNamed(context, PageName.check_in_inventory.toString(),arguments: bundle);
 
     onResume();
   }

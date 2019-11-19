@@ -2,6 +2,7 @@ import 'package:dsd/application.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
@@ -33,8 +34,9 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.ROUTE_SHIPMENT_NO].first;
+
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
   }
 
   Future initData() async {
@@ -53,8 +55,11 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
   }
 
   Future onClickItem(BuildContext context, String shipmentNo) async {
-    String path = '''${Routers.check_out_inventory}?${FragmentArg.ROUTE_SHIPMENT_NO}=$shipmentNo''';
-    await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: shipmentNo,
+    };
+    await Navigator.pushNamed(context, PageName.check_out_inventory.toString(),arguments: bundle);
 
     onResume();
   }
@@ -84,9 +89,9 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
       Navigator.of(context).pop();
     }, onFailSync: (e) async {
       CustomerDialog.show(context, msg: 'upload fail', onConfirm: () {
-//        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       }, onCancel: () {
-//        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       });
     });
   }

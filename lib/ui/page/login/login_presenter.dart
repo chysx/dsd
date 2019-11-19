@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
 import 'package:dsd/application.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/manager/app_log_manager.dart';
@@ -8,7 +5,7 @@ import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/exception/exception_type.dart';
 import 'package:dsd/net/api_service.dart';
-import 'package:dsd/route/routers.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
@@ -20,7 +17,6 @@ import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/utils/device_info.dart';
 import 'package:dsd/utils/string_util.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:package_info/package_info.dart';
@@ -108,11 +104,15 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
   }
 
   Future onClickCheckout(BuildContext context) async {
-    await Application.router.navigateTo(context, Routers.check_out_shipment, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {};
+    await Navigator.pushNamed(context, PageName.check_out_shipment.toString(),arguments: bundle);
+
   }
 
   Future onClickSetting(BuildContext context) async {
-    String result = await Application.router.navigateTo(context, Routers.settings, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {};
+    String result = await Navigator.pushNamed(context, PageName.settings.toString(),arguments: bundle);
+
     if(result == 'refresh'){
       fillAppConfigEntity();
     }
@@ -148,7 +148,7 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
       loginRequestBean
         ..userName = loginInputInfo.userCode
         ..password = loginInputInfo.password
-        ..versionNum = '0.1.0.93'
+        ..versionNum = '0.1.0.102'
         ..isChangePwd = false
         ..newPassword = ""
         ..platForm = "Android";
@@ -168,22 +168,22 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
           DateTime serviceTime = DateUtil.getDateTime(responseBean.result.serverTime);
           DateTime localTime = DateTime.now();
           Duration diff = localTime.difference(serviceTime);
-          if (diff.inMinutes.abs() > 15) {
-            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
-            CustomerDialog.show(context,
-                msg: 'Your phone time is incorrect.\n'
-                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
-                    'Server time ${responseBean.result.serverTime}',
-                onConfirm: (){
-                  if(Platform.isAndroid){
-                    AndroidIntent intent = const AndroidIntent(
-                      action: 'android.settings.DATE_SETTINGS',
-                    );
-                    intent.launch();
-                  }
-                });
-            return;
-          }
+//          if (diff.inMinutes.abs() > 15) {
+//            responseStatus = LoginResponseStatus.LocalServeTimeDifference;
+//            CustomerDialog.show(context,
+//                msg: 'Your phone time is incorrect.\n'
+//                    'Phone time ${DateUtil.getDateStrByDateTime(new DateTime.now())}\n'
+//                    'Server time ${responseBean.result.serverTime}',
+//                onConfirm: (){
+//                  if(Platform.isAndroid){
+//                    AndroidIntent intent = const AndroidIntent(
+//                      action: 'android.settings.DATE_SETTINGS',
+//                    );
+//                    intent.launch();
+//                  }
+//                });
+//            return;
+//          }
           loginSuccess(context, syncType, responseBean, loginInputInfo);
 
 

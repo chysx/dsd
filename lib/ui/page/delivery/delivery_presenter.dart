@@ -13,6 +13,7 @@ import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/delivery_model.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/model/visit_model.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -54,12 +55,12 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    deliveryNo = params[FragmentArg.DELIVERY_NO].first;
-    shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
-    accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
-    customerName = params[FragmentArg.TASK_CUSTOMER_NAME].first;
-    deliveryType = params[FragmentArg.DELIVERY_TYPE].first;
+  void setBundle(Map<String,dynamic> bundle){
+    deliveryNo = bundle[FragmentArg.DELIVERY_NO];
+    shipmentNo = bundle[FragmentArg.DELIVERY_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.DELIVERY_ACCOUNT_NUMBER];
+    customerName = bundle[FragmentArg.TASK_CUSTOMER_NAME];
+    deliveryType = bundle[FragmentArg.DELIVERY_TYPE];
   }
 
   Future initData() async {
@@ -83,6 +84,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         productUnitValue = ProductUnit.EA;
         break;
     }
+
   }
 
   Future fillProductData() async {
@@ -181,10 +183,16 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
 
   void onClickRight(BuildContext context) {
     cacheData();
-    String path =
-        '''${Routers.delivery_summary}?${FragmentArg.DELIVERY_NO}=$deliveryNo&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName&${FragmentArg.DELIVERY_TYPE}=$deliveryType&${FragmentArg.DELIVERY_SUMMARY_READONLY}=${false}
-    ''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_NO: deliveryNo,
+      FragmentArg.DELIVERY_SHIPMENT_NO: shipmentNo,
+      FragmentArg.DELIVERY_ACCOUNT_NUMBER: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+      FragmentArg.DELIVERY_TYPE: deliveryType,
+      FragmentArg.DELIVERY_SUMMARY_READONLY: false,
+    };
+    Navigator.pushNamed(context, PageName.delivery_summary.toString(),arguments: bundle);
+
   }
 
   @override

@@ -5,14 +5,13 @@ import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/visit_model.dart';
-import 'package:dsd/route/routers.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/visit_summary/visit_summary_info.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -44,9 +43,9 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
-    accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.DELIVERY_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.DELIVERY_ACCOUNT_NUMBER];
   }
 
   Future initData() async {
@@ -86,9 +85,11 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
   }
 
   void onItemClick(BuildContext context,VisitSummaryInfo info){
-    String path =
-    '''${Routers.visit_summary_detail}?${FragmentArg.DELIVERY_NO}=${info.deliveryNo}''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_NO: info.deliveryNo,
+    };
+    Navigator.pushNamed(context, PageName.visit_summary_detail.toString(),arguments: bundle);
   }
 
   void onClickRight(BuildContext context) {

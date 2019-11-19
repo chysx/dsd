@@ -5,6 +5,7 @@ import 'package:dsd/db/table/entity/dsd_t_truck_stock_tracking_entity.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:flustars/flustars.dart';
+import 'package:uuid/uuid.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -175,6 +176,7 @@ class TruckStockManager {
     }
 
     DSD_T_TruckStockTracking_Entity csAdd = new DSD_T_TruckStockTracking_Entity.Empty();
+    csAdd.Id = new Uuid().v1();
     csAdd.VisitId = visitId;
     csAdd.TruckId = truckId;
     csAdd.ShipmentNo = shipmentNo;
@@ -190,6 +192,7 @@ class TruckStockManager {
     await Application.database.tTruckStockTrackingDao.insertEntity(csAdd);
 
     DSD_T_TruckStockTracking_Entity eaAdd = new DSD_T_TruckStockTracking_Entity.Empty();
+    eaAdd.Id = new Uuid().v1();
     eaAdd.VisitId = visitId;
     eaAdd.TruckId = truckId;
     eaAdd.ShipmentNo = shipmentNo;

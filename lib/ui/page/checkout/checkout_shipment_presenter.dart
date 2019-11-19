@@ -1,12 +1,9 @@
-import 'package:dsd/application.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
-import 'package:dsd/route/routers.dart';
-import 'package:dsd/ui/widget/drawer_widget.dart';
-import 'package:fluro/fluro.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:flutter/cupertino.dart';
 
 enum ShipmentEvent {
@@ -42,15 +39,19 @@ class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
 
   Future onClickItem(BuildContext context,ShipmentInfo info) async {
     if(info.status == ShipmentStatus.CHKO){
-      String path =
-      '''${Routers.route}?${FragmentArg.ROUTE_SHIPMENT_NO}=${info.no}''';
-      Application.router.navigateTo(context, path, replace: true,transition: TransitionType.inFromLeft);
+      Map<String,dynamic> bundle = {
+        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
+      };
+      Navigator.pushReplacementNamed(context, PageName.route.toString(),arguments: bundle);
+
     }else if(info.status == ShipmentStatus.CHKI){
 
     }else{
-      String path =
-      '''${Routers.check_out}?${FragmentArg.ROUTE_SHIPMENT_NO}=${info.no}''';
-      await Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+      Map<String,dynamic> bundle = {
+        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
+      };
+      await Navigator.pushNamed(context, PageName.check_out.toString(),arguments: bundle);
+
 
       onResume();
     }

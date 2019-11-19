@@ -32,8 +32,9 @@ class VisitSummaryDetailPresenter extends EventNotifier<VisitSummaryDetailEvent>
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    deliveryNo = params[FragmentArg.DELIVERY_NO].first;
+  void setBundle(Map<String,dynamic> bundle){
+    deliveryNo = bundle[FragmentArg.DELIVERY_NO];
+
   }
 
   Future initData() async {

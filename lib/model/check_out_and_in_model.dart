@@ -72,24 +72,26 @@ class CheckOutAndInModel {
   void cacheShipmentItemList(List<BaseProductInfo> productList, String productUnitValue,{List<BaseProductInfo> emptyList}){
     String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
 
-    for (BaseProductInfo info in emptyList) {
-      if (info.actualCs != 0) {
-        DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
+    if(emptyList != null){
+      for (BaseProductInfo info in emptyList) {
+        if (info.actualCs != 0) {
+          DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
 
-        add.HeaderId = shipmentHeader.Id;
-        add.ProductCode = info.code;
-        add.ProductUnit = ProductUnit.CS;
+          add.HeaderId = shipmentHeader.Id;
+          add.ProductCode = info.code;
+          add.ProductUnit = ProductUnit.CS;
 
-        add.PlanQty = info.plannedCs;
-        add.ActualQty = info.actualCs;
-        add.DifferenceQty = info.plannedCs - info.actualCs;
+          add.PlanQty = info.plannedCs;
+          add.ActualQty = info.actualCs;
+          add.DifferenceQty = info.plannedCs - info.actualCs;
 
-        add.DifferenceReason = info.reasonValue;
-        add.CreateUser = Application.user.userCode;
-        add.CreateTime = notTime;
-        add.dirty = SyncDirtyStatus.DEFAULT;
+          add.DifferenceReason = info.reasonValue;
+          add.CreateUser = Application.user.userCode;
+          add.CreateTime = notTime;
+          add.dirty = SyncDirtyStatus.DEFAULT;
 
-        shipmentItemList.add(add);
+          shipmentItemList.add(add);
+        }
       }
     }
 
@@ -153,6 +155,7 @@ class CheckOutAndInModel {
         ..WarehouseCode = mShipmentHeader.WarehouseCode
         ..Driver = Application.user.userCode
         ..TruckId = mShipmentHeader.TruckId
+        ..Odometer = 0
         ..CreateUser = Application.user.userCode
         ..CreateTime = notTime
         ..ScanResult = '0'

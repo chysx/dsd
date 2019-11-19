@@ -2,10 +2,9 @@ import 'package:dsd/application.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
-import 'package:dsd/route/routers.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/ui/page/document/document_info.dart';
 import 'package:dsd/ui/page/print/print_module_type.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -36,10 +35,11 @@ class DocumentPresenter extends EventNotifier<DocumentEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.DELIVERY_SHIPMENT_NO].first;
-    accountNumber = params[FragmentArg.DELIVERY_ACCOUNT_NUMBER].first;
-    customerName = params[FragmentArg.TASK_CUSTOMER_NAME].first;
+
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.DELIVERY_SHIPMENT_NO];
+  accountNumber = bundle[FragmentArg.DELIVERY_ACCOUNT_NUMBER];
+  customerName = bundle[FragmentArg.TASK_CUSTOMER_NAME];
   }
 
   Future initData() async {
@@ -59,10 +59,14 @@ class DocumentPresenter extends EventNotifier<DocumentEvent> {
   }
 
   void onItemClick(BuildContext context, DocumentInfo info) {
-    String path =
-    '''${Routers.print_delivery_slip}?${FragmentArg.DELIVERY_NO}=${info.deliveryNo}&${FragmentArg.DELIVERY_SHIPMENT_NO}=$shipmentNo&${FragmentArg.DELIVERY_ACCOUNT_NUMBER}=$accountNumber&${FragmentArg.TASK_CUSTOMER_NAME}=$customerName''';
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_NO: info.deliveryNo,
+      FragmentArg.DELIVERY_SHIPMENT_NO: shipmentNo,
+      FragmentArg.DELIVERY_ACCOUNT_NUMBER: accountNumber,
+      FragmentArg.TASK_CUSTOMER_NAME: customerName,
+    };
+    Navigator.pushNamed(context, PageName.print_delivery_slip.toString(),arguments: bundle);
 
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
   }
 
 }

@@ -2,6 +2,7 @@ import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
+import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -45,9 +46,12 @@ class CheckInShipmentPresenter extends EventNotifier<CheckInShipmentEvent> {
   }
 
   void onClickItem(BuildContext context,ShipmentInfo info) {
-    String path =
-    '''${Routers.check_in}?${FragmentArg.ROUTE_SHIPMENT_NO}=${info.no}''';
-    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
+
+    Map<String,dynamic> bundle = {
+      FragmentArg.ROUTE_SHIPMENT_NO: info.no,
+    };
+    Navigator.pushNamed(context, PageName.check_in.toString(),arguments: bundle);
+
   }
 
 }

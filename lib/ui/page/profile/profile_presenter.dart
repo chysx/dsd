@@ -42,9 +42,9 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
     super.onEvent(event, data);
   }
 
-  void setPageParams(Map<String, List<String>> params) {
-    shipmentNo = params[FragmentArg.ROUTE_SHIPMENT_NO][0];
-    accountNumber = params[FragmentArg.ROUTE_ACCOUNT_NUMBER][0];
+  void setBundle(Map<String,dynamic> bundle){
+    shipmentNo = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
+    accountNumber = bundle[FragmentArg.ROUTE_ACCOUNT_NUMBER];
   }
 
   Future initData() async {
