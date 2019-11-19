@@ -59,7 +59,10 @@ class RouteManager {
             t.ebMobile__OrderBlock__c,
             t.ebMobile__Barcode__c,
             j1.DeliveryTimeSlotFrom,
-            j1.DeliveryTimeSlotTo 
+            j1.DeliveryTimeSlotTo, 
+            j1.DeliveryNote, 
+            j1.ArrivalTime__c, 
+            j1.FinishTime__c 
         FROM
             md_account t          
         JOIN
@@ -95,10 +98,24 @@ class RouteManager {
           ..longitude = double.tryParse(values[7])
           ..block = values[8]
           ..barcode = values[9]
-//          ..timeSlotFrom = DateUtil.getDateStrByTimeStr(values[10],format: DateFormat.HOUR_MINUTE)
-//          ..timeSlotTo = DateUtil.getDateStrByTimeStr(values[11],format: DateFormat.HOUR_MINUTE)
+          ..deliveryNote = values[12]
+          ..arriveTime = values[13]
+          ..finishTime = values[14]
           ..index = RoutePresenter.realMakeIndex(resultList.length)
           ..customerType = CustomerType.Delivery;
+
+        info.timeSlotFrom = values[10];
+        List<String> timeSlotFromList = info.timeSlotFrom.split(":");
+        if(timeSlotFromList != null && timeSlotFromList.length > 1){
+          info.timeSlotFrom = timeSlotFromList[0] + ":" + timeSlotFromList[1];
+        }
+
+        info.timeSlotTo = values[11];
+        List<String> timeSlotToList = info.timeSlotTo.split(":");
+        if(timeSlotToList != null && timeSlotToList.length > 1){
+          info.timeSlotTo = timeSlotToList[0] + ":" + timeSlotToList[1];
+        }
+
         info.isVisitComplete = await VisitManager.isVisitCompleteByCustomer(shipmentNo, info.accountNumber);
 
         Map<String, List<DSD_T_DeliveryHeader_Entity>> tDeliveryMap = await getCustomerDeliveryMap(shipmentNo);

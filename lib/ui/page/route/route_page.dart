@@ -7,6 +7,7 @@ import 'package:dsd/ui/page/route/customer_info.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/ui/widget/search_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -224,7 +225,19 @@ class _RouteState extends State<RoutePage> {
                                   style: TextStyles.small,
                                 ),
                                 Text(
-                                  info?.timeSlotFrom?? '',
+                                  '${info?.timeSlotFrom?? ''} - ${info?.timeSlotTo?? ''}',
+                                  style: TextStyles.small,
+                                ),
+                                Text(
+                                  'Arrival:${info?.arriveTime?? ''}',
+                                  style: TextStyles.small,
+                                ),
+                                Text(
+                                  'Finish:${info?.finishTime?? ''}',
+                                  style: TextStyles.small,
+                                ),
+                                Text(
+                                  'Note:${info?.deliveryNote?? ''}',
                                   style: TextStyles.small,
                                 ),
                                 Row(
@@ -242,7 +255,17 @@ class _RouteState extends State<RoutePage> {
                                 Row(
                                   children: <Widget>[
                                     Icon(Icons.phone_iphone, size: 15),
+                                    Padding(padding: EdgeInsets.only(left: 10),),
+                                    Text(
+                                      info?.tel?? '',
+                                      style: TextStyles.small,
+                                    ),
                                     Icon(Icons.phone, size: 15),
+                                    Padding(padding: EdgeInsets.only(left: 10),),
+                                    Text(
+                                      info?.phone?? '',
+                                      style: TextStyles.small,
+                                    ),
                                   ],
                                 ),
                                 Padding(

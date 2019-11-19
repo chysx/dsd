@@ -30,6 +30,7 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
   List<NoteInfo> noteInfoList = [];
   String accountNumber;
   String shipmentNo;
+  bool isFromVisit;
   static const String mark = ".";
 
   @override
@@ -42,9 +43,10 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
     super.onEvent(event, data);
   }
 
-  void setBundle(Map<String,dynamic> bundle){
+  void setBundle(Map<String, dynamic> bundle) {
     shipmentNo = bundle[FragmentArg.ROUTE_SHIPMENT_NO];
     accountNumber = bundle[FragmentArg.ROUTE_ACCOUNT_NUMBER];
+    isFromVisit = bundle[FragmentArg.IS_FROM_VISIT] ?? false;
   }
 
   Future initData() async {
@@ -54,27 +56,33 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
   }
 
   Future fillCustomerData() async {
-    dictionaryList =
-        await Application.database.dictionaryDao.findEntityByCategory(AccountMasterFields.CATEGORY, Valid.EXIST);
+    dictionaryList = await Application.database.dictionaryDao
+        .findEntityByCategory(AccountMasterFields.CATEGORY, Valid.EXIST);
 
-    MD_Account_Entity account = await Application.database.accountDao.findEntityByAccountNumber(accountNumber);
-    List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
+    MD_Account_Entity account = await Application.database.accountDao
+        .findEntityByAccountNumber(accountNumber);
+    List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application
+        .database.mDeliveryHeaderDao
+        .findEntityByCon(shipmentNo, accountNumber);
     DSD_M_DeliveryHeader_Entity deliveryHeader;
-    if(deliveryHeaderList.length > 0) deliveryHeader = deliveryHeaderList[0];
+    if (deliveryHeaderList.length > 0) deliveryHeader = deliveryHeaderList[0];
 
     for (MD_Dictionary_Entity entity in dictionaryList) {
-      if (entity.Value.contains(AccountMasterFields.STORE_INFO) && entity.Value != AccountMasterFields.STORE_INFO) {
-        profileStoreList.add(await fillStore(entity,account,deliveryHeader));
-      }else if(entity.Value.contains(AccountMasterFields.CONTACT_INFO) && entity.Value != AccountMasterFields.CONTACT_INFO){
+      if (entity.Value.contains(AccountMasterFields.STORE_INFO) &&
+          entity.Value != AccountMasterFields.STORE_INFO) {
+        profileStoreList.add(await fillStore(entity, account, deliveryHeader));
+      } else if (entity.Value.contains(AccountMasterFields.CONTACT_INFO) &&
+          entity.Value != AccountMasterFields.CONTACT_INFO) {
 //        profileContactList.add(await fillStore(entity,account));
       }
-
     }
   }
 
   fillOrderData() async {
-    List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application.database.mDeliveryHeaderDao.findEntityByCon(shipmentNo, accountNumber);
-    for(DSD_M_DeliveryHeader_Entity entity in deliveryHeaderList){
+    List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application
+        .database.mDeliveryHeaderDao
+        .findEntityByCon(shipmentNo, accountNumber);
+    for (DSD_M_DeliveryHeader_Entity entity in deliveryHeaderList) {
       OrderInfo info = new OrderInfo();
       info.no = entity.OrderNo;
       info.date = entity.OrderDate;
@@ -86,37 +94,62 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
   }
 
   fillNoteData() async {
-    noteInfoList = await MdAccountManager.getRouteNoteList(shipmentNo, accountNumber);
+    noteInfoList =
+        await MdAccountManager.getRouteNoteList(shipmentNo, accountNumber);
   }
 
-  Future<MapEntry<String, String>> fillStore(MD_Dictionary_Entity entity,MD_Account_Entity account,DSD_M_DeliveryHeader_Entity deliveryHeader) async {
+  Future<MapEntry<String, String>> fillStore(
+      MD_Dictionary_Entity entity,
+      MD_Account_Entity account,
+      DSD_M_DeliveryHeader_Entity deliveryHeader) async {
     String key = entity.Description;
     String value;
     List<String> valueList = entity.Value.split(mark);
     String table = valueList[1];
     String field = valueList[2];
-    if (table == 'MD_Account') {
+    if (table == 'MD_Account' && account != null) {
       Map<String, dynamic> map = MD_Account_Entity.toJson(account);
       value = map[field];
-      value = await convertValueToDesc(field,value);
-    }else if(table == 'DSD_M_DeliveryHeader'){
-      Map<String, dynamic> map = DSD_M_DeliveryHeader_Entity.toJson(deliveryHeader);
+      value = await convertValueToDesc(field, value);
+    } else if (table == 'DSD_M_DeliveryHeader' && deliveryHeader != null) {
+      Map<String, dynamic> map =
+          DSD_M_DeliveryHeader_Entity.toJson(deliveryHeader);
       value = map[field];
     }
     return MapEntry(key, value);
   }
 
-   Future<String> convertValueToDesc(String columnName,String columnValue) async {
-    if('EbMobile__TradeChannel__c'.toLowerCase() == columnName.toLowerCase()){
+  Future<String> convertValueToDesc(
+      String columnName, String columnValue) async {
+    if ('EbMobile__TradeChannel__c'.toLowerCase() == columnName.toLowerCase()) {
       String category = AccountMasterFields.Account_ebMobile__TradeChannel__c;
-      return await DictionaryManager.getDictionaryDescription(category,columnValue);
-    }else if('EbMobile__SubTradeChannel__c'.toLowerCase() == columnName.toLowerCase()){
-      String category = AccountMasterFields.Account_ebMobile__SubTradeChannel__c;
-      return await DictionaryManager.getDictionaryDescription(category,columnValue);
-    }else if('EbMobile__Segment__c'.toLowerCase() == columnName.toLowerCase()){
+      return await DictionaryManager.getDictionaryDescription(
+          category, columnValue);
+    } else if ('EbMobile__SubTradeChannel__c'.toLowerCase() ==
+        columnName.toLowerCase()) {
+      String category =
+          AccountMasterFields.Account_ebMobile__SubTradeChannel__c;
+      return await DictionaryManager.getDictionaryDescription(
+          category, columnValue);
+    } else if ('EbMobile__Segment__c'.toLowerCase() ==
+        columnName.toLowerCase()) {
       String category = AccountMasterFields.Account_ebMobile__Classification__c;
-      return await DictionaryManager.getDictionaryDescription(category,columnValue);
+      return await DictionaryManager.getDictionaryDescription(
+          category, columnValue);
     }
     return columnValue;
+  }
+
+  @override
+  void dispose() {
+    if (isFromVisit) {
+      String noteDesc = "";
+      try {
+        noteDesc = noteInfoList[0].dsc;
+      } catch (e) {}
+      MdAccountManager.updateAccount(accountNumber, noteDesc);
+    }
+
+    super.dispose();
   }
 }

@@ -117,7 +117,7 @@ class _CheckInShipmentState extends State<CheckInShipmentPage> {
                       ),
                       Expanded(
                         flex: 1,
-                        child: Text('0/3',style: TextStyles.normal,textAlign: TextAlign.center,),
+                        child: Text(presenter.getShipmentCustomerStatusStr(info),style: TextStyles.normal,textAlign: TextAlign.center,),
                       ),
                       Expanded(
                         flex: 1,

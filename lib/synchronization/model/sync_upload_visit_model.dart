@@ -42,12 +42,17 @@ class SyncUploadVisitModel extends AbstractSyncUploadModel {
         VisitModelSqlFind.VISIT_DSD_T_TruckStockTracking_Sql_Find,
         VisitModelSqlUpdate.VISIT_DSD_T_TruckStockTracking_Sql_Update, getUploadUniqueIdValues());
 
+    TableUploadBean mdAccount = new TableUploadBean('MD_Account',
+        VisitModelSqlFind.VISIT_MD_Account_Sql_Find,
+        VisitModelSqlUpdate.VISIT_MD_Account_Sql_Update, getUploadUniqueIdValues());
+
 
     uploadBeanList.add(visit);
     uploadBeanList.add(deliveryHeader);
     uploadBeanList.add(deliveryItem);
     uploadBeanList.add(stock);
     uploadBeanList.add(stockTracking);
+    uploadBeanList.add(mdAccount);
 
     return uploadBeanList;
   }

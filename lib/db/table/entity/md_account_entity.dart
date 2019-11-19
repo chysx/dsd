@@ -179,6 +179,9 @@ class MD_Account_Entity {
   String ArabicCountry__c;
   String VATRegistrationNo;
   String NoteToDriver__c;
+  String Usercode;
+  String LastTime;
+  String dirty;
 
   MD_Account_Entity(this.id, this.Name, this.AccountNumber, this.Owner, this.RecordType, this.Site, this.AccountSource,
       this.AnnualRevenue, this.BillingAddress, this.CreatedBy, this.Jigsaw, this.Description, this.NumberOfEmployees,
@@ -227,7 +230,7 @@ class MD_Account_Entity {
       this.Geo_Latitude, this.ProductList, this.ebMobile__Barcode__c, this.RouteNumber,
       this.ebMobile__ScanStoreMandatory__c, this.ebMobile__RouteJumping__c, this.ShippingCity, this.ShippingPostalCode,
       this.Route, this.ArabicName__c, this.ArabicStreet__c, this.ArabicCity__c, this.ArabicCountry__c,
-      this.VATRegistrationNo, this.NoteToDriver__c);
+      this.VATRegistrationNo, this.NoteToDriver__c,this.Usercode,this.LastTime,this.dirty);
 
   static Map<String, dynamic> toJson(
       MD_Account_Entity instance) =>
@@ -413,6 +416,9 @@ class MD_Account_Entity {
         'ArabicCountry__c': instance.ArabicCountry__c,
         'VATRegistrationNo': instance.VATRegistrationNo,
         'NoteToDriver__c': instance.NoteToDriver__c,
+        'Usercode': instance.Usercode,
+        'LastTime': instance.LastTime,
+        'dirty': instance.dirty,
       };
 
   MD_Account_Entity.Empty();

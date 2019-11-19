@@ -30,6 +30,10 @@ class CustomerInfo {
   String timeSlotFrom;
   String timeSlotTo;
 
+  String deliveryNote;
+  String arriveTime;
+  String finishTime;
+
   bool isMore = false;
 
   @override

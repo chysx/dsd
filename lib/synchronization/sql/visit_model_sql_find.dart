@@ -58,14 +58,13 @@ class VisitModelSqlFind {
 		   DeliveryNote,
 		   CreateTime,
 		   Rebook,
-		   Tax2
+		   Tax2,
+		   PickupEmpties__c,
+		   EmptyRefund__c
 		FROM DSD_T_DeliveryHeader
 		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
   
   ''';
-
-//  PickupEmpties__c,
-//  EmptyRefund__c
 
   static const String VISIT_DSD_T_DeliveryItem_Sql_Find =
   ''' 
@@ -124,5 +123,19 @@ class VisitModelSqlFind {
 		FROM DSD_T_TruckStockTracking
 		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
   
+  ''';
+
+  static const String VISIT_MD_Account_Sql_Find =
+  ''' 
+		SELECT
+		   T1.AccountNumber,
+		   T1.NoteToDriver__c,
+		   Geo_Longitude,
+		   Geo_Latitude,
+		   T1.Usercode
+		FROM MD_Account AS T1
+		INNER JOIN DSD_T_Visit AS T2 ON T1.AccountNumber = T2.AccountNumber
+		WHERE T2.VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND T1.dirty != '1' AND T1.dirty != '2'
+	
   ''';
 }

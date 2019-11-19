@@ -1,5 +1,8 @@
+import 'package:dsd/db/table/entity/md_account_entity.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/ui/page/profile/note_info.dart';
 import 'package:dsd/utils/sql_util.dart';
+import 'package:flustars/flustars.dart';
 
 import '../../application.dart';
 
@@ -42,4 +45,13 @@ class MdAccountManager {
      }
      return result;
   }
+
+    static Future updateAccount(String accountNumber,String noteToDriver) async {
+     MD_Account_Entity entity = await Application.database.accountDao.findEntityByAccountNumber(accountNumber);
+     entity.Usercode = Application.user.userCode;
+     entity.NoteToDriver__c = noteToDriver;
+     entity.LastTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+     entity.dirty = SyncDirtyStatus.DEFAULT;
+     await Application.database.accountDao.updateEntity(entity);
+   }
 }

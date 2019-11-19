@@ -111,9 +111,9 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
     }, onFailSync: (e) async {
       VisitModel().visit.dirty = SyncDirtyStatus.FAIL;
       CustomerDialog.show(context, msg: 'upload fail', onConfirm: () {
-//        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       }, onCancel: () {
-//        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       });
     });
   }

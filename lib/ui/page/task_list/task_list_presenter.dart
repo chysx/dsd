@@ -308,8 +308,9 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
   void doProfile(material.BuildContext context) {
     Map<String,dynamic> bundle = {
       FragmentArg.ROUTE_SHIPMENT_NO: shipmentNo,
-      FragmentArg.ROUTE_SHIPMENT_NO: accountNumber,
+      FragmentArg.ROUTE_ACCOUNT_NUMBER: accountNumber,
       FragmentArg.TASK_CUSTOMER_NAME: customerName,
+      FragmentArg.IS_FROM_VISIT: true,
     };
     material.Navigator.pushNamed(context, PageName.profile.toString(),arguments: bundle);
 

@@ -40,4 +40,10 @@ class VisitModelSqlUpdate {
 		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
   
   ''';
+
+  static const String VISIT_MD_Account_Sql_Update =
+  ''' 
+    UPDATE MD_Account SET dirty = ?
+		WHERE AccountNumber IN (SELECT DISTINCT AccountNumber FROM DSD_T_Visit WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK)
+  ''';
 }

@@ -21,9 +21,14 @@ class ProfilePage extends StatefulWidget {
   }
 }
 
-class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin {
+class _SyncState extends State<ProfilePage>
+    with SingleTickerProviderStateMixin {
   TabController tabController;
-  final List<Tab> myTabs = <Tab>[Tab(text: 'Profile'), Tab(text: 'Order'), Tab(text: 'Note')];
+  final List<Tab> myTabs = <Tab>[
+    Tab(text: 'Profile'),
+    Tab(text: 'Order'),
+    Tab(text: 'Note')
+  ];
 
   Widget createProfile(ProfilePresenter presenter) {
     List<MapEntry<String, String>> list = presenter.profileStoreList;
@@ -37,11 +42,12 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
               style: TextStyles.normal,
             ),
             Spacer(),
-            Expanded(child:             Text(
-              item.value,
-              style: TextStyles.normal,
-            ),)
-
+            Expanded(
+              child: Text(
+                item.value ?? '',
+                style: TextStyles.normal,
+              ),
+            )
           ],
         ),
       );
@@ -90,7 +96,10 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
                         width: 52,
                         height: 52,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1, style: BorderStyle.solid),
+                            border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                                style: BorderStyle.solid),
                             shape: BoxShape.circle),
                         child: Column(
                           children: <Widget>[
@@ -147,6 +156,25 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
     );
   }
 
+  List<TextEditingController> descList = [];
+  void initControllerCs(ProfilePresenter presenter) {
+//    if(csList.length > 0) return ;
+    descList.clear();
+    for (NoteInfo info in presenter.noteInfoList) {
+      TextEditingController controller = TextEditingController.fromValue(TextEditingValue(
+        // 设置内容
+          text: (info.dsc ?? '').toString(),
+          // 保持光标在最后
+          selection: TextSelection.fromPosition(
+              TextPosition(affinity: TextAffinity.downstream, offset: (info.dsc ?? '').toString().length))));
+
+      controller.addListener(() {
+        info.dsc = controller.text;
+      });
+      descList.add(controller);
+    }
+  }
+
   Widget createNote(ProfilePresenter presenter) {
     return Column(
       children: <Widget>[
@@ -181,10 +209,12 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                     ),
-                    Text(
-                      info.dsc ?? '',
+                    TextField(
+                      controller:
+                      descList.length > 0 ? descList[index] : new TextEditingController(),
+                      enabled: presenter.isFromVisit,
                       style: TextStyles.normal,
-                    ),
+                    )
                   ],
                 ),
               );
@@ -218,9 +248,14 @@ class _SyncState extends State<ProfilePage> with SingleTickerProviderStateMixin 
         ),
       ),
       body: Consumer<ProfilePresenter>(builder: (context, presenter, _) {
+        initControllerCs(presenter);
         return TabBarView(
           controller: tabController,
-          children: <Widget>[createProfile(presenter), createOrder(presenter), createNote(presenter)],
+          children: <Widget>[
+            createProfile(presenter),
+            createOrder(presenter),
+            createNote(presenter)
+          ],
         );
       }),
     );
