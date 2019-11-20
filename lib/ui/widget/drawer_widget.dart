@@ -2,7 +2,6 @@ import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/route/page_builder.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../application.dart';
@@ -99,6 +98,9 @@ class DrawerWidget extends StatelessWidget {
       if (goPage == ConstantMenu.SETTING) {
         Navigator.pushReplacementNamed(context, PageName.settings.toString(),arguments: <String,dynamic>{});
 
+      }
+      if (goPage == ConstantMenu.LOGOUT) {
+        Navigator.popUntil(context, ModalRoute.withName(PageName.root.toString()));
       }
     }
   }

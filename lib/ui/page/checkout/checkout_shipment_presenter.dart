@@ -4,7 +4,7 @@ import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/shipment_info.dart';
 import 'package:dsd/route/page_builder.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 enum ShipmentEvent {
   InitData

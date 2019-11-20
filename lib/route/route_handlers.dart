@@ -69,7 +69,8 @@ PageBuilder rootHandler = PageBuilder(builder: (bundle) {
 PageBuilder settingsHandler = PageBuilder(builder: (bundle) {
   return MultiProvider(
     providers: [
-      ChangeNotifierProvider(builder: (context) => new SettingPresenter()..onEvent(SettingEvent.InitData)),
+      ChangeNotifierProvider(builder: (context) => new SettingPresenter()
+        ..onEvent(SettingEvent.InitData)),
     ],
     child: SettingsPage(),
   );

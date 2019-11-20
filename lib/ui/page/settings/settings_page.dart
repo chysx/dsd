@@ -2,7 +2,6 @@ import 'package:dsd/db/util.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
-import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';

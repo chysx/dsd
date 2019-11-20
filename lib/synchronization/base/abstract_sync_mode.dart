@@ -5,7 +5,7 @@ import 'package:dsd/synchronization/sync/sync_message.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'abstract_parser.dart';

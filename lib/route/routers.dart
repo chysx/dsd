@@ -16,7 +16,6 @@ class Routers {
       PageName.root: rootHandler,
       PageName.route: routeHandler,
       PageName.settings: settingsHandler,
-      PageName.route: routeHandler,
       PageName.check_out_shipment: checkoutShipmentHandler,
       PageName.check_out: checkoutHandler,
       PageName.check_out_inventory: checkoutInventoryHandler,

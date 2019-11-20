@@ -18,8 +18,7 @@ import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/utils/device_info.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:package_info/package_info.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'login_response_bean.dart';
@@ -36,7 +35,6 @@ enum LoginEvent { InitData }
 class LoginPresenter extends EventNotifier<LoginEvent> {
   LoginInputInfo inputInfo = new LoginInputInfo();
   AppConfigEntity appConfigEntity;
-  String version = "";
 
   @override
   void onEvent(LoginEvent event, [dynamic data]) async {
@@ -51,7 +49,6 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
 
   Future initData() async {
     await fillAppConfigEntity();
-    await fillVersion();
   }
 
   Future fillAppConfigEntity() async {
@@ -62,11 +59,6 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
       fillInputData();
       fillAppUser();
     }
-  }
-
-  Future fillVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    version = packageInfo.version;
   }
 
   void fillInputData() {
@@ -111,7 +103,7 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
 
   Future onClickSetting(BuildContext context) async {
     Map<String,dynamic> bundle = {};
-    String result = await Navigator.pushNamed(context, PageName.settings.toString(),arguments: bundle);
+    var result = await Navigator.pushNamed(context, PageName.settings.toString(),arguments: bundle);
 
     if(result == 'refresh'){
       fillAppConfigEntity();
@@ -148,7 +140,7 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
       loginRequestBean
         ..userName = loginInputInfo.userCode
         ..password = loginInputInfo.password
-        ..versionNum = '0.1.0.102'
+        ..versionNum = DeviceInfo().versionName
         ..isChangePwd = false
         ..newPassword = ""
         ..platForm = "Android";

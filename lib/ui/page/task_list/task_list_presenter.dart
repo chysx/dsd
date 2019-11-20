@@ -345,4 +345,13 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
       return item.isMust && item.status == TaskDeliveryStatus.NotComplete;
     });
   }
+
+  @override
+  void dispose() {
+
+    VisitModel().clear();
+
+    super.dispose();
+  }
+
 }

@@ -92,12 +92,13 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
     Navigator.pushNamed(context, PageName.visit_summary_detail.toString(),arguments: bundle);
   }
 
-  void onClickRight(BuildContext context) {
+  Future onClickRight(BuildContext context) async {
 //    String path =
 //    '''${Routers.delivery_summary}?${FragmentArg.TASK_CUSTOMER_NAME}=$customerName
 //    ''';
 //    Application.router.navigateTo(context, path, transition: TransitionType.inFromLeft);
 
+    await VisitModel().updateVisit();
     uploadData(context);
   }
 

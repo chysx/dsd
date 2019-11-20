@@ -5,7 +5,6 @@ import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
 import 'package:dsd/ui/widget/fold_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

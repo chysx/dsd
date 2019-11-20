@@ -1,14 +1,9 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
-import 'package:dsd/res/strings.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/utils/file_util.dart';
-import 'package:fluintl/fluintl.dart';
-import 'package:flustars/flustars.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:signature/signature.dart';

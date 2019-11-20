@@ -4,7 +4,6 @@ import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:fluintl/fluintl.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';

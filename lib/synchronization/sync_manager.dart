@@ -4,7 +4,7 @@ import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_factory.dart';
 import 'package:dsd/ui/dialog/loading_dialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'base/abstract_sync_mode.dart';
 

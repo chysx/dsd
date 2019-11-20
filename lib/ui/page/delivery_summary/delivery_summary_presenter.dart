@@ -100,14 +100,13 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
   }
 
   bool isHideNextButton() {
-    return VisitManager.isVisitCompleteByVisit(VisitModel().visit);
+//    return VisitManager.isVisitCompleteByVisit(VisitModel().visit);
+    return isReadOnly;
   }
 
   Future onClickRight(BuildContext context) async {
     await saveData();
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
-    DeliveryModel().clear();
   }
 
   Future saveData() async {

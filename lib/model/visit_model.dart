@@ -30,17 +30,20 @@ class VisitModel {
   DSD_T_Visit_Entity visit;
 
   Future initData(String shipmentNo,String accountNumber) async {
-    if (await VisitManager.isVisitCompleteByCustomer(shipmentNo, accountNumber)) {
-      visit = await VisitManager.getVisitLastly(shipmentNo, accountNumber);
-    } else {
+    visit = await VisitManager.getVisitLastly(shipmentNo, accountNumber);
+    if (visit == null) {
       visit = VisitManager.createVisit(shipmentNo, accountNumber,'');
       await Application.database.tVisitDao.insertEntity(visit);
     }
   }
 
-  Future updateVisit(String endTime) async {
-    visit.EndTime = endTime;
+  Future updateVisit() async {
+    visit.EndTime = DateUtil.getDateStrByDateTime(DateTime.now());
     await Application.database.tVisitDao.updateEntity(visit);
+  }
+
+  void clear() {
+    visit = null;
   }
 
 }
