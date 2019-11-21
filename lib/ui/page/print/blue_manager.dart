@@ -50,6 +50,9 @@ class BlueManager {
           print('name = ${device.name} id = ${device.id}');
           return device;
         }).toList();
+        deviceList.removeWhere((device){
+          return device.name.isEmpty;
+        });
         call(deviceList);
       }
     });

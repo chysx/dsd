@@ -81,6 +81,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
+
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -113,7 +114,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              presenter.orderNo,
+                              presenter.orderNo ?? '',
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Padding(
@@ -124,7 +125,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              presenter.data,
+                              presenter.data ?? '',
                               style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                             )
                           ],

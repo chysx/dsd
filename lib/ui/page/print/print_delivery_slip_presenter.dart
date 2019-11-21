@@ -9,6 +9,7 @@ import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/delivery_model.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
+import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
 import 'package:dsd/ui/page/print/blue_manager.dart';
 import 'package:dsd/utils/file_util.dart';
@@ -120,7 +121,9 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   }
 
   void showBlueDialog(BuildContext context){
+    LoadingDialog.show(context,msg: 'loading...');
     BlueManager().scan((deviceList){
+      LoadingDialog.dismiss(context);
       List<KeyValueInfo> list = deviceList.map((device){
         return new KeyValueInfo()
           ..name = device.name
@@ -131,7 +134,11 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
       //添加弹出框消失回调方法
       ListDialog.show(context,title: 'title',data: list,onSelect: (reason) async {
         BluetoothDevice device = reason.data;
-        BlueManager().sendAddress(device.id.toString());
+        if(Platform.isAndroid){
+          BlueManager().sendAddress(device.id.toString());
+        }else if(Platform.isIOS){
+          BlueManager().sendAddress(device.name);
+        }
       });
     });
 
@@ -154,11 +161,13 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   }
 
   Uint8List getCustomerSign() {
-    return FileUtil.readFileData(Constant.WORK_IMG, 'signature.png');
+//    return FileUtil.readFileData(Constant.WORK_IMG, 'signature.png');
+    return null;
   }
 
   Uint8List getDriverSign() {
-    return FileUtil.readFileData(Constant.WORK_IMG, 'signature2.png');
+//    return FileUtil.readFileData(Constant.WORK_IMG, 'signature2.png');
+    return null;
   }
 
   @override

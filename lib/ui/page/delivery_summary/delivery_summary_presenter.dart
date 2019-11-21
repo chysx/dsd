@@ -107,6 +107,7 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
   Future onClickRight(BuildContext context) async {
     await saveData();
     Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   Future saveData() async {
