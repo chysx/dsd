@@ -9,6 +9,7 @@ class Constant {
   static const String DB_NAME = "dsd.db";
   static const String WORK_DB = 'db';
   static const String WORK_IMG = 'img';
+  static const String WORK_LOG = 'log';
 }
 
 class ConstantMenu {
@@ -61,5 +62,5 @@ class ReadyOnly {
 
 String getMonth(int monthInt) {
   List<String> months = <String>['Jan','Feb','Mar','Apr','May','June','July','Aug','Sept','Oct','Nov','Dec'];
-  return months[monthInt];
+  return months[monthInt - 1];
 }

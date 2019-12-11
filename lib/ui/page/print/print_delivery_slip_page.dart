@@ -80,55 +80,60 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Kunde:',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                                '''${presenter.accountNumber}\n${presenter.address} ''',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                            ),
-                            Text(
-                              'Tel:',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              presenter.phone,
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Kunde:',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                  '''${presenter.accountNumber}\n${presenter.address} ''',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                              ),
+                              Text(
+                                'Tel:',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                presenter.phone,
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Lieferungs-Nr:',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              presenter.orderNo ?? '',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10),
-                            ),
-                            Text(
-                              'Lieferungsdatum:',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              presenter.data ?? '',
-                              style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
-                            )
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Lieferungs-Nr:',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                presenter.orderNo ?? '',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                              ),
+                              Text(
+                                'Lieferungsdatum:',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                presenter.data ?? '',
+                                style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
                         ),
                       ],
                     ),

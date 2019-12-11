@@ -38,7 +38,7 @@ class RoutePlanPresenter extends EventNotifier<RoutePlanEvent> {
       RoutePlanInfo info = new RoutePlanInfo();
       info.no = entity.DeliveryNo;
       info.orderNo = entity.OrderNo;
-      info.qty = int.tryParse(entity.PlanDeliveryQty);
+      info.qty = double.tryParse(entity.PlanDeliveryQty).toInt();
       info.type = entity.DeliveryType;
       routePlanList.add(info);
     }

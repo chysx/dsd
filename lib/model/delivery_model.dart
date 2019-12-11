@@ -124,9 +124,16 @@ class DeliveryModel {
         add.DifferenceQty = (info.plannedCs - info.actualCs).toString();
         add.Reason = "24";
         add.IsReturn = IsReturn.TRUE;
+        add.ItemSequence = '2';
         add.CreateUser = Application.user.userCode;
         add.CreateTime = notTime;
         add.dirty = SyncDirtyStatus.DEFAULT;
+
+        add.BasePrice = '0';
+        add.NetPrice = '0';
+        add.Discount = '0';
+        add.Tax = '0';
+        add.Deposit = '0';
 
         deliveryItemList.add(add);
       }
@@ -145,9 +152,17 @@ class DeliveryModel {
           add.ActualQty = info.actualCs.toString();
           add.DifferenceQty = (info.plannedCs - info.actualCs).toString();
           add.Reason = info.reasonValue;
+          add.ItemSequence = '2';
           add.CreateUser = Application.user.userCode;
           add.CreateTime = notTime;
           add.dirty = SyncDirtyStatus.DEFAULT;
+
+
+          add.BasePrice = '0';
+          add.NetPrice = '0';
+          add.Discount = '0';
+          add.Tax = '0';
+          add.Deposit = '0';
 
           deliveryItemList.add(add);
         }
@@ -164,9 +179,16 @@ class DeliveryModel {
           add.ActualQty = info.actualEa.toString();
           add.DifferenceQty = (info.plannedEa - info.actualEa).toString();
           add.Reason = info.reasonValue;
+          add.ItemSequence = '2';
           add.CreateUser = Application.user.userCode;
           add.CreateTime = notTime;
           add.dirty = SyncDirtyStatus.DEFAULT;
+
+          add.BasePrice = '0';
+          add.NetPrice = '0';
+          add.Discount = '0';
+          add.Tax = '0';
+          add.Deposit = '0';
 
           deliveryItemList.add(add);
         }

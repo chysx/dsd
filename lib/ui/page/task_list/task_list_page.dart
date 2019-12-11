@@ -29,6 +29,16 @@ class _TaskListState extends State<TaskListPage> {
           );
   }
 
+
+  Widget getOrderNo(TaskInfo info) {
+    return StringUtil.isEmpty(info.orderNo)
+        ? Container()
+        : Text(
+      'Order No: ${info.orderNo}',
+      style: TextStyles.small,
+    );
+  }
+
   Widget getMust(TaskInfo info) {
     return info.isMust
         ? Text(
@@ -88,7 +98,8 @@ class _TaskListState extends State<TaskListPage> {
                                       info.name,
                                       style: TextStyles.normal,
                                     ),
-                                    getDesc(info)
+                                    getDesc(info),
+                                    getOrderNo(info)
                                   ],
                                 ),
                                 Padding(

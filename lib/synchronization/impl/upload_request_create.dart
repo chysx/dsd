@@ -6,6 +6,7 @@ import 'package:dsd/db/database.dart';
 import 'package:dsd/synchronization/sync/sync_config.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/utils/sync_util.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 
@@ -69,6 +70,7 @@ class UploadRequestCreate extends AbstractRequestCreate<Future<SyncRequestBean>>
     ReqContent syncContentBean = new ReqContent();
     syncContentBean.tables = syncTableBeanList;
     syncDataRequestBean.reqContent = syncContentBean;
+    FileUtil.writeString(syncDataRequestBean.toJson());
     Log().logger.i('*****************upload request*************\n${syncDataRequestBean.toJson()}');
     return syncDataRequestBean;
   }
