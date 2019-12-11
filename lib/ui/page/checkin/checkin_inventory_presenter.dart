@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 enum CheckInInventoryEvent {
   InitData,
   SelectOrCancelAll,
+  SelectOrCancel,
   SelectOrCancelEmptyAll,
   OnInput,
 }
@@ -43,13 +44,16 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
         await initData();
         break;
       case CheckInInventoryEvent.SelectOrCancelAll:
-        selectOrCancelAll(productList,data);
+        BaseProductInfo.selectOrCancelAll(productList, data);
         break;
       case CheckInInventoryEvent.SelectOrCancelEmptyAll:
-        selectOrCancelAll(emptyProductList,data);
+        BaseProductInfo.selectOrCancelAll(emptyProductList, data);
+        break;
+      case CheckInInventoryEvent.SelectOrCancel:
+        BaseProductInfo.selectOrCancel(data);
         break;
       case CheckInInventoryEvent.OnInput:
-        onInput(data);
+        BaseProductInfo.onInput(data);
         break;
     }
 
@@ -114,27 +118,6 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
       info.reasonValue = reason.value;
       notifyListeners();
     });
-  }
-
-  void selectOrCancelAll(List<BaseProductInfo> productList,bool isCheck){
-    for(BaseProductInfo info in productList){
-      info.isCheck = isCheck;
-      info.actualCs = info.plannedCs;
-      info.actualEa = info.plannedEa;
-    }
-  }
-
-  void selectOrCancel(BaseProductInfo info,bool isCheck){
-    info.isCheck = isCheck;
-    if(isCheck){
-      info.actualCs = info.plannedCs;
-      info.actualEa = info.plannedEa;
-    }
-    notifyListeners();
-  }
-
-  onInput(BaseProductInfo info){
-    info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
 
   onClickRight(BuildContext context) async {

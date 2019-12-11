@@ -2,6 +2,8 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:dsd/business/delivery_util.dart';
+import 'package:dsd/business/product_util.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
@@ -78,41 +80,13 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     productList.clear();
 
     List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
-
-    for (DSD_T_DeliveryItem_Entity tItem in tList) {
-      if(tItem.IsReturn == IsReturn.TRUE) continue;
-      if (int.tryParse(tItem.ActualQty) == 0) continue;
-
-      BaseProductInfo info = new BaseProductInfo();
-      info.code = tItem.ProductCode;
-      info.name = (await Application.productMap)[tItem.ProductCode];
-      if (tItem.ProductUnit == ProductUnit.CS) {
-        info.plannedCs = int.tryParse(tItem.PlanQty);
-        info.actualCs = int.tryParse(tItem.ActualQty);
-      } else {
-        info.plannedEa = int.tryParse(tItem.PlanQty);
-        info.actualEa = int.tryParse(tItem.ActualQty);
-      }
-      info.isInMDelivery = true;
-      productList.add(info);
-    }
+    productList.addAll(await ProductUtil.mergeTProduct(tList, true));
   }
 
   Future fillEmptyProductData() async {
     emptyProductList.clear();
 
-    List<DSD_T_DeliveryItem_Entity> tList = DeliveryModel().deliveryItemList;
-
-    for (DSD_T_DeliveryItem_Entity tItem in tList) {
-      if(tItem.IsReturn != IsReturn.TRUE) continue;
-      if (int.tryParse(tItem.ActualQty) == 0) continue;
-
-      BaseProductInfo info = new BaseProductInfo();
-      info.code = tItem.ProductCode;
-      info.name = (await Application.productMap)[tItem.ProductCode];
-      info.actualCs = int.tryParse(tItem.ActualQty);
-      emptyProductList.add(info);
-    }
+    emptyProductList.addAll(await DeliveryUtil.createEmptyProductList(DeliveryModel().deliveryItemList));
   }
 
   Future onClickRight(BuildContext context,GlobalKey rootWidgetKey) async {

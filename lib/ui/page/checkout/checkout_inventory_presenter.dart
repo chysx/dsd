@@ -25,6 +25,7 @@ import 'package:flutter/material.dart';
 
 enum CheckOutInventoryEvent {
   InitData,
+  SelectOrCancel,
   SelectOrCancelAll,
   OnInput
 }
@@ -43,10 +44,13 @@ class CheckoutInventoryPresenter extends EventNotifier<CheckOutInventoryEvent> {
         await initData();
         break;
       case CheckOutInventoryEvent.SelectOrCancelAll:
-        selectOrCancelAll(data);
+        BaseProductInfo.selectOrCancelAll(productList,data);
+        break;
+      case CheckOutInventoryEvent.SelectOrCancel:
+        BaseProductInfo.selectOrCancel(data);
         break;
       case CheckOutInventoryEvent.OnInput:
-        onInput(data);
+        BaseProductInfo.onInput(data);
         break;
     }
 
@@ -106,27 +110,6 @@ class CheckoutInventoryPresenter extends EventNotifier<CheckOutInventoryEvent> {
       info.reasonValue = reason.value;
       notifyListeners();
     });
-  }
-
-  void selectOrCancelAll(bool isCheck){
-    for(BaseProductInfo info in productList){
-      info.isCheck = isCheck;
-      info.actualCs = info.plannedCs;
-      info.actualEa = info.plannedEa;
-    }
-  }
-
-  void selectOrCancel(BaseProductInfo info,bool isCheck){
-    info.isCheck = isCheck;
-    if(isCheck){
-      info.actualCs = info.plannedCs;
-      info.actualEa = info.plannedEa;
-    }
-    notifyListeners();
-  }
-
-  onInput(BaseProductInfo info){
-    info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
   }
 
   onClickRight(BuildContext context) async {

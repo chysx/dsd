@@ -204,7 +204,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                     child: Checkbox(
                                       value: info.isCheck,
                                       onChanged: (value){
-                                        presenter.selectOrCancel(info, value);
+                                        presenter.onEvent(CheckOutInventoryEvent.SelectOrCancel,info);
                                       },
                                     ),
                                   ),

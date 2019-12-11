@@ -91,4 +91,40 @@ class BaseProductInfo {
      return '$totalCs/$totalEa';
    }
 
+   static int getTotalActualCs(List<BaseProductInfo> productList) {
+     int totalCs = 0;
+     for(BaseProductInfo info in productList){
+       totalCs += info.actualCs ?? 0;
+     }
+     return totalCs;
+   }
+
+   static int getTotalActualEa(List<BaseProductInfo> productList) {
+     int totalEa = 0;
+     for(BaseProductInfo info in productList){
+       totalEa += info.actualEa ?? 0;
+     }
+     return totalEa;
+   }
+
+   static void selectOrCancelAll(List<BaseProductInfo> productList,bool isCheck){
+     for(BaseProductInfo info in productList){
+       info.isCheck = isCheck;
+       info.actualCs = info.plannedCs;
+       info.actualEa = info.plannedEa;
+     }
+   }
+
+   static void selectOrCancel(BaseProductInfo info){
+     info.isCheck = !info.isCheck;
+     if(info.isCheck){
+       info.actualCs = info.plannedCs;
+       info.actualEa = info.plannedEa;
+     }
+   }
+
+   static onInput(BaseProductInfo info){
+     info.isCheck = info.plannedCs == info.actualCs && info.plannedEa == info.actualEa;
+   }
+
 }

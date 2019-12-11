@@ -265,7 +265,7 @@ class CheckInInventoryPage extends StatelessWidget {
                                           child: Checkbox(
                                             value: info.isCheck,
                                             onChanged: (value){
-                                              presenter.selectOrCancel(info, value);
+                                              presenter.onEvent(CheckInInventoryEvent.SelectOrCancel,info);
                                             },
                                           ),
                                         ),
@@ -370,7 +370,7 @@ class CheckInInventoryPage extends StatelessWidget {
                                           child: Checkbox(
                                             value: info.isCheck,
                                             onChanged: (value){
-                                              presenter.selectOrCancel(info, value);
+                                              presenter.onEvent(CheckInInventoryEvent.SelectOrCancel,info);
                                             },
                                           ),
                                         ),
