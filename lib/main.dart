@@ -9,6 +9,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'res/strings.dart';
 
 void main(){
+  WidgetsFlutterBinding.ensureInitialized();
   Application.install();
   Routers.configRouters(Application.router);
   runApp(MyApp());

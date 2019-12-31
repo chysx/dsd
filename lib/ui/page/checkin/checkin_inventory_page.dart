@@ -153,6 +153,7 @@ class CheckInInventoryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('INVENTORY CHECKIN'),
         actions: <Widget>[
           IconButton(

@@ -9,9 +9,11 @@ import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
+import 'package:dsd/res/strings.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
+import 'package:fluintl/fluintl.dart';
 import 'package:flutter/material.dart';
 
 
@@ -114,7 +116,7 @@ class CheckInInventoryPresenter extends EventNotifier<CheckInInventoryEvent> {
   }
 
   void showReasonDialog(BuildContext context,BaseProductInfo info){
-    ListDialog.show(context,title: 'title',data: reasonList,onSelect: (reason){
+    ListDialog.show(context,title: IntlUtil.getString(context, Ids.checkoutInventory_title_reason),data: reasonList,onSelect: (reason){
       info.reasonValue = reason.value;
       notifyListeners();
     });

@@ -96,6 +96,10 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
     });
   }
 
+  void onClickPrint(BuildContext context) {
+
+  }
+
   @override
   void dispose() {
     CheckOutModel().clear();

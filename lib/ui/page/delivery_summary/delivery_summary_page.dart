@@ -28,6 +28,7 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('DeliverySummary'),
         actions: <Widget>[
           Builder(builder: (context)  {
@@ -120,7 +121,16 @@ class _DeliverySummarySate extends State<DeliverySummaryPage> {
                           height: 2,
                         );
                       },
-                    )
+                    ),
+                    ListHeaderWidget(
+                      names: ['Total', BaseProductInfo.getActualTotal(presenter.productList).toString()],
+                      supNames: ['', ''],
+                      weights: [1, 1],
+                      aligns: [
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
+                    ),
                   ],
                 ),
               ),

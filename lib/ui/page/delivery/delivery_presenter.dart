@@ -104,6 +104,8 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         .database.mDeliveryItemDao
         .findEntityByDeliveryNo(deliveryNo);
     productList.addAll(await ProductUtil.mergeMProduct(mList, true));
+
+    BaseProductInfo.selectOrCancelAll(productList, true);
   }
 
   Future fillEmptyProductData() async {

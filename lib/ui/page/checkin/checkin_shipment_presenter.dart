@@ -1,4 +1,5 @@
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/db/manager/route_manager.dart';
 import 'package:dsd/db/manager/shipment_manager.dart';
 import 'package:dsd/event/EventNotifier.dart';
@@ -88,6 +89,10 @@ class CheckInShipmentPresenter extends EventNotifier<CheckInShipmentEvent> {
   void onClickItem(BuildContext context, ShipmentInfo info) {
     if(!map[info.no].isAllVisited()){
       CustomerDialog.show(context,msg: 'Please upload all customer data first');
+      return;
+    }
+    if(info.status == ShipmentStatus.CHKI){
+      CustomerDialog.show(context,msg: 'This shipment had checked in');
       return;
     }
     Map<String, dynamic> bundle = {

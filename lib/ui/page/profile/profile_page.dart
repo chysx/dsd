@@ -241,6 +241,7 @@ class _SyncState extends State<ProfilePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('CUSTOMER PROFILE'),
         bottom: TabBar(
           controller: tabController,

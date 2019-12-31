@@ -19,6 +19,7 @@ class CheckoutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text(IntlUtil.getString(context, Ids.checkout_title)),
           actions: <Widget>[
             IconButton(
@@ -50,6 +51,7 @@ class CheckoutPage extends StatelessWidget {
                             'INVENTORY CHECKOUT',
                             style: TextStyles.large,
                           ),
+                          Padding(padding: EdgeInsets.only(top: 10),),
                           Text(
                             'Shipment No:${presenter.shipmentNo}',
                             style: TextStyles.small,
@@ -62,11 +64,25 @@ class CheckoutPage extends StatelessWidget {
                         style: TextStyles.large,
                       ),
                       Icon(
-                        Icons.arrow_forward_ios,
+                        Icons.keyboard_arrow_right,
                         color: Colors.grey,
                       )
                     ],
-                  )
+                  ),
+                  Spacer(),
+                  Container(
+                    width: double.infinity,
+                    child: RaisedButton(
+                      color: ColorsRes.brown_normal,
+                      child: Text(
+                        "PRINT",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        presenter.onClickPrint(context);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

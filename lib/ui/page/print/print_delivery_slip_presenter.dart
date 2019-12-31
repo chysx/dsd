@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:dsd/business/delivery_util.dart';
 import 'package:dsd/business/product_util.dart';
-import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
@@ -20,8 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 
-
-import '../../../application.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.

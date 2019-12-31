@@ -179,6 +179,7 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('SYNC'),
         bottom: TabBar(
           controller: tabController,

@@ -50,6 +50,7 @@ class VisitSummaryDetailPage extends StatelessWidget{
 
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('VISIT SUMMARY'),
         ),
         body: Consumer<VisitSummaryDetailPresenter>(builder: (context, presenter, _) {

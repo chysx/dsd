@@ -102,6 +102,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
 
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('INVENTORY COUNT'),
           actions: <Widget>[
             IconButton(

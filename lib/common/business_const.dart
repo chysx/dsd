@@ -97,3 +97,34 @@ class ActionType {
   static const String CheckOut = "CHKO";
   static const String CheckIn = "CHKI";
 }
+
+class UserType {
+  static String CATEGORY = "UserType";
+  static String DRIVER = "Driver";
+  static String CHECKER = "Checker";
+  static String CASHIER = "Cashier";
+  static String GATEKEEPER = "Gatekeeper";
+  static String CUSTOMER = "Customer";
+  static String HELPER = "Helper";
+}
+
+class BizModel {
+  static int START_OF_DAY = 1;
+  static int END_OF_DAY = 2;
+  static int CHECK_OUT = 3;
+  static int CHECK_IN = 4;
+  static int DELIVERY = 5;
+  static int TRADE_RETURN = 6;
+  static int EMPTY_RETURN = 7;
+  static int VAN_SALES = 8;
+  static int PRESALES = 9;
+  static int ARCOLLECTION = 10;
+  static int CHECK_IN_FINANCE = 11;
+  static int CHECK_IN_INVENTORY = 12;
+  static int CHECK_IN_SHIPMENT = 13;
+  static int CHECK_OUT_FINANCE = 14;
+  static int CHECK_OUT_INVENTORY = 15;
+  static int CHECK_OUT_FRAGMENT = 16;
+}
+
+

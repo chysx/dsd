@@ -59,6 +59,7 @@ class _SettingState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: GestureDetector(
           child: Text('Setting'),
           onLongPress: () {

@@ -30,6 +30,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('LIEFERSCHEIN'),
         actions: <Widget>[
           IconButton(
@@ -195,6 +196,16 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                     ),
+                    ListHeaderWidget(
+                      names: ['Total', BaseProductInfo.getActualTotal(presenter.productList).toString()],
+                      supNames: ['', ''],
+                      weights: [1, 1],
+                      aligns: [
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
+                      isBold: true,
+                    ),
                     Divider(
                       height: 2,
                     ),
@@ -249,6 +260,16 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 10),
+                    ),
+                    ListHeaderWidget(
+                      names: ['Total', BaseProductInfo.getTotalActualCs(presenter.productList).toString()],
+                      supNames: ['', ''],
+                      weights: [1, 1],
+                      aligns: [
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
+                      isBold: true,
                     ),
                     Divider(
                       height: 2,

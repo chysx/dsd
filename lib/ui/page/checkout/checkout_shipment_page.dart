@@ -23,18 +23,21 @@ class CheckoutShipmentPage extends StatelessWidget {
     var header = ListHeaderWidget(
       names: [
         IntlUtil.getString(context, Ids.shipment_shipment),
+        IntlUtil.getString(context, Ids.shipment_date),
         IntlUtil.getString(context, Ids.shipment_type),
         IntlUtil.getString(context, Ids.shipment_status)
       ],
-      weights: [1, 1, 1],
+      weights: [1, 1, 1,1],
       aligns: [
         TextAlign.left,
+        TextAlign.center,
         TextAlign.center,
         TextAlign.center,
       ],
     );
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('SHIPMENT'),
       ),
       body: Consumer<CheckoutShipmentPresenter>(builder: (context, presenter, _) {
@@ -70,17 +73,33 @@ class CheckoutShipmentPage extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: Text(
+                                info.shipmentDate ?? '',
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(
                                 info.type ?? '',
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(
                               flex: 1,
-                              child: Text(
-                                info.status ?? '',
-                                textAlign: TextAlign.center,
-                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                Text(
+                                  info.status ?? '',
+                                  textAlign: TextAlign.center,
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right,
+                                  color: Colors.grey,
+                                ),
+                              ],),
                             ),
+
                           ],
                         ),
                       ),

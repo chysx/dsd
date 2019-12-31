@@ -43,6 +43,7 @@ class _CheckInShipmentState extends State<CheckInShipmentPage> {
     );
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('SHIPMENT'),
       ),
       body: Consumer<CheckInShipmentPresenter>(builder: (context, presenter, _) {

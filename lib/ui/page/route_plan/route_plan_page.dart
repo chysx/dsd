@@ -27,6 +27,7 @@ class RoutePlanPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+          centerTitle: true,
           title: GestureDetector(
         child: Text('ROUTE PLAN'),
       ) //Text('ROUTE PLAN'),
