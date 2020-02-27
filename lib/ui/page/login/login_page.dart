@@ -27,6 +27,8 @@ class LoginPage extends StatefulWidget {
 class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
   TextEditingController userCtrl;
   TextEditingController pwdCtrl;
+  FocusNode userFocus = FocusNode();
+  FocusNode pwdFocus = FocusNode();
 
   void ctrlUserName(LoginPresenter presenter) {
     if (userCtrl == null) {
@@ -68,6 +70,11 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
     }
   }
 
+  void hideFocus() {
+    userFocus.unfocus();
+    pwdFocus.unfocus();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +113,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                                 hintText: IntlUtil.getString(context, Ids.userName),
                                 prefixIcon: Icon(Icons.person)),
                             controller: userCtrl,
+                            focusNode: userFocus,
                           ),
                           TextField(
                             decoration: InputDecoration(
@@ -114,6 +122,8 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                               prefixIcon: Icon(Icons.lock),
                             ),
                             controller: pwdCtrl,
+                            obscureText: true,
+                            focusNode: pwdFocus,
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 20),
@@ -127,6 +137,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
+                                      hideFocus();
                                       presenter.login(context, presenter.inputInfo);
                                     },
                                   ),
@@ -140,6 +151,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
+                                    hideFocus();
                                     presenter.onClickSetting(context);
                                   },
                                   child: Container(

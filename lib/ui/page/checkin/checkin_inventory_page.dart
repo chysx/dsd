@@ -213,7 +213,7 @@ class CheckInInventoryPage extends StatelessWidget {
                                       children: <Widget>[
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(
@@ -236,7 +236,7 @@ class CheckInInventoryPage extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(
@@ -340,7 +340,7 @@ class CheckInInventoryPage extends StatelessWidget {
                                       children: <Widget>[
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(

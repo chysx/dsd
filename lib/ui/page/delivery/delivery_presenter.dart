@@ -4,6 +4,7 @@ import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
 import 'package:dsd/common/system_config.dart';
+import 'package:dsd/db/manager/md_account_manager.dart';
 import 'package:dsd/db/manager/system_config_manager.dart';
 import 'package:dsd/db/manager/truck_stock_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_item_entity.dart';
@@ -14,6 +15,7 @@ import 'package:dsd/model/delivery_model.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/page_builder.dart';
+import 'package:dsd/ui/page/profile/note_info.dart';
 import 'package:flutter/material.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -35,6 +37,8 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   List<BaseProductInfo> productList = [];
   List<BaseProductInfo> emptyProductList = [];
   List<TruckStockProductInfo> stockList = [];
+  NoteInfo noteInfo = new NoteInfo();
+
   String deliveryNo;
   String shipmentNo;
   String accountNumber;
@@ -76,6 +80,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   Future initData() async {
     await DeliveryModel().initData(deliveryNo);
     await initConfig();
+    await fillNoteData();
     await fillProductData();
     await fillEmptyProductData();
     await fillStockData();
@@ -94,6 +99,14 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
       case ProductUnit.EA_VALUE:
         productUnitValue = ProductUnit.EA;
         break;
+    }
+  }
+
+  fillNoteData() async {
+    List<NoteInfo> noteInfoList =
+    await MdAccountManager.getRouteNoteList(shipmentNo, accountNumber);
+    if(noteInfoList.length > 0){
+      noteInfo = noteInfoList[0];
     }
   }
 
@@ -161,6 +174,12 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
     return isEqual
         ? DeliveryStatus.TOTAL_DELIVERED_VALUE
         : DeliveryStatus.PARTIAL_DELIVERED_VALUE;
+  }
+
+  bool isShowPickupEmpty() {
+    if(DeliveryModel().deliveryHeader == null ||
+        DeliveryModel().deliveryHeader.PickupEmpties__c == null) return false;
+    return DeliveryModel().deliveryHeader.PickupEmpties__c == Show.TRUE;
   }
 
   void onClickRight(BuildContext context) {

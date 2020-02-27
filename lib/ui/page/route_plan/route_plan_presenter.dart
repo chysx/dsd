@@ -3,6 +3,8 @@ import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/route_plan_info.dart';
+import 'package:dsd/route/page_builder.dart';
+import 'package:flutter/material.dart';
 
 enum RoutePlanEvent { InitData }
 
@@ -42,5 +44,14 @@ class RoutePlanPresenter extends EventNotifier<RoutePlanEvent> {
       info.type = entity.DeliveryType;
       routePlanList.add(info);
     }
+  }
+
+  void onClickItem(BuildContext context,RoutePlanInfo info) {
+    Map<String,dynamic> bundle = {
+      FragmentArg.DELIVERY_NO: info.no,
+      FragmentArg.ROUTE_ORDER_NO: info.orderNo,
+    };
+    Navigator.pushNamed(context, PageName.route_plan_detail.toString(),arguments: bundle);
+
   }
 }

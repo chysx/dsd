@@ -1,4 +1,5 @@
 import 'package:dsd/model/base_product_info.dart';
+import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/widget/fold_widget.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
@@ -76,7 +77,7 @@ class DeliveryPage extends StatelessWidget {
 
   Widget createListHeaderWidget(DeliveryPresenter presenter) {
     return ListHeaderWidget(
-      names: ['Product', 'Stock', 'Actual'],
+      names: ['Product', 'Planned', 'Actual'],
       supNames: ['', 'CS/EA', 'CS/EA'],
       weights: [2, 1, 1],
       aligns: [
@@ -113,15 +114,13 @@ class DeliveryPage extends StatelessWidget {
 
   Widget createListHeaderEmptyWidget(DeliveryPresenter presenter) {
     return ListHeaderWidget(
-      names: ['Product', 'Stock', 'Actual'],
-      supNames: ['', '', ''],
-      weights: [2, 1, 1],
+      names: ['Product', 'Qty'],
+      supNames: ['', '', ],
+      weights: [2, 1],
       aligns: [
         TextAlign.left,
         TextAlign.center,
-        TextAlign.center,
       ],
-      isCheck: false,
       onChange: (value) {
 //        presenter.onEvent(CheckInInventoryEvent.SelectOrCancelEmptyAll, value);
       },
@@ -132,16 +131,12 @@ class DeliveryPage extends StatelessWidget {
     return ListHeaderWidget(
       names: [
         'toal:',
-        BaseProductInfo.getPlanTotal(presenter.emptyProductList),
         BaseProductInfo.getActualTotal(presenter.emptyProductList),
-        ''
       ],
-      supNames: ['', '', '', ''],
-      weights: [2, 1, 1, 1],
+      supNames: ['', ''],
+      weights: [2, 1],
       aligns: [
         TextAlign.left,
-        TextAlign.center,
-        TextAlign.center,
         TextAlign.center,
       ],
       onChange: (value) {
@@ -174,6 +169,44 @@ class DeliveryPage extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
+                FoldWidget(
+                  msg: 'DELIVERY NOTE',
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Offstage(
+                          offstage: presenter.isShowPickupEmpty(),
+                          child: Text(
+                            'Please Pickup Empties',
+                            style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              presenter.noteInfo.getShowDate() ?? '',
+                              style: TextStyles.normal,
+                            ),
+                            Spacer(),
+                            Text(
+                              presenter.noteInfo.name ?? '',
+                              style: TextStyles.normal,
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 10),
+                        ),
+                        Text(
+                          presenter.noteInfo.dsc ?? '',
+                          style: TextStyles.normal,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 FoldWidget(
                   msg: 'PRODUCTS',
                   child: Column(
@@ -214,7 +247,7 @@ class DeliveryPage extends StatelessWidget {
                                       children: <Widget>[
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(
@@ -238,7 +271,7 @@ class DeliveryPage extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(
@@ -332,18 +365,11 @@ class DeliveryPage extends StatelessWidget {
                                   ),
                                   Expanded(
                                     flex: 1,
-                                    child: Text(
-                                      '${info.plannedCs}',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
                                     child: Row(
                                       children: <Widget>[
                                         Expanded(
                                           child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                             child: Theme(
                                               data: ThemeData(primaryColor: Colors.grey),
                                               child: TextField(
@@ -362,37 +388,6 @@ class DeliveryPage extends StatelessWidget {
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Stack(
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment.center,
-                                          child: Checkbox(
-                                            value: info.isCheck,
-                                            onChanged: (value){
-//                                              presenter.selectOrCancel(info, value);
-                                            },
-                                          ),
-                                        ),
-
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 16,
-                                          child: GestureDetector(
-                                            behavior: HitTestBehavior.opaque,
-                                            onTap: (){
-//                                              presenter.showReasonDialog(context, info);
-                                            },
-                                            child: Offstage(
-                                                offstage: info.isEqual(),
-                                                child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 18,)),
-                                          ),
-                                        ),
-
                                       ],
                                     ),
                                   ),

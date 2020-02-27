@@ -90,11 +90,18 @@ class HttpConfig {
 enum UrlConfig { PRD, UAT, QAS, DEV }
 
 class UrlDev {
-  static const String HOST = "180.166.98.86";
-  static const String PORT = "1089";
-  static const bool IS_SSL = false;
+  static const String HOST = "sfademo.ebestmobile.net";
+  static const String PORT = "8000";
+  static const bool IS_SSL = true;
   static const String ENV = "DEV";
 }
+
+//class UrlDev {
+//  static const String HOST = "180.166.98.86";
+//  static const String PORT = "1089";
+//  static const bool IS_SSL = false;
+//  static const String ENV = "DEV";
+//}
 
 //class UrlQas {
 //  static const String HOST = "aglsfaqa.ebestmobile.net";

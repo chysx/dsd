@@ -122,7 +122,7 @@ class _RouteState extends State<RoutePage> {
                     onPressed: (){
                       presenter.onClickPlan(context,info);
                     },
-                    color: Colors.blue,
+                    color: ColorsRes.title,
                     child: Text(
                       'Plan',
                       style: TextStyle(color: Colors.white),
@@ -135,7 +135,7 @@ class _RouteState extends State<RoutePage> {
                     onPressed: (){
                       presenter.onClickProfile(context,info);
                     },
-                    color: Colors.blue,
+                    color: ColorsRes.themTitle.shade500,
                     child: Text(
                       'Profile',
                       style: TextStyle(color: Colors.white),
@@ -149,7 +149,7 @@ class _RouteState extends State<RoutePage> {
                     onPressed: (){
                       presenter.onClickNavigation(context, info);
                     },
-                    color: Colors.blue,
+                    color: ColorsRes.themTitle.shade500,
                     child: Text(
                       'Navigation',
                       style: TextStyle(color: Colors.white),
@@ -163,7 +163,7 @@ class _RouteState extends State<RoutePage> {
                     onPressed: (){
                       presenter.onClickStartCall(context,info);
                     },
-                    color: Colors.blue,
+                    color: ColorsRes.themTitle.shade500,
                     child: Text(
                       'Start Call',
                       style: TextStyle(color: Colors.white),

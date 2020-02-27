@@ -1,4 +1,5 @@
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/route/page_builder.dart';
@@ -109,7 +110,7 @@ class DrawerWidget extends StatelessWidget {
     return DrawerHeader(
         padding: EdgeInsets.zero,
         child: Container(
-          color: Colors.blue,
+          color: Colors.grey,
           child: Stack(
             alignment: FractionalOffset.centerLeft,
             children: <Widget>[
@@ -144,7 +145,7 @@ class DrawerWidget extends StatelessWidget {
   List<Widget> _buildContent(BuildContext context) {
     return menuInfoList.map((menu) {
       return Container(
-        color: menu.isSelect ? Colors.blue : Colors.grey,
+        color: menu.isSelect ? ColorsRes.themTitle.shade500 : Colors.grey,
         child: ListTile(
           leading: Image.asset(menu.imgPath),
           title: Text(

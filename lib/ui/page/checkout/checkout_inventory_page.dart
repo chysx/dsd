@@ -1,4 +1,5 @@
 import 'package:dsd/model/base_product_info.dart';
+import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/widget/list_header_widget.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,20 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
           initControllerEa(presenter);
           return Column(
             children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(10),
+                color: ColorsRes.gray_normal,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        'SHIPMENT NO: ${presenter.shipmentNo}',
+                        style: TextStyles.large,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               createListHeaderWidget(presenter),
               Expanded(
                 child: ListView.separated(
@@ -154,7 +169,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                 children: <Widget>[
                                   Expanded(
                                     child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                       child: Theme(
                                         data: ThemeData(primaryColor: Colors.grey),
                                         child: TextField(
@@ -176,7 +191,7 @@ class _CheckoutInventoryState extends State<CheckoutInventoryPage> {
                                   ),
                                   Expanded(
                                     child: SizedBox(
-//                                height: 36,
+                                height: 36,
                                       child: Theme(
                                         data: ThemeData(primaryColor: Colors.grey),
                                         child: TextField(

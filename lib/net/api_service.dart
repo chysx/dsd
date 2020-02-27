@@ -14,16 +14,19 @@ import 'package:dsd/ui/page/login/login_request_bean.dart';
 class ApiService {
   static Future<Response<Map<String, dynamic>>> getDataByLogin(LoginRequestBean loginRequestBean) {
     String path = '/iSyncService/login.aspx';
+//    String path = '/DSD_iSyncService/login.aspx';
     return Application.httpService.post(path, data: loginRequestBean.toJson());
   }
 
   static Future<Response<Map<String, dynamic>>> getSyncDataByDownload(SyncRequestBean syncRequestBean) {
     String path = '/iSyncService/download.aspx';
+//    String path = '/DSD_iSyncService/download.aspx';
     return Application.httpService.post(path, data: syncRequestBean.toJson());
   }
 
   static Future<Response<Map<String, dynamic>>> getSyncDataByUpload(SyncRequestBean syncRequestBean) {
     String path = '/iSyncService/Upload.aspx';
+//    String path = '/DSD_iSyncService/Upload.aspx';
     return Application.httpService.post(path, data: syncRequestBean.toJson());
   }
 }

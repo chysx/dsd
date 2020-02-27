@@ -64,7 +64,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                         Text(
-                          '''Valser Service AG\nSchermenweg 151\n3072 Ostermundigen''',
+                          '''Valser Service AG\nStationsstrasse 33\n8306 Brüttisellen''',
                           style: TextStyle(fontSize: Dimens.font_large, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.right,
                         ),
@@ -93,7 +93,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                                 style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                  '''${presenter.accountNumber}\n${presenter.address} ''',
+                                  '''${presenter.customerName}\n\n${presenter.address} ''',
                                 style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
                               ),
                               Padding(
@@ -262,7 +262,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10),
                     ),
                     ListHeaderWidget(
-                      names: ['Total', BaseProductInfo.getTotalActualCs(presenter.productList).toString()],
+                      names: ['Total', BaseProductInfo.getTotalActualCs(presenter.emptyProductList).toString()],
                       supNames: ['', ''],
                       weights: [1, 1],
                       aligns: [

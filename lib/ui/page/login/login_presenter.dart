@@ -18,6 +18,7 @@ import 'package:dsd/ui/page/login/login_status.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/utils/device_info.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
@@ -171,6 +172,8 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
         ..platForm = "Android";
 
       Application.logger.i('request = ${loginRequestBean.toJson()}');
+
+      FileUtil.writeString(loginRequestBean.toJson());
 
       LoginResponseStatus responseStatus;
       Observable.fromFuture(ApiService.getDataByLogin(loginRequestBean)).listen((response) {

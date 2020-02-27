@@ -20,6 +20,8 @@ import 'package:dsd/ui/page/document/document_page.dart';
 import 'package:dsd/ui/page/document/document_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
 import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/page/print/checkout_slip/print_checkout_slip_page.dart';
+import 'package:dsd/ui/page/print/checkout_slip/print_checkout_slip_presenter.dart';
 import 'package:dsd/ui/page/print/print_delivery_slip_page.dart';
 import 'package:dsd/ui/page/print/print_delivery_slip_presenter.dart';
 import 'package:dsd/ui/page/profile/profile_page.dart';
@@ -28,6 +30,8 @@ import 'package:dsd/ui/page/route/route_page.dart';
 import 'package:dsd/ui/page/route/route_presenter.dart';
 import 'package:dsd/ui/page/route_plan/route_plan_page.dart';
 import 'package:dsd/ui/page/route_plan/route_plan_presenter.dart';
+import 'package:dsd/ui/page/route_plan_detail/route_plan_detail_page.dart';
+import 'package:dsd/ui/page/route_plan_detail/route_plan_detail_presenter.dart';
 import 'package:dsd/ui/page/settings/settings_page.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/ui/page/sync/sync_page.dart';
@@ -279,5 +283,29 @@ PageBuilder printDeliverySlipHandler = PageBuilder(builder: (bundle) {
             ..onEvent(PrintDeliverySlipEvent.InitData)),
     ],
     child: PrintDeliverySlipPage(),
+  );
+});
+
+PageBuilder printCheckoutSlipHandler = PageBuilder(builder: (bundle) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new PrintCheckoutSlipPresenter()
+            ..setBundle(bundle)
+            ..onEvent(PrintCheckoutSlipEvent.InitData)),
+    ],
+    child: PrintCheckoutSlipPage(),
+  );
+});
+
+PageBuilder routePlanDetailHandler = PageBuilder(builder: (bundle) {
+  return MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          builder: (context) => new RoutePlanDetailPresenter()
+            ..setBundle(bundle)
+            ..onEvent(RoutePlanDetailEvent.InitData)),
+    ],
+    child: RoutePlanDetailPage(),
   );
 });

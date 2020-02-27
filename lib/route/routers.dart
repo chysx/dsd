@@ -32,6 +32,8 @@ class Routers {
       PageName.profile: profileHandler,
       PageName.document: documentHandler,
       PageName.print_delivery_slip: printDeliverySlipHandler,
+      PageName.print_checkout_slip: printCheckoutSlipHandler,
+      PageName.route_plan_detail: routePlanDetailHandler,
     };
     pageRoutes.forEach((pageName,pageBuilder){
       router.define(pageName.toString(), handler: Handler(handlerFunc:pageBuilder.getHandlerFunc()),transitionType: TransitionType.inFromLeft);

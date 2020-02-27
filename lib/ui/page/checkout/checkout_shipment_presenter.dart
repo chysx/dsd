@@ -38,32 +38,24 @@ class CheckoutShipmentPresenter extends EventNotifier<ShipmentEvent> {
   }
 
   Future onClickItem(BuildContext context,ShipmentInfo info) async {
-//    if(info.status == ShipmentStatus.CHKO){
-//      Map<String,dynamic> bundle = {
-//        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
-//      };
-//      Navigator.pushReplacementNamed(context, PageName.route.toString(),arguments: bundle);
-//
-//    }else if(info.status == ShipmentStatus.CHKI){
-//
-//    }else{
-//      Map<String,dynamic> bundle = {
-//        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
-//      };
-//      await Navigator.pushNamed(context, PageName.check_out.toString(),arguments: bundle);
-//
-//
-//      onResume();
-//    }
+    if(info.status == ShipmentStatus.CHKO){
+      Map<String,dynamic> bundle = {
+        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
+      };
+      Navigator.pushReplacementNamed(context, PageName.route.toString(),arguments: bundle);
+
+    }else if(info.status == ShipmentStatus.CHKI){
+
+    }else{
+      Map<String,dynamic> bundle = {
+        FragmentArg.ROUTE_SHIPMENT_NO: info.no,
+      };
+      await Navigator.pushNamed(context, PageName.check_out.toString(),arguments: bundle);
 
 
-    Map<String,dynamic> bundle = {
-      FragmentArg.ROUTE_SHIPMENT_NO: info.no,
-    };
-    await Navigator.pushNamed(context, PageName.check_out.toString(),arguments: bundle);
+      onResume();
+    }
 
-
-    onResume();
   }
 
   void onResume(){

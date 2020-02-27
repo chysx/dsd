@@ -42,7 +42,8 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
   }
 
   bool isComplete(){
-    return CheckInModel().shipmentItemList.length > 0;
+//    return CheckInModel().shipmentItemList.length > 0;
+    return CheckInModel().shipmentHeader?.ActionType != null;
   }
 
   String getIsCompleteText() {

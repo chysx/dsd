@@ -1,5 +1,6 @@
 
 import 'package:dsd/application.dart';
+import 'package:dsd/res/colors.dart';
 import 'package:dsd/route/routers.dart';
 import 'package:dsd/splash_page.dart';
 import 'package:fluintl/fluintl.dart';
@@ -29,7 +30,7 @@ class MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'CCH',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: ColorsRes.themTitle,
       ),
       onGenerateRoute: Application.router.generator,
       localizationsDelegates: [

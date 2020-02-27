@@ -48,6 +48,8 @@ enum PageName {
   profile,
   document,
   print_delivery_slip,
+  print_checkout_slip,
+  route_plan_detail,
 }
 
 
