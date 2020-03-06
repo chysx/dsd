@@ -1,6 +1,7 @@
 import 'package:dsd/synchronization/model/sync_update_model.dart';
 import 'package:dsd/synchronization/model/sync_upload_checkin_model.dart';
 import 'package:dsd/synchronization/model/sync_upload_checkout_model.dart';
+import 'package:dsd/synchronization/model/sync_upload_photo_model.dart';
 import 'package:dsd/synchronization/model/sync_upload_visit_model.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 
@@ -32,6 +33,9 @@ class SyncFactory {
         break;
       case SyncType.SYNC_UPLOAD_VISIT:
         syncMode = new SyncUploadVisitModel(syncType);
+        break;
+      case SyncType.SYNC_UPLOAD_PHOTO:
+        syncMode = new SyncUploadPhotoModel(syncType);
         break;
       default:
         break;

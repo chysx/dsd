@@ -19,5 +19,6 @@ class SyncPhotoUploadEntity {
 
   SyncPhotoUploadEntity(this.id, this.filePath, this.name, this.type, this.status, this.time);
 
+  SyncPhotoUploadEntity.Empty();
 
 }

@@ -18,7 +18,12 @@ import 'base/abstract_sync_mode.dart';
 class SyncManager {
   static void start(SyncType syncType,
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) {
-    if (context != null) LoadingDialog.show(context);
+    if (context != null) {
+      if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+        LoadingDialog.show(context);
+      }
+    }
+
     if (syncParameter == null) syncParameter = new SyncParameter();
     AbstractSyncMode syncMode = SyncFactory.createSyncModel(syncType);
 
@@ -26,12 +31,24 @@ class SyncManager {
       ..syncParameter = syncParameter
       ..onSuccessSync = () {
         print("onSuccessSync");
-        if (context != null) LoadingDialog.dismiss(context);
+
+        if (context != null) {
+          if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+            LoadingDialog.dismiss(context);
+          }
+        }
+
         onSuccessSync();
       }
       ..onFailSync = (e) {
         print("onFailSync");
-        if (context != null) LoadingDialog.dismiss(context);
+
+        if (context != null) {
+          if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+            LoadingDialog.dismiss(context);
+          }
+        }
+
         onFailSync(e);
       };
     syncMode.start();

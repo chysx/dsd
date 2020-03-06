@@ -58,4 +58,17 @@ class FileUtil {
     await file.writeAsString(jsonEncode(content));
   }
 
+  ///
+  /// 获取全路径中的不带拓展名的文件名
+  ///
+  /// @param filePath 文件路径
+  /// @return 不带拓展名的文件名
+  ///
+  static String getFileNameNoExtension(String filePath) {
+    if (filePath == null || filePath.isEmpty) return filePath;
+    int lastIndex = filePath.lastIndexOf('.');
+    if(lastIndex == -1) return filePath;
+    return filePath.substring(0,lastIndex);
+  }
+
 }
