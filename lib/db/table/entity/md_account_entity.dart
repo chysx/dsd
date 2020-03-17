@@ -10,7 +10,8 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "MD_Account")
 class MD_Account_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String Name;
   String AccountNumber;
   String Owner;
@@ -183,7 +184,7 @@ class MD_Account_Entity {
   String LastTime;
   String dirty;
 
-  MD_Account_Entity(this.id, this.Name, this.AccountNumber, this.Owner, this.RecordType, this.Site, this.AccountSource,
+  MD_Account_Entity(this.pid,this.Id, this.Name, this.AccountNumber, this.Owner, this.RecordType, this.Site, this.AccountSource,
       this.AnnualRevenue, this.BillingAddress, this.CreatedBy, this.Jigsaw, this.Description, this.NumberOfEmployees,
       this.Fax, this.Industry, this.LastModifiedBy, this.Ownership, this.Parent, this.Phone, this.Rating,
       this.ShippingAddress, this.Sic, this.SicDesc, this.TickerSymbol, this.Type, this.Website,
@@ -235,7 +236,8 @@ class MD_Account_Entity {
   static Map<String, dynamic> toJson(
       MD_Account_Entity instance) =>
       <String, dynamic>{
-        'id': instance.id,
+        'pid': instance.pid,
+        'Id': instance.Id,
         'Name': instance.Name,
         'AccountNumber': instance.AccountNumber,
         'Owner': instance.Owner,

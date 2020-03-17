@@ -7,6 +7,7 @@ import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -54,7 +55,10 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
   }
 
   Future onClickItem(BuildContext context,String shipmentNo) async {
-
+    if(isComplete()){
+      Fluttertoast.showToast(msg: 'You already complete the inventory');
+      return;
+    }
     Map<String,dynamic> bundle = {
       FragmentArg.ROUTE_SHIPMENT_NO: shipmentNo,
     };

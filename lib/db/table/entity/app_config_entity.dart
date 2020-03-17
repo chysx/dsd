@@ -14,6 +14,8 @@ class AppConfigEntity {
   String userCode;
   String userName;
   String password;
+  String token;
+  String url;
   String env;
   String host;
   String port;
@@ -27,6 +29,8 @@ class AppConfigEntity {
       this.userCode,
       this.userName,
       this.password,
+      this.token,
+      this.url,
       this.env,
       this.host,
       this.port,
@@ -39,7 +43,7 @@ class AppConfigEntity {
 
   @override
   String toString() {
-    return 'AppConfigEntity{id: $id, userCode: $userCode, userName: $userName, password: $password, env: $env, host: $host, port: $port, isSsl: $isSsl, syncInitFlag: $syncInitFlag, version: $version, lastUpdateTime: $lastUpdateTime}';
+    return 'AppConfigEntity{id: $id, userCode: $userCode, userName: $userName, password: $password,token: $token,url: $url, env: $env, host: $host, port: $port, isSsl: $isSsl, syncInitFlag: $syncInitFlag, version: $version, lastUpdateTime: $lastUpdateTime}';
   }
 
 

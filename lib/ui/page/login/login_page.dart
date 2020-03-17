@@ -1,16 +1,11 @@
 
-import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
 import 'package:dsd/res/strings.dart';
-import 'package:dsd/ui/page/login/login_presenter.dart';
-import 'package:dsd/ui/widget/drawer_widget.dart';
+import 'package:dsd/ui/page/login/sf_login_presenter.dart';
 import 'package:dsd/utils/device_info.dart';
 import 'package:fluintl/fluintl.dart';
-import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../../application.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -30,7 +25,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
   FocusNode userFocus = FocusNode();
   FocusNode pwdFocus = FocusNode();
 
-  void ctrlUserName(LoginPresenter presenter) {
+  void ctrlUserName(SfLoginPresenter presenter) {
     if (userCtrl == null) {
       userCtrl = new TextEditingController();
       userCtrl.addListener(() {
@@ -41,7 +36,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
     userCtrl.text = presenter.inputInfo.userCode;
   }
 
-  void ctrlPassword(LoginPresenter presenter) {
+  void ctrlPassword(SfLoginPresenter presenter) {
     if (pwdCtrl == null) {
       pwdCtrl = TextEditingController();
       pwdCtrl.addListener(() {
@@ -97,7 +92,7 @@ class _LoginState extends State<LoginPage> with WidgetsBindingObserver{
                 ),
               ),
             ),
-            Consumer<LoginPresenter>(
+            Consumer<SfLoginPresenter>(
                 builder: (context, presenter, _) {
                   ctrlUserName(presenter);
                   ctrlPassword(presenter);

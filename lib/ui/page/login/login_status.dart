@@ -52,3 +52,8 @@ enum LoginResponseStatus {
   //UserCode 和 IMEI不匹配
   ImeiNotMatch
 }
+
+enum LoginType {
+  Token,
+  Login,
+}

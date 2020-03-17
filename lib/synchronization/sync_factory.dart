@@ -7,6 +7,9 @@ import 'package:dsd/synchronization/sync/sync_type.dart';
 
 import 'base/abstract_sync_mode.dart';
 import 'model/sync_init_model.dart';
+import 'model/sync_sf_config_model.dart';
+import 'model/sync_sf_init_model.dart';
+import 'model/sync_sf_update_model.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -36,6 +39,15 @@ class SyncFactory {
         break;
       case SyncType.SYNC_UPLOAD_PHOTO:
         syncMode = new SyncUploadPhotoModel(syncType);
+        break;
+      case SyncType.SYNC_INIT_SF:
+        syncMode = new SyncInitSfModel(syncType);
+        break;
+      case SyncType.SYNC_UPDATE_SF:
+        syncMode = new SyncSfUpdateModel(syncType);
+        break;
+      case SyncType.SYNC_CONFIG_SF:
+        syncMode = new SyncSfConfigModel(syncType);
         break;
       default:
         break;
