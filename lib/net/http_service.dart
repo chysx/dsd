@@ -29,8 +29,10 @@ class HttpService {
     return _instance;
   }
 
-  BaseOptions configDio() {
-    return new BaseOptions(
+  factory HttpService() => _getInstance();
+
+  void resetConfigDio(){
+    dio.options = new BaseOptions(
         baseUrl: url,
         connectTimeout: TimeOut.CONNECT_TIMEOUT,
         receiveTimeout: TimeOut.READ_TIMEOUT,
@@ -38,12 +40,6 @@ class HttpService {
           HttpHeaders.authorizationHeader: 'Bearer ' + token
         }
     );
-  }
-
-  factory HttpService() => _getInstance();
-
-  void resetConfigDio(){
-    dio.options = configDio();
   }
 
   void restConfigDioByToken() {

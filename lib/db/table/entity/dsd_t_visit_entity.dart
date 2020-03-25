@@ -10,7 +10,9 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_T_Visit")
 class DSD_T_Visit_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
+  String GUID;
   String VisitId;
   String ShipmentNo;
   String StartTime;
@@ -21,6 +23,7 @@ class DSD_T_Visit_Entity {
   String Latitude;
   String CancelReason;
   String NoScanReason;
+  String CallType;
   String CreateUser;
   String CreateTime;
   String LastUpdateUser;
@@ -28,8 +31,8 @@ class DSD_T_Visit_Entity {
   String dirty;
   String isCompleted;
 
-  DSD_T_Visit_Entity(this.id, this.VisitId, this.ShipmentNo, this.StartTime, this.EndTime, this.UserCode,
-      this.AccountNumber, this.Longitude, this.Latitude, this.CancelReason, this.NoScanReason, this.CreateUser,
+  DSD_T_Visit_Entity(this.pid,this.Id,this.GUID, this.VisitId, this.ShipmentNo, this.StartTime, this.EndTime, this.UserCode,
+      this.AccountNumber, this.Longitude, this.Latitude, this.CancelReason, this.NoScanReason, this.CallType,this.CreateUser,
       this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty, this.isCompleted);
 
   DSD_T_Visit_Entity.Empty();

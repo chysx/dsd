@@ -12,7 +12,7 @@ import 'package:dsd/synchronization/base/abstract_request_create.dart';
 ///  Date:         2019/7/29 16:00
 
 class DownloadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfRequestBean>> {
-  DownloadSfRequestCreate(AbstractSyncSfDownloadModel syncDownloadModel) : super.bySf(syncDownloadModel);
+  DownloadSfRequestCreate(AbstractSyncSfDownloadModel syncDownloadModel) : super.bySf(syncDownloadModel,null);
 
   @override
   Future<SyncSfRequestBean> create() async {
@@ -22,9 +22,9 @@ class DownloadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfRequest
   Future<SyncSfRequestBean> createSyncDataRequestBean(List<String> tableList) async {
 
     SyncSfRequestBean requestBean = SyncSfRequestBean();
-//    requestBean.deviceId = '';
+    requestBean.deviceId = '';
 //    requestBean.userId = '';
-    requestBean.groupNumber = '1';
+//    requestBean.groupNumber = '';
     if(syncSfDownloadModel.syncType == SyncType.SYNC_INIT_SF){
       requestBean.syncType = '0';
     } else{

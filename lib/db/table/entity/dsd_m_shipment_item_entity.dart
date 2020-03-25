@@ -10,13 +10,14 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_M_ShipmentItem")
 class DSD_M_ShipmentItem_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String ShipmentNo;
   String ProductCode;
   String ProductUnit;
   String PlanQty;
 
-  DSD_M_ShipmentItem_Entity(this.id, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.PlanQty);
+  DSD_M_ShipmentItem_Entity(this.pid,this.Id, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.PlanQty);
 
   DSD_M_ShipmentItem_Entity.Empty();
 

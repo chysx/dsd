@@ -56,4 +56,5 @@ enum LoginResponseStatus {
 enum LoginType {
   Token,
   Login,
+  UpdateTime
 }

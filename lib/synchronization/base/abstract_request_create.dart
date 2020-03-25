@@ -1,3 +1,5 @@
+import 'package:dsd/synchronization/base/abstract_sync_sf_upload_model.dart';
+
 import 'abstract_sync_download_model.dart';
 import 'abstract_sync_sf_download_model.dart';
 import 'abstract_sync_upload_model.dart';
@@ -15,9 +17,10 @@ abstract class AbstractRequestCreate<T> implements ICreateFlow<T> {
   AbstractSyncUploadModel syncUploadModel;
 
   AbstractSyncSfDownloadModel syncSfDownloadModel;
+  AbstractSyncSfUploadModel syncSfUploadModel;
 
 
   AbstractRequestCreate(this.syncDownloadModel, this.syncUploadModel);
 
-  AbstractRequestCreate.bySf(this.syncSfDownloadModel);
+  AbstractRequestCreate.bySf(this.syncSfDownloadModel,this.syncSfUploadModel);
 }

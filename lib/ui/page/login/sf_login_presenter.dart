@@ -11,11 +11,13 @@ import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/login/Login_by_online.dart';
 import 'package:dsd/ui/page/login/login_input_info.dart';
 import 'package:dsd/ui/page/login/login_status.dart';
+import 'package:dsd/ui/page/login/login_test.dart';
 import 'package:dsd/ui/page/login/sf_login_response_bean.dart';
 import 'package:dsd/ui/page/login/sf_token_response_bean.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
 import 'package:dsd/utils/device_info.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +100,29 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
     HttpService().url = appConfigEntity.url;
   }
 
+  Future testLoadConfig(BuildContext context) async {
+    SyncManager.start(SyncType.SYNC_CONFIG_SF, context: context, onSuccessSync: () {
+      CustomerDialog.show(context, msg: 'Sync config success');
+    }, onFailSync: (e) async {
+      CustomerDialog.show(context, msg: 'Sync config fail');
+    });
+  }
+
+  Future testLoadSync(BuildContext context) async {
+    SyncManager.start(SyncType.SYNC_INIT_SF, context: context, onSuccessSync: () {
+      CustomerDialog.show(context, msg: 'Sync success');
+    }, onFailSync: (e) async {
+      CustomerDialog.show(context, msg: 'Sync fail');
+    });
+  }
+
+
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
+    if(true){
+//      testLoadSync(context);
+    FileUtil.getFilePath('log');
+      return;
+    }
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');
@@ -110,10 +134,10 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
         CustomerDialog.show(context, msg: 'Please input your password!');
         break;
       case LoginStatus.SyncUpdate:
-        loadToken(context, SyncType.SYNC_UPDATE, loginInputInfo);
+        loadToken(context, SyncType.SYNC_UPDATE_SF, loginInputInfo);
         break;
       case LoginStatus.SyncInit:
-        loadToken(context, SyncType.SYNC_INIT, loginInputInfo);
+        loadToken(context, SyncType.SYNC_INIT_SF, loginInputInfo);
         break;
       case LoginStatus.OffLine:
         onClickCheckout(context);
@@ -162,6 +186,7 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
         loginSuccess(context, syncType, responseBean, loginInputInfo);
       } else {
         CustomerDialog.show(context, msg: responseBean.records?.exceptionDescrption ?? 'Login failed. Please check your network and try again.');
+//        loginSuccess(context, syncType, responseBean, loginInputInfo);
       }
     },loginInputInfo);
   }
@@ -211,8 +236,14 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
     return LoginStatus.OffLine;
   }
 
+  Future loginSuccess(BuildContext context, SyncType syncType,
+      SFLoginResponseBean responseBean, LoginInputInfo inputInfo) async {
+    await saveUserToDbByLogin(responseBean, inputInfo);
+
+    loadConfig(context, syncType);
+  }
+
   Future loadConfig(BuildContext context, SyncType syncType) async {
-    //修改改变请求方式get
     SyncManager.start(SyncType.SYNC_CONFIG_SF, context: context, onSuccessSync: () {
       syncData(context,syncType);
     }, onFailSync: (e) async {
@@ -220,20 +251,27 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
     });
   }
 
-  Future loginSuccess(BuildContext context, SyncType syncType,
-      SFLoginResponseBean responseBean, LoginInputInfo inputInfo) async {
-    await saveUserToDb(responseBean, syncType, inputInfo);
-
-    loadConfig(context, syncType);
-  }
 
   void syncData(BuildContext context, SyncType syncType) {
-    SyncManager.start(syncType, context: context, onSuccessSync: () {
-      onClickCheckout(context);
+    SyncManager.start(syncType, context: context, onSuccessSync: () async {
+      loadUpdateTime(context,syncType);
     }, onFailSync: (e) async {
       await clearUserToDb();
       appConfigEntity.syncInitFlag = null;
       CustomerDialog.show(context, msg: 'Sync fail');
+    });
+  }
+
+  void loadUpdateTime(BuildContext context, SyncType syncType) {
+    LoginByOnline.start(context, LoginType.UpdateTime, (data) async {
+      if(data == 'SUCCESS'){
+        await saveUserToDbBySync(syncType);
+        onClickCheckout(context);
+      }else{
+        await clearUserToDb();
+        appConfigEntity.syncInitFlag = null;
+        CustomerDialog.show(context, msg: data);
+      }
     });
   }
 
@@ -260,7 +298,7 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
   }
 
 
-  Future saveUserToDb(SFLoginResponseBean responseBean, SyncType syncType,
+  Future saveUserToDbByLogin(SFLoginResponseBean responseBean,
       LoginInputInfo inputInfo) async {
     List<AppConfigEntity> list = await AppConfigManager.queryAll();
     SettingInfo settingInfo = await SettingPresenter.getCurSettingInfo();
@@ -271,7 +309,6 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
         ..userCode = responseBean.records.loginName
         ..userName = responseBean.records.userName
         ..password = inputInfo.password
-        ..syncInitFlag = syncType.toString()
         ..version = DeviceInfo().versionName
         ..lastUpdateTime = DateUtil.getNowDateStr()
         ..host = settingInfo.host
@@ -285,11 +322,26 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
         ..userCode = responseBean.records.loginName
         ..userName = responseBean.records.userName
         ..password = inputInfo.password
-        ..syncInitFlag = syncType.toString()
         ..version = DeviceInfo().versionName
         ..lastUpdateTime = DateUtil.getNowDateStr();
       await AppConfigManager.update(entity);
     }
     await fillAppConfigEntity();
+  }
+
+  Future saveUserToDbBySync(SyncType syncType,) async {
+    List<AppConfigEntity> list = await AppConfigManager.queryAll();
+    AppConfigEntity entity;
+    if (ObjectUtil.isEmptyList(list)) {
+      entity = AppConfigEntity.Empty();
+      entity
+        ..syncInitFlag = syncType.toString();
+        await AppConfigManager.insert(entity);
+    } else {
+      AppConfigEntity entity = list[0];
+      entity
+        ..syncInitFlag = syncType.toString();
+    await AppConfigManager.update(entity);
+    }
   }
 }

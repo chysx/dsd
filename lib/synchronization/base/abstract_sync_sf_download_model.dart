@@ -32,9 +32,15 @@ abstract class AbstractSyncSfDownloadModel
   }
 
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
-    return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
-      return Observable.fromFuture(ApiService.getSFDownloadData(syncRequestBean));
-    });
+    if(syncType == SyncType.SYNC_CONFIG_SF){
+      return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
+        return Observable.fromFuture(ApiService.getSFConfigData());
+      });
+    }else{
+      return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
+        return Observable.fromFuture(ApiService.getSFDownloadData(syncRequestBean));
+      });
+    }
   }
 
   void onSuccess() {

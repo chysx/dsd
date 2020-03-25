@@ -6,6 +6,7 @@ import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_parser.dart';
 import 'package:dsd/synchronization/base/i_parse_policy.dart';
 import 'package:dsd/synchronization/bean/sync_sf_response_bean.dart';
+import 'package:dsd/synchronization/model/sync_sf_update_model.dart';
 import 'package:dsd/synchronization/sync/sync_config.dart';
 import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/synchronization/sync/sync_response_status.dart';
@@ -125,6 +126,7 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
 
       indexList = _getIndexList(tableName,fields,tDeliveryHeaderFieldsByDownload);
       result = await _realParseTable(txn,tDeliveryHeader,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+      await _deleteT(txn, tDeliveryHeader);
 
     }else if(tableName == deliveryItem){
       indexList = _getIndexList(tableName,fields,mDeliveryItemFieldsByDownload);
@@ -132,18 +134,24 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
 
       indexList = _getIndexList(tableName,fields,tDeliveryItemFieldsByDownload);
       result = await _realParseTable(txn,tDeliveryItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+      await _deleteT(txn, tDeliveryItem);
+
     }else if(tableName == shipmentHeader){
       indexList = _getIndexList(tableName,fields,mShipmentHeaderFieldsByDownload);
       result = await _realParseTable(txn,mShipmentHeader,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
 
       indexList = _getIndexList(tableName,fields,tShipmentHeaderFieldsByDownload);
-      await _realParseTable(txn,tShipmentHeader,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+      result = await _realParseTable(txn,tShipmentHeader,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+      await _deleteT(txn, tShipmentHeader);
+
     }else if(tableName == shipmentItem){
       indexList = _getIndexList(tableName,fields,mShipmentItemFieldsByDownload);
       result = await _realParseTable(txn,mShipmentItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
 
       indexList = _getIndexList(tableName,fields,tShipmentItemFieldsByDownload);
       result = await _realParseTable(txn,tShipmentItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+      await _deleteT(txn, tShipmentItem);
+
     }else {
       result = await _realParseTable(txn,sf2LocalMapping[tableName],_getFieldNames(tableName,fields),rows);
     }
@@ -157,10 +165,14 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
     if (!await _isColumnInTable(txn, fieldList, tableName)) {
     return false;
     }
+
     List<String> primaryKeys = await _getTablePrimaryKeys(txn, tableName);
-    if (!await _isColumnInTable(txn, primaryKeys, tableName)) {
-      return false;
+    if(primaryKeys != null){//如果为null表明该张表不属于增量跟新里面的表，所以不需要check
+      if (!await _isColumnInTable(txn, primaryKeys, tableName)) {
+        return false;
+      }
     }
+
     if (rows != null && rows.length > 0) {
       await _parseRows(txn, primaryKeys, fieldList, rows, tableName);
     }
@@ -300,16 +312,10 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
   /// @return
   ///
   Future<List<String>> _getTablePrimaryKeys(sqlite_api.Transaction transaction, String tableName) async {
-    try {
-      List<Map<String, dynamic>> list =
-          await transaction.rawQuery("SELECT keys FROM sync_download_logic WHERE tableName = ?", [tableName]);
-      if (list != null && list.length > 0) {
-        return _getPrimaryKeys(list[0]["keys"]);
+    for(String key in SyncSfUpdateModel.updateMap.keys){
+      if(key.toLowerCase() == tableName.toLowerCase()){
+        return SyncSfUpdateModel.updateMap[key];
       }
-    } catch (e) {
-      Log().logger.e(e.toString());
-      AppLogManager.insert(ExceptionType.ERROR.toString(), error: e);
-      throw e;
     }
     return null;
   }
@@ -411,4 +417,14 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
     await transaction.update("sync_download_logic", {"TimeStamp": timeStamp, "Transferred": 1},
         where: "TableName = ?", whereArgs: [tableName]);
   }
+
+  Future _deleteT(sqlite_api.Transaction transaction, String tableName) async {
+    String sql1 = 'delete from $tableName where CreateUser = ?';
+    String sql2 = 'delete from $tableName where CreateUser = ?';
+    String sql3 = 'delete from $tableName where CreateUser is null';
+    await transaction.rawDelete(sql1,['']);
+    await transaction.rawDelete(sql2,[' ']);
+    await transaction.rawDelete(sql3);
+  }
+
 }

@@ -1,3 +1,6 @@
+import 'package:dsd/synchronization/model/sync_sf_upload_checkin_model.dart';
+import 'package:dsd/synchronization/model/sync_sf_upload_checkout_model.dart';
+import 'package:dsd/synchronization/model/sync_sf_upload_visit_model.dart';
 import 'package:dsd/synchronization/model/sync_update_model.dart';
 import 'package:dsd/synchronization/model/sync_upload_checkin_model.dart';
 import 'package:dsd/synchronization/model/sync_upload_checkout_model.dart';
@@ -48,6 +51,15 @@ class SyncFactory {
         break;
       case SyncType.SYNC_CONFIG_SF:
         syncMode = new SyncSfConfigModel(syncType);
+        break;
+      case SyncType.SYNC_UPLOAD_CHECKIN_SF:
+        syncMode = new SyncSfUploadCheckInModel(syncType);
+        break;
+      case SyncType.SYNC_UPLOAD_CHECKOUT_SF:
+        syncMode = new SyncSfUploadCheckOutModel(syncType);
+        break;
+      case SyncType.SYNC_UPLOAD_VISIT_SF:
+        syncMode = new SyncSfUploadVisitModel(syncType);
         break;
       default:
         break;

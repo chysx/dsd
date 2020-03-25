@@ -1,3 +1,4 @@
+import 'package:dsd/synchronization/base/abstract_sync_sf_upload_model.dart';
 import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 import 'package:dsd/synchronization/sql/checkin_model_sql_find.dart';
@@ -13,8 +14,8 @@ import 'package:dsd/synchronization/sync/sync_type.dart';
 ///  Email:        guopeng.zhang@ebestmobile.com)
 ///  Date:         2019/10/23 15:20
 
-class SyncUploadCheckInModel extends AbstractSyncUploadModel {
-  SyncUploadCheckInModel(SyncType syncType,
+class SyncSfUploadCheckInModel extends AbstractSyncSfUploadModel {
+  SyncSfUploadCheckInModel(SyncType syncType,
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
       : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync);
 

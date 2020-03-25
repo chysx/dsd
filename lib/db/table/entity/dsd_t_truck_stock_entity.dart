@@ -10,7 +10,9 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_T_TruckStock")
 class DSD_T_TruckStock_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
+  String GUID;
   int TruckId;
   String ShipmentNo;
   String ProductCode;
@@ -23,7 +25,7 @@ class DSD_T_TruckStock_Entity {
   String LastUpdateTime;
   String dirty;
 
-  DSD_T_TruckStock_Entity(this.id, this.TruckId, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.StockQty,
+  DSD_T_TruckStock_Entity(this.pid,this.Id,this.GUID, this.TruckId, this.ShipmentNo, this.ProductCode, this.ProductUnit, this.StockQty,
       this.SaleableQty, this.CreateUser, this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty);
 
   DSD_T_TruckStock_Entity.Empty();

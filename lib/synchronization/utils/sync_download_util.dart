@@ -1,6 +1,5 @@
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
 import 'package:dsd/synchronization/sync/sync_file_status.dart';
-import 'package:uuid/uuid.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -33,19 +32,12 @@ class SyncDownloadUtil {
     Map<String, Map<String, String>> tableMap = new Map();
 
     tableMap["DSD_T_ShipmentHeader"] = getFieldMapByDirty();
-    tableMap["DSD_T_ShipmentHelper"] = getFieldMapByDirty();
     tableMap["DSD_T_ShipmentItem"] = getFieldMapByDirty();
-    tableMap["DSD_T_ShipmentFinance"] = getFieldMapByDirty();
-
-    tableMap["DSD_T_TruckStock"] = getFieldMapByDirty();
-    tableMap["DSD_T_TruckStockTracking"] = getFieldMapByDirty();
-
-    tableMap["DSD_T_Visit"] = getFieldMapByDirty();
     tableMap["DSD_T_DeliveryHeader"] = getFieldMapByDirty();
     tableMap["DSD_T_DeliveryItem"] = getFieldMapByDirty();
-
-    tableMap["DSD_T_Order"] = getFieldMapByDirty();
-    tableMap["DSD_T_OrderItem"] = getFieldMapByDirty();
+    tableMap["DSD_T_Visit"] = getFieldMapByDirty();
+    tableMap["DSD_T_TruckStock"] = getFieldMapByDirty();
+    tableMap["DSD_T_TruckStockTracking"] = getFieldMapByDirty();
 
     return tableMap;
   }

@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:dsd/application.dart';
 import 'package:dsd/common/sf_config.dart';
-import 'package:dsd/net/http_service.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/synchronization/bean/sync_sf_request_bean.dart';
+import 'package:dsd/synchronization/bean/sync_sf_up_request_bean.dart';
 import 'package:dsd/ui/page/login/login_request_bean.dart';
 import 'package:dsd/ui/page/login/sf_login_request_bean.dart';
 import 'package:dsd/utils/code_util.dart';
@@ -47,13 +47,39 @@ class ApiService {
     return Application.httpService.post(path, data: data);
   }
 
+  static Future<Response<Map<String, dynamic>>> getSFConfigData() {
+    String path = '/services/apexrest/DMSDownloadService';
+    return Application.httpService.get(path);
+  }
+
   static Future<Response<Map<String, dynamic>>> getSFDownloadData(SyncSfRequestBean syncSfRequestBean) {
     String path = '/services/apexrest/DMSDownloadService';
     Map<String, dynamic> data = {
       "jsonData": CodeUtil.base64EncodeByMap(syncSfRequestBean.toJson()),
     };
     print('request = $data');
-    return Application.httpService.post(path, data: data);//need change
+
+    return Application.httpService.post(path, data: data);
+  }
+
+  static Future<Response<Map<String, dynamic>>> updateTime() {
+    String path = '/services/apexrest/DMSSyncSuccessService';
+    Map<String, dynamic> data = {
+      "deviceId": "",
+      "driverId": Application.user.userCode
+    };
+    print('request = $data');
+    return Application.httpService.post(path, data: data);
+  }
+
+  static Future<Response<Map<String, dynamic>>> getSFUploadData(SyncSfUpRequestBean sfUpRequestBean) {
+    String path = '/services/apexrest/DMSDownloadService';
+    Map<String, dynamic> data = {
+      "jsonData": CodeUtil.base64EncodeByMap(sfUpRequestBean.toJson()),
+    };
+    print('request = $data');
+
+    return Application.httpService.post(path, data: data);
   }
 
 }

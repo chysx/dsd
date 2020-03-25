@@ -37,6 +37,8 @@ class LoginByOnline {
     }else if(loginType == LoginType.Token){
       HttpService().restConfigDioByToken();
       api = ApiService.getSFTokenData();
+    }else if(loginType == LoginType.UpdateTime){
+      api = ApiService.updateTime();
     }
 
     Observable.fromFuture(api).listen((response) {
@@ -51,6 +53,8 @@ class LoginByOnline {
       }else if(loginType == LoginType.Token){
         SFTokenResponseBean responseBean = SFTokenResponseBean.fromJson(response.data);
         loginCallBack(responseBean);
+      }else if(loginType == LoginType.UpdateTime){
+        loginCallBack(response.data['Result']);
       }
 
     }, onError: (e) {

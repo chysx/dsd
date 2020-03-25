@@ -22,10 +22,36 @@ class SyncSfUpdateModel extends AbstractSyncSfDownloadModel {
 
   @override
   bool isAllDataAndAllInsert(String tableName) {
-    if('MD_Account' == tableName || 'MD_Contact' == tableName){
-      return true;
-    }
     return false;
   }
+
+//  static Map<String,List<String>> updateMap = {
+//    "DSD_M_ShipmentHeader": ["ShipmentNo"],
+//    "DSD_M_ShipmentItem": ["ShipmentNo", "ProductCode", "ProductUnit"],
+//    "DSD_T_ShipmentHeader": ["id"],
+//    "DSD_T_ShipmentItem": ["HeaderId", "ProductCode", "ProductUnit"],
+//    "DSD_M_DeliveryHeader": ["DeliveryNo"],
+//    "DSD_M_DeliveryItem": ["DeliveryNo", "ProductCode", "ProductUnit","ItemSequence"],
+//    "DSD_T_DeliveryHeader": ["DeliveryNo"],
+//    "DSD_T_DeliveryItem": ["DeliveryNo", "ProductCode", "ProductUnit","ItemSequence"],
+//    "DSD_T_Visit": ["VisitId"],
+//    "DSD_T_TruckStock": ["TruckId", "ShipmentNo", "ProductCode", "ProductUnit"],
+//    "DSD_T_TruckStockTracking": ["id"]
+//  };
+
+  static Map<String,List<String>> updateMap = {
+    "DSD_M_ShipmentHeader": ["Id"],
+    "DSD_M_ShipmentItem": ["Id"],
+    "DSD_T_ShipmentHeader": ["Id"],
+    "DSD_T_ShipmentItem": ["Id"],
+    "DSD_M_DeliveryHeader": ["Id"],
+    "DSD_M_DeliveryItem": ["Id"],
+    "DSD_T_DeliveryHeader": ["Id"],
+    "DSD_T_DeliveryItem": ["Id"],
+    "DSD_T_Visit": ["Id"],
+    "DSD_T_TruckStock": ["Id"],
+    "DSD_T_TruckStockTracking": ["Id"]
+  };
+
 
 }

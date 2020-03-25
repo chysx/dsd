@@ -56,6 +56,7 @@ class VisitManager {
       ..UserCode = Application.user.userCode
       ..AccountNumber = accountNumber
       ..CancelReason = reasonValue
+      ..CallType = 'Delivery'
       ..CreateUser = Application.user.userCode
       ..CreateTime = nowTime
       ..LastUpdateUser = Application.user.userCode

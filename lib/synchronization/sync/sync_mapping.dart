@@ -230,37 +230,32 @@ Map<String,String> sf2LocalMapping = {
   'Truck__c': 'DSD_M_Truck',
   'ebMobile__Call__c': 'DSD_T_Visit',
 
-//  'Truck__c': 'DSD_M_SystemConfig',
-//  'Truck__c': 'DSD_T_TruckStock',
-//  'Truck__c': 'DSD_T_TruckStockTracking',
-//  'Truck__c': 'MD_Dictionary',
+  'ebMobile__Configuration__c': 'DSD_M_SystemConfig',
+  'TruckStock__c': 'DSD_T_TruckStock',
+  'TruckStockTracking__c': 'DSD_T_TruckStockTracking',
+  'Dictionary__c': 'MD_Dictionary',
 
-
-//  'ebMobile__Delivery__c': 'DSD_M_DeliveryHeader',
-//  'DeliveryItem__c': 'DSD_M_DeliveryItem',
-//  'Shipment__c': 'DSD_M_ShipmentHeader',
-//  'ShipmentLine__c': 'DSD_M_ShipmentItem',
-
-//  'ebMobile__Delivery__c': 'DSD_M_DeliveryHeader${MARK}DSD_T_DeliveryHeader',
-//  'DeliveryItem__c': 'DSD_M_DeliveryItem${MARK}DSD_T_DeliveryItem',
-//  'Shipment__c': 'DSD_M_ShipmentHeader${MARK}DSD_T_ShipmentHeader',
-//  'ShipmentLine__c': 'DSD_M_ShipmentItem${MARK}DSD_T_ShipmentItem',
 };
 
 Map<String,String> local2SfMapping = {
   'MD_Product': 'Product2',
-  'MD_Dictionary': 'Truck__c',
+  'MD_Dictionary': 'Dictionary__c',
   'MD_Person': 'Driver__c',
   'MD_Contact': 'Contact',
   'MD_Account': 'Account',
   'DSD_M_Truck': 'Truck__c',
+  'DSD_M_SystemConfig': 'ebMobile__Configuration__c',
+
+  'DSD_T_TruckStock': 'TruckStock__c',
+  'DSD_T_TruckStockTracking': 'TruckStockTracking__c',
+  'DSD_T_DeliveryHeader': 'ebMobile__Delivery__c',
+  'DSD_T_DeliveryItem': 'DeliveryItem__c',
+  'DSD_T_ShipmentHeader': 'Shipment__c',
+  'DSD_T_ShipmentItem': 'ShipmentLine__c',
   'DSD_T_Visit': 'ebMobile__Call__c',
+  'DSD_T_TruckStock': 'DSD_T_TruckStock',
+  'DSD_T_TruckStockTracking': 'DSD_T_TruckStockTracking'
 
-
-//  'DSD_M_DeliveryHeader': 'ebMobile__Delivery__c',
-//  'DSD_M_DeliveryItem': 'DeliveryItem__c',
-//  'DSD_M_ShipmentHeader': 'Shipment__c',
-//  'DSD_M_ShipmentItem': 'ShipmentLine__c',
 };
 
 String deliveryHeaderMark = 'ebMobile__Delivery__c$MARK';
@@ -273,12 +268,18 @@ String personMark = 'Driver__c$MARK';
 String truckMark = 'Truck__c$MARK';
 String productMark = 'Product2$MARK';
 String visitMark = 'ebMobile__Call__c$MARK';
+String systemConfigMark = 'ebMobile__Configuration__c$MARK';
+String dictionaryMark = 'Dictionary__c$MARK';
+String truckStockMark = 'TruckStock__c$MARK';
+String truckTrackMark = 'TruckStockTracking__c$MARK';
 
 
 Map<String,String> fieldMapping = {
 
 //  DSD_M_DeliveryHeader
 
+  '${deliveryHeaderMark}Id': 'Id',
+  '${deliveryHeaderMark}GUID__c': 'GUID',
   '${deliveryHeaderMark}iDelyDeliveryNo__c': 'DeliveryNo',
   '${deliveryHeaderMark}ShipmentNo__c': 'ShipmentNo',
   '${deliveryHeaderMark}ebMobile__DeliveryType__c': 'DeliveryType',
@@ -335,14 +336,18 @@ Map<String,String> fieldMapping = {
   '${deliveryHeaderMark}Rebook__c': 'Rebook',
   '${deliveryHeaderMark}CancelReason__c': 'CancelReason',
 
-  '${deliveryHeaderMark}CreatedById': 'CreateUser',
-  '${deliveryHeaderMark}CreatedDate': 'CreateTime',
-  '${deliveryHeaderMark}LastModifiedById': 'LastUpdateUser',
-  '${deliveryHeaderMark}LastModifiedDate': 'LastUpdateTime',
+
+  '${deliveryHeaderMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${deliveryHeaderMark}iDelyCreateTime__c': 'CreateTime',
+  '${deliveryHeaderMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${deliveryHeaderMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
 
   //  DSD_M_DeliveryItem
 
+  '${deliveryItemMark}Id': 'Id',
+  '${deliveryItemMark}GUID__c': 'GUID',
+  '${deliveryItemMark}DeliveryID__c': 'DeliveryID',
   '${deliveryItemMark}DeliveryNo__c': 'DeliveryNo',
   '${deliveryItemMark}iDelyProductCode__c': 'ProductCode',
   '${deliveryItemMark}iDelyProductUnit__c': 'ProductUnit',
@@ -368,13 +373,15 @@ Map<String,String> fieldMapping = {
   '${deliveryItemMark}Reason__c': 'Reason',
   '${deliveryItemMark}IsReturn__c': 'IsReturn',
 
-  '${deliveryItemMark}CreatedById': 'CreateUser',
-  '${deliveryItemMark}CreatedDate': 'CreateTime',
-  '${deliveryItemMark}LastModifiedById': 'LastUpdateUser',
-  '${deliveryItemMark}LastModifiedDate': 'LastUpdateTime',
+  '${deliveryItemMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${deliveryItemMark}iDelyCreateTime__c': 'CreateTime',
+  '${deliveryItemMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${deliveryItemMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
   //  DSD_M_ShipmentHeader
 
+  '${shipmentHeaderMark}Id': 'Id',
+  '${shipmentHeaderMark}GUID__c': 'GUID',
   '${shipmentHeaderMark}ShipmentNo__c': 'ShipmentNo',
   '${shipmentHeaderMark}Plan_Shipment_Date__c': 'ShipmentDate',
   /*'': 'ShipmentType',*/
@@ -428,65 +435,74 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}ScanResult__c': 'ScanResult',
   '${shipmentHeaderMark}Manually__c': 'Manually',
 
-
-  '${shipmentHeaderMark}CreatedById': 'CreateUser',
-  '${shipmentHeaderMark}CreatedDate': 'CreateTime',
-  '${shipmentHeaderMark}LastModifiedById': 'LastUpdateUser',
-  '${shipmentHeaderMark}LastModifiedDate': 'LastUpdateTime',
+  '${shipmentHeaderMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${shipmentHeaderMark}iDelyCreateTime__c': 'CreateTime',
+  '${shipmentHeaderMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${shipmentHeaderMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
   //  DSD_M_ShipmentItem
 
-
-  '${shipmentItemMark}ShipmentNo__c': 'ShipmentNo',
+  '${shipmentItemMark}Id': 'Id',
+  '${shipmentItemMark}GUID__c': 'GUID',
   '${shipmentItemMark}iDelyProductCode__c': 'ProductCode',
   '${shipmentItemMark}iDelyProductUnit__c': 'ProductUnit',
   '${shipmentItemMark}PlanQuantity__c': 'PlanQty',
 
   //  DSD_T_ShipmentItem
 
-  '${shipmentItemMark}iDelyShipmentId__c': 'HeaderId',
+  '${shipmentItemMark}ShipmentId__c': 'HeaderId',
   '${shipmentItemMark}ActualQty__c': 'ActualQty',
   '${shipmentItemMark}DifferenceQty__c': 'DifferenceQty',
   '${shipmentItemMark}DifferenceReason__c': 'DifferenceReason',
 
-  '${shipmentItemMark}CreatedById': 'CreateUser',
-  '${shipmentItemMark}CreatedDate': 'CreateTime',
-  '${shipmentItemMark}LastModifiedById': 'LastUpdateUser',
-  '${shipmentItemMark}LastModifiedDate': 'LastUpdateTime',
+  '${shipmentItemMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${shipmentItemMark}iDelyCreateTime__c': 'CreateTime',
+  '${shipmentItemMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${shipmentItemMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
-  //  MD_Account
+  //  DSD_T_TruckStock
 
-  '${accountMark}RouteJumping__c': 'ebMobile__RouteJumping__c',
-  '${accountMark}ebMobile__GeoCode__Longitude__s': 'Geo_Longitude',
-  '${accountMark}ebMobile__GeoCode__Latitude__s': 'Geo_Latitude',
+  '${truckStockMark}Id': 'Id',
+  '${truckStockMark}GUID__c': 'GUID',
+  '${truckStockMark}TruckID__c': 'TruckId',
+  '${truckStockMark}ShipmentNo__c': 'ShipmentNo',
+  '${truckStockMark}ProductCode__c': 'ProductCode',
+  '${truckStockMark}ProductUnit__c': 'ProductUnit',
+  '${truckStockMark}StockQty__c': 'StockQty',
+  '${truckStockMark}SaleableQty__c': 'SaleableQty',
 
-//  MD_Contact
+  '${truckStockMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${truckStockMark}iDelyCreateTime__c': 'CreateTime',
+  '${truckStockMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${truckStockMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
-  '${contactMark}ebMobile__AccountNumber__c': 'AccountNumber__c',
+  //  DSD_T_TruckStockTracking
 
-//  MD_Person
+  '${truckTrackMark}Id': 'Id',
+  '${truckTrackMark}GUID__c': 'GUID',
+  '${truckTrackMark}VisitId__c': 'VisitId',
+  '${truckTrackMark}TruckID__c': 'TruckId',
+  '${truckTrackMark}ShipmentNo__c': 'ShipmentNo',
+  '${truckTrackMark}TrackingTime__c': 'TrackingTime',
+  '${truckTrackMark}ProductCode__c': 'ProductCode',
+  '${truckTrackMark}ProductUnit__c': 'ProductUnit',
+  '${truckTrackMark}ChangeAction__c': 'ChangeAction',
+  '${truckTrackMark}ChangeQuantity__c': 'ChangeQuantity',
+  '${truckTrackMark}FromQty__c': 'FromQty',
+  '${truckTrackMark}ToQty__c': 'ToQty',
 
-  '${personMark}UserCode__c': 'UserCode',
-  '${personMark}FirstName__c': 'FirstName',
-  '${personMark}LastName__c': 'LastName',
-  '${personMark}UserType__c': 'Type',
-//  '': 'Password',
+  '${truckTrackMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${truckTrackMark}iDelyCreateTime__c': 'CreateTime',
+  '${truckTrackMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${truckTrackMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
 
-//  DSD_M_Truck
-
-  '${truckMark}Id': 'TruckID',
-  '${truckMark}TruckCode__c': 'TruckCode',
-  '${truckMark}TruckType__c': 'Type',
-  '${truckMark}Capacity__c': 'Capacity',
-  '${truckMark}Volume__c': 'Volume',
-  '${truckMark}VolumeUnit__c': 'VolumeUnit',
-  '${truckMark}CompanyCode__c': 'CompanyCode',
-  '${truckMark}IsActive__c': 'Status',
 
   //  DSD_T_Visit
 
+  '${visitMark}Id': 'Id',
+  '${visitMark}ebMobile__GUID__c': 'GUID',
   '${visitMark}ebMobile__ExternalID__c': 'VisitId',
-  /*'': 'ShipmentNo',*/
+  '${visitMark}ShipmentNo__c': 'ShipmentNo',
   '${visitMark}ebMobile__TimeInOutlet__c': 'StartTime',
   '${visitMark}ebMobile__TimeOutOutlet__c': 'EndTime',
   '${visitMark}iDelyUserCode__c': 'UserCode',
@@ -495,11 +511,70 @@ Map<String,String> fieldMapping = {
   '${visitMark}ebMobile__GPSInStore__Latitude__s': 'Latitude',
   '${visitMark}ebMobile__NoVisitReason__c': 'CancelReason',
   '${visitMark}ebMobile__OutbarcodeNoscanReason__c': 'NoScanReason',
+  '${visitMark}ebMobile__CallType__c': 'CallType',
 
-  '${visitMark}CreatedById': 'CreateUser',
-  '${visitMark}CreatedDate': 'CreateTime',
-  '${visitMark}LastModifiedById': 'LastUpdateUser',
-  '${visitMark}LastModifiedDate': 'LastUpdateTime',
+  '${visitMark}iDelyCreateUserCode__c': 'CreateUser',
+  '${visitMark}iDelyCreateTime__c': 'CreateTime',
+  '${visitMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
+  '${visitMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
+
+  //  MD_Account
+
+  '${accountMark}Id': 'Id',
+  '${accountMark}RouteJumping__c': 'ebMobile__RouteJumping__c',
+  '${accountMark}ebMobile__GeoCode__Longitude__s': 'Geo_Longitude',
+  '${accountMark}ebMobile__GeoCode__Latitude__s': 'Geo_Latitude',
+
+//  MD_Contact
+
+  '${contactMark}Id': 'Id',
+  '${contactMark}ebMobile__AccountNumber__c': 'AccountNumber__c',
+
+  //  MD_Product
+
+  '${productMark}Id': 'Id',
+  '${productMark}ebMobile__ConversionRate__c': 'ConversionRate__c',
+
+
+//  MD_Person
+
+  '${personMark}Id': 'Id',
+  '${personMark}UserCode__c': 'UserCode',
+  '${personMark}FirstName__c': 'FirstName',
+  '${personMark}LastName__c': 'LastName',
+  '${personMark}UserType__c': 'Type',
+  '${personMark}Password__c': 'Password',
+//  '': 'Password',
+
+//  DSD_M_Truck
+
+  '${truckMark}Id': 'Id',
+  '${truckMark}TruckCode__c': 'TruckCode',
+  '${truckMark}TruckType__c': 'Type',
+  '${truckMark}Capacity__c': 'Capacity',
+  '${truckMark}Volume__c': 'Volume',
+  '${truckMark}VolumeUnit__c': 'VolumeUnit',
+  '${truckMark}CompanyCode__c': 'CompanyCode',
+  '${truckMark}IsActive__c': 'Status',
+
+
+  //  DSD_M_SystemConfig
+
+  '${systemConfigMark}Id': 'Id',
+  '${systemConfigMark}ebMobile__CodeCategory__c': 'Category',
+  '${systemConfigMark}Name': 'KeyName',
+  '${systemConfigMark}ebMobile__CodeDescription__c': 'Description',
+  '${systemConfigMark}ebMobile__CodeValue__c': 'Value',
+  '${systemConfigMark}ebMobile__IsActive__c': 'Valid',
+
+//  MD_Dictionary
+
+  '${dictionaryMark}Id': 'Id',
+  '${dictionaryMark}Category__c': 'Category',
+  '${dictionaryMark}Sequence__c': 'Sequence',
+  '${dictionaryMark}Description__c': 'Description',
+  '${dictionaryMark}Value__c': 'Value',
+  '${dictionaryMark}IsActive__c': 'Valid',
 
 
 //  '': '',

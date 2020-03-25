@@ -10,7 +10,8 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "MD_Person")
 class MD_Person_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String UserCode;
   String Password;
   String FirstName;
@@ -18,11 +19,11 @@ class MD_Person_Entity {
   String Type;
   String RouteNumber;
 
-  MD_Person_Entity(this.id, this.UserCode, this.Password, this.FirstName, this.LastName, this.Type, this.RouteNumber);
+  MD_Person_Entity(this.pid,this.Id, this.UserCode, this.Password, this.FirstName, this.LastName, this.Type, this.RouteNumber);
 
   @override
   String toString() {
-    return 'MD_Person_Entity{id: $id, UserCode: $UserCode, Password: $Password, FirstName: $FirstName, LastName: $LastName, Type: $Type, RouteNumber: $RouteNumber}';
+    return 'MD_Person_Entity{pid: $pid,Id: $Id, UserCode: $UserCode, Password: $Password, FirstName: $FirstName, LastName: $LastName, Type: $Type, RouteNumber: $RouteNumber}';
   }
 
   MD_Person_Entity.Empty();
