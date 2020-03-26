@@ -309,7 +309,7 @@ class DeliveryPage extends StatelessWidget {
 
                                         Positioned(
                                           right: 0,
-                                          bottom: 16,
+                                          bottom: 12,
                                           child: GestureDetector(
                                             behavior: HitTestBehavior.opaque,
                                             onTap: (){
@@ -317,7 +317,7 @@ class DeliveryPage extends StatelessWidget {
                                             },
                                             child: Offstage(
                                                 offstage: info.isEqual(),
-                                                child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 18,)),
+                                                child: Icon(Icons.info,color: info.isRedReasonIcon() ? Colors.red : Colors.grey,size: 24,)),
                                           ),
                                         ),
 

@@ -46,6 +46,7 @@ abstract class SignatureLogic {
         name: role.name,
         code: role.code,
         role: role.role,
+        isShowCustomerNot: true,
         signatureName: SignatureUtil.createSignaturePath(getFunctionType()),
         authorization: authorization,
 
@@ -106,6 +107,7 @@ class SignatureResultInfo {
   String code;
   String role;
   String signatureName;
+  bool isSelectedCustomerNot;
 }
 
 class Role {

@@ -44,6 +44,8 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   String phone;
   String data;
 
+  bool isShowCustomerNot;
+
 
   @override
   Future onEvent(PrintDeliverySlipEvent event, [dynamic data]) async {
@@ -71,6 +73,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 //    phone = DeliveryModel().mDeliveryHeader.DeliveryPhone;
     phone = '123456789';
     data = DateUtil.getDateStrByDateTime(DateTime.now());
+    isShowCustomerNot = DeliveryModel().deliveryHeader.CustomerNot == '1';
   }
 
   Future fillProductData() async {
@@ -131,14 +134,13 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     return null;
   }
 
+
   Uint8List getCustomerSign() {
-//    return FileUtil.readFileData(Constant.WORK_IMG, 'signature.png');
-    return null;
+    return FileUtil.readFileData(Constant.WORK_IMG, DeliveryModel().deliveryHeader.CustomerSignImg);
   }
 
   Uint8List getDriverSign() {
-//    return FileUtil.readFileData(Constant.WORK_IMG, 'signature2.png');
-    return null;
+    return FileUtil.readFileData(Constant.WORK_IMG, DeliveryModel().deliveryHeader.DriverSignImg);
   }
 
   @override

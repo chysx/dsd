@@ -1,6 +1,8 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/business/delivery_util.dart';
 import 'package:dsd/business/product_util.dart';
+import 'package:dsd/business/signature/delivery_signature.dart';
+import 'package:dsd/business/signature/signature_logic.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/visit_manager.dart';
@@ -79,14 +81,49 @@ class DeliverySummaryPresenter extends EventNotifier<DeliverySummaryEvent> {
   }
 
   Future onClickRight(BuildContext context) async {
-    await saveData();
-    Navigator.of(context).pop();
-    Navigator.of(context).pop();
+//    await saveData();
+//    Navigator.of(context).pop();
+//    Navigator.of(context).pop();
+
+    showSignature(context);
+
   }
 
   Future saveData() async {
     await DeliveryModel().saveDeliveryHeader();
     await DeliveryModel().saveDeliveryItems();
+  }
+
+  void showSignature(BuildContext context) {
+    new DeliverySignature(
+        accountNumber: accountNumber,
+        onSuccess: (_,info) async {
+          if(info.role == Role.driver){
+            print('onSuccess: ${info.name} ${info.code} \n${info.signatureName}');
+
+            DeliveryModel().cacheDeliveryHeaderCustomerSignature(info.signatureName);
+
+            await saveData();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+
+          }else {
+            if(info.isSelectedCustomerNot){
+              DeliveryModel().cacheDeliveryHeaderByCustomerNot();
+            }
+            DeliveryModel().cacheDeliveryHeaderDriverSignature(info.signatureName);
+          }
+        },
+        onFail: (_,info){
+          print('onFail');
+          if(info.role == Role.driver){
+            print('onSuccess: ${info.name} ${info.code} \n${info.signatureName}');
+
+          }else {
+
+          }
+        }
+    ).show(context);
   }
 
   @override

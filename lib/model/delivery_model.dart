@@ -107,6 +107,26 @@ class DeliveryModel {
     }
   }
 
+  void cacheDeliveryHeaderCustomerSignature(String imgName){
+    String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    deliveryHeader
+      ..CustomerSignStatus = '1'
+      ..CustomerSignDate = notTime
+      ..CustomerSignImg = imgName;
+  }
+
+  void cacheDeliveryHeaderDriverSignature(String imgName){
+    String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    deliveryHeader
+      ..DriverSignStatus = '1'
+      ..DriverSignDate = notTime
+      ..DriverSignImg = imgName;
+  }
+
+  void cacheDeliveryHeaderByCustomerNot(){
+    deliveryHeader.CustomerNot = '1';
+  }
+
   void cacheDeliveryItemList(List<BaseProductInfo> productList, String productUnitValue,{List<BaseProductInfo> emptyList}) {
     deliveryItemList.clear();
     String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());

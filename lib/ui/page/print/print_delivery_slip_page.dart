@@ -51,6 +51,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                 color: Colors.white,
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(top: 10),
@@ -64,7 +65,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                         Text(
-                          '''Valser Service AG\nStationsstrasse 33\n8306 Brüttisellen''',
+                          '''Stationsstrasse 33\n8306 Wangen-Brüttisellen''',
                           style: TextStyle(fontSize: Dimens.font_large, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.right,
                         ),
@@ -79,6 +80,7 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                     ),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -274,6 +276,17 @@ class PrintDeliverySlipPage extends StatelessWidget {
                     Divider(
                       height: 2,
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                    ),
+                    Offstage(
+                      offstage: !presenter.isShowCustomerNot,
+                      child: Text(
+                        'Kunde ist nicht vor Ort',
+                        style: TextStyle(fontSize: Dimens.font_normal, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+
                     Padding(
                       padding: EdgeInsets.only(top: 10),
                     ),

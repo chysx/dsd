@@ -1,4 +1,5 @@
 import 'package:dsd/application.dart';
+import 'package:dsd/business/signature/delivery_signature.dart';
 import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/common/dictionary.dart';
@@ -150,6 +151,7 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   Future fillCurShipment() async {
+
     if (currentShipment == null) {
       if (shipmentList.length > 0) {
         currentShipment = shipmentList[0];
@@ -275,8 +277,9 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
       FragmentArg.TASK_CUSTOMER_TYPE: info.customerType,
       FragmentArg.TASK_IS_BLOCK: info.block,
     };
-    material.Navigator.pushNamed(context, PageName.task_list.toString(),arguments: bundle);
+    await material.Navigator.pushNamed(context, PageName.task_list.toString(),arguments: bundle);
 
+    onResume();
   }
 
   void onClickNavigation(material.BuildContext context, CustomerInfo info) {
@@ -332,10 +335,17 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
 
     SyncManager.start(SyncType.SYNC_UPLOAD_VISIT, context: context, syncParameter: syncParameter, onSuccessSync: () {
       Fluttertoast.showToast(msg: 'upload success');
-      onEvent(RouteEvent.InitData);
+      onResume();
     }, onFailSync: (e) async {
       Fluttertoast.showToast(msg: 'upload fail');
-      onEvent(RouteEvent.InitData);
+      onResume();
     });
   }
+
+
+  void onResume() {
+    onEvent(RouteEvent.SelectShipment, currentShipment.no);
+  }
+
+
 }

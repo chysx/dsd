@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:dsd/business/signature/signature_logic.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/res/colors.dart';
+import 'package:dsd/res/dimens.dart';
 import 'package:dsd/res/styles.dart';
 import 'package:dsd/utils/file_util.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class SignatureDialog extends StatefulWidget {
   final String authorization;
   final OnSuccess onSuccess;
   final OnFail onFail;
+  final bool isShowCustomerNot;
 
   TextEditingController userCtrl;
   TextEditingController pwdCtrl;
@@ -33,6 +35,7 @@ class SignatureDialog extends StatefulWidget {
       {this.title,
         this.name,
         this.code,
+        this.isShowCustomerNot,
         this.role,
         this.signatureName,
         this.authorization,
@@ -46,6 +49,7 @@ class SignatureDialog extends StatefulWidget {
         String name,
         String code,
         String role,
+        bool isShowCustomerNot = false,
         String signatureName,
         String authorization,
         OnSuccess onSuccess,
@@ -59,6 +63,7 @@ class SignatureDialog extends StatefulWidget {
             name: name,
             code: code,
             role: role,
+            isShowCustomerNot: isShowCustomerNot,
             signatureName: signatureName,
             authorization: authorization,
             onSuccess: onSuccess,
@@ -73,19 +78,21 @@ class SignatureDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _SignatureState(name, code);
+    return _SignatureState(name, code,role);
   }
 }
 
 class _SignatureState extends State<SignatureDialog> {
   String name;
   String code;
+  String role;
   Signature signature;
+  bool isSelect = false;
 
   TextEditingController nameCtrl;
   TextEditingController codeCtrl;
 
-  _SignatureState(this.name, this.code);
+  _SignatureState(this.name, this.code,this.role);
 
   @override
   Widget build(BuildContext context) {
@@ -121,11 +128,18 @@ class _SignatureState extends State<SignatureDialog> {
                           children: <Widget>[
                             SizedBox(
                               width: 60,
-                              child: Text(
-                                'Name:',
-                                style: TextStyles.normal,
-                              ),
+                              child: Row(children: <Widget>[
+                                Text(
+                                  'Name:',
+                                  style: TextStyles.normal,
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(color: Colors.red , fontSize: Dimens.font_normal),
+                                ),
+                              ],),
                             ),
+
                             Theme(
                               data: ThemeData(
                                   primaryColor: ColorsRes.gray_normal),
@@ -149,10 +163,16 @@ class _SignatureState extends State<SignatureDialog> {
                           children: <Widget>[
                             SizedBox(
                               width: 60,
-                              child: Text(
-                                'Code:',
-                                style: TextStyles.normal,
-                              ),
+                              child: Row(children: <Widget>[
+                                Text(
+                                  'Title:',
+                                  style: TextStyles.normal,
+                                ),
+                                Text(
+                                  '*',
+                                  style: TextStyle(color: Colors.red , fontSize: Dimens.font_normal),
+                                ),
+                              ],),
                             ),
                             Theme(
                               data: ThemeData(
@@ -171,6 +191,24 @@ class _SignatureState extends State<SignatureDialog> {
                               ),
                             ),
                           ],
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 15)),
+                        Offstage(
+                          offstage: !widget.isShowCustomerNot,
+                          child: Row(children: <Widget>[
+                            Checkbox(
+                              value: isSelect,
+                              onChanged: (value){
+                                setState(() {
+                                  isSelect = !isSelect;
+                                });
+                              },
+                            ),
+                            Text(
+                              'Customer not available',
+                              style: TextStyles.normal,
+                            ),
+                          ],),
                         ),
                       ],
                     ),
@@ -216,15 +254,16 @@ class _SignatureState extends State<SignatureDialog> {
   void ctrlCode() {
     codeCtrl = TextEditingController.fromValue(TextEditingValue(
       // 设置内容
-        text: (code ?? '').toString(),
+        text: (role ?? '').toString(),
         // 保持光标在最后
         selection: TextSelection.fromPosition(TextPosition(
             affinity: TextAffinity.downstream,
-            offset: (code ?? 0).toString().length))));
+            offset: (role ?? 0).toString().length))));
     codeCtrl.addListener(() {
-      code = codeCtrl.text;
+      role = codeCtrl.text;
     });
   }
+
 
   Future saveSignature(BuildContext context, Signature signature) async {
     if (signature.isNotEmpty) {
@@ -232,9 +271,10 @@ class _SignatureState extends State<SignatureDialog> {
       info.name = name;
       info.code = code;
       info.signatureName = widget.signatureName;
+      info.isSelectedCustomerNot = isSelect;
       try {
         Uint8List data = await signature.exportBytes();
-        FileUtil.saveFileData(data, Constant.WORK_IMG, 'signature.png');
+        FileUtil.saveFileData(data, Constant.WORK_IMG, info.signatureName);
         if (widget.onSuccess != null) widget.onSuccess(context, info);
       } catch (e) {
         if (widget.onFail != null) widget.onFail(context, info);
