@@ -25,6 +25,7 @@ String tShipmentItem = 'DSD_T_ShipmentItem';
 
 
 List<String> mDeliveryHeaderFieldsByDownload = [
+  'Id',
   'DeliveryNo',
   'ShipmentNo',
   'DeliveryType',
@@ -64,6 +65,8 @@ List<String> mDeliveryHeaderFieldsByDownload = [
 ];
 
 List<String> tDeliveryHeaderFieldsByDownload = [
+  'Id',
+  'GUID',
   'DeliveryNo',
   'VisitId',
   'ShipmentNo',
@@ -102,6 +105,7 @@ List<String> tDeliveryHeaderFieldsByDownload = [
 ];
 
 List<String> mDeliveryItemFieldsByDownload = [
+  'Id',
   'DeliveryNo',
   'ProductCode',
   'ProductUnit',
@@ -121,6 +125,8 @@ List<String> mDeliveryItemFieldsByDownload = [
 ];
 
 List<String> tDeliveryItemFieldsByDownload = [
+  'Id',
+  'GUID',
   'DeliveryNo',
   'ProductCode',
   'ProductUnit',
@@ -143,6 +149,7 @@ List<String> tDeliveryItemFieldsByDownload = [
 ];
 
 List<String> mShipmentHeaderFieldsByDownload = [
+  'Id',
   'ShipmentNo',
   'ShipmentDate',
   'ShipmentType',
@@ -172,6 +179,7 @@ List<String> mShipmentHeaderFieldsByDownload = [
 
 List<String> tShipmentHeaderFieldsByDownload = [
   'Id',
+  'GUID',
   'ShipmentNo',
   'ShipmentDate',
   'ActionType',
@@ -205,6 +213,7 @@ List<String> tShipmentHeaderFieldsByDownload = [
 ];
 
 List<String> mShipmentItemFieldsByDownload = [
+  'Id',
   'ShipmentNo',
   'ProductCode',
   'ProductUnit',
@@ -212,6 +221,8 @@ List<String> mShipmentItemFieldsByDownload = [
 ];
 
 List<String> tShipmentItemFieldsByDownload = [
+  'Id',
+  'GUID',
   'HeaderId',
   'ProductCode',
   'ProductUnit',
@@ -384,6 +395,8 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}GUID__c': 'GUID',
   '${shipmentHeaderMark}ShipmentNo__c': 'ShipmentNo',
   '${shipmentHeaderMark}Plan_Shipment_Date__c': 'ShipmentDate',
+  '${shipmentHeaderMark}ShipmentType__c': 'ShipmentType',
+  '${shipmentHeaderMark}TruckId__c': 'TruckId',
   /*'': 'ShipmentType',*/
 //  '': 'Route',
 //  '': 'Description',
@@ -403,8 +416,6 @@ Map<String,String> fieldMapping = {
 //  '': 'TotalWeight',
 //  '': 'WeightUnit',
 //  '': 'DataSource',
-  '${shipmentHeaderMark}Plan_Shipment_Date__c': 'PlanDeliveryDate',
-
   //  DSD_T_ShipmentHeader
 
 
@@ -428,12 +439,13 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}DGKSignImg__c': 'DGKSignImg',
   '${shipmentHeaderMark}Status__c': 'Status',
   '${shipmentHeaderMark}iDelyDriver__c': 'Driver',
-  '${shipmentHeaderMark}iDelyTruck__c': 'TruckId',
+//  '${shipmentHeaderMark}iDelyTruck__c': 'TruckId',
 //  '': 'TotalAmount',
 //  '': 'TotalWeight',
 //  '': 'WeightUnit',
   '${shipmentHeaderMark}ScanResult__c': 'ScanResult',
   '${shipmentHeaderMark}Manually__c': 'Manually',
+  '${shipmentHeaderMark}IsActive__c': 'Valid',
 
   '${shipmentHeaderMark}iDelyCreateUserCode__c': 'CreateUser',
   '${shipmentHeaderMark}iDelyCreateTime__c': 'CreateTime',
@@ -444,6 +456,7 @@ Map<String,String> fieldMapping = {
 
   '${shipmentItemMark}Id': 'Id',
   '${shipmentItemMark}GUID__c': 'GUID',
+  '${shipmentItemMark}ShipmentNo__c': 'ShipmentNo',
   '${shipmentItemMark}iDelyProductCode__c': 'ProductCode',
   '${shipmentItemMark}iDelyProductUnit__c': 'ProductUnit',
   '${shipmentItemMark}PlanQuantity__c': 'PlanQty',

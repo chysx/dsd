@@ -24,7 +24,7 @@ class DSD_M_ShipmentHeader_Entity {
   String CompletionTime;
   String Driver1;
   String Driver2;
-  int TruckId;
+  String TruckId;
   String TruckCode;
   String TruckType;
   String LoadingSequence;

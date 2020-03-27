@@ -8,10 +8,10 @@
 /// 对应数据库中的Valid字段
 class Valid {
   /// 存在
-  static const String EXIST = "True";
+  static const String EXIST = "true";
 
   /// 不存在
-  static const String NOT_EXIST = "False";
+  static const String NOT_EXIST = "false";
 }
 
 ///

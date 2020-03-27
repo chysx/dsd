@@ -24,7 +24,7 @@ enum StockType {
 
 class TruckStockManager {
 
-  static Future setStock(StockType stockType, String action, int truckId, String shipmentNo, String productCode,
+  static Future setStock(StockType stockType, String action, String truckId, String shipmentNo, String productCode,
       int csChange, int eaChange, [int csSaleableChange, int eaSaleableChange, String visitId]) async {
     DSD_T_TruckStock_Entity csTruckStock =
         await Application.database.tTruckStockDao.findEntityByCon(truckId, shipmentNo, productCode, ProductUnit.CS);

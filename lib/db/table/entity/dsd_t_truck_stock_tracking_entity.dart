@@ -14,7 +14,7 @@ class DSD_T_TruckStockTracking_Entity {
   String Id;
   String GUID;
   String VisitId;
-  int TruckId;
+  String TruckId;
   String ShipmentNo;
   String TrackingTime;
   String ProductCode;

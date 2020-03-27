@@ -146,7 +146,8 @@ class CheckOutAndInModel {
       String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
       shipmentHeader = DSD_T_ShipmentHeader_Entity.Empty();
       shipmentHeader
-        ..Id = new Uuid().v1()
+        ..Id = mShipmentHeader.Id
+        ..GUID = mShipmentHeader.Id
         ..ShipmentNo = _shipmentNo
         ..ShipmentType = mShipmentHeader.ShipmentType
         ..ShipmentDate = DateUtil.getDateStrByTimeStr(notTime,format: DateFormat.YEAR_MONTH_DAY)

@@ -38,7 +38,7 @@ class DSD_T_ShipmentHeader_Entity {
   String WarehouseCode;
   String Status;
   String Driver;
-  int TruckId;
+  String TruckId;
   String TotalAmount;
   String TotalWeight;
   String WeightUnit;

@@ -221,7 +221,7 @@ class DeliveryModel {
     List<DSD_T_DeliveryItem_Entity> tDeliveryItems =
     await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(deliveryNo);
 
-    int truckId = shipmentHeader?.TruckId ?? 0;
+    String truckId = shipmentHeader?.TruckId;
     Map<String, StockInfo> stocks = {};
     for (DSD_T_DeliveryItem_Entity deliveryItem in tDeliveryItems) {
       String code = deliveryItem.ProductCode;

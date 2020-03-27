@@ -41,7 +41,7 @@ class ShipmentManager {
                 ON t2.status = t3.VALUE             
                 AND t3.category = 'ShipmentStatus'
         WHERE
-            t1.Valid = 'True'
+            t1.Valid = 'true'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -83,7 +83,7 @@ class ShipmentManager {
                 on m.shipmentno = t.shipmentno          
         WHERE
             t.status is null 
-            and m.Valid = 'True'
+            and m.Valid = 'true'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -129,7 +129,7 @@ class ShipmentManager {
                 AND t3.category = 'ShipmentStatus' 
         WHERE
             t2.EndTime > ?
-            AND t1.Valid = 'True'
+            AND t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -181,7 +181,7 @@ class ShipmentManager {
                 AND t3.category = 'ShipmentStatus' 
         WHERE
             t2.EndTime < ? 
-            AND t1.Valid = 'True'
+            AND t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -283,7 +283,7 @@ class ShipmentManager {
                 ON t1.shipmentno = t2.shipmentno                    
                 AND t2.status = 'CHKO'        
         WHERE
-            t1.Valid = 'True'
+            t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql);

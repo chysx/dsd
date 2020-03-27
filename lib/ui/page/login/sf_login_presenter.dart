@@ -5,13 +5,14 @@ import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/net/http_config.dart';
 import 'package:dsd/net/http_service.dart';
 import 'package:dsd/route/page_builder.dart';
+import 'package:dsd/synchronization/sql/checkin_model_sql_find.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/login/Login_by_online.dart';
 import 'package:dsd/ui/page/login/login_input_info.dart';
 import 'package:dsd/ui/page/login/login_status.dart';
-import 'package:dsd/ui/page/login/login_test.dart';
 import 'package:dsd/ui/page/login/sf_login_response_bean.dart';
 import 'package:dsd/ui/page/login/sf_token_response_bean.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
@@ -100,6 +101,29 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
     HttpService().url = appConfigEntity.url;
   }
 
+  void testCreateFields() {
+    String tableName = 'DSD_T_ShipmentHeader';
+    String sql = CheckInModelSqlFind.CHECKIN_DSD_T_ShipmentHeader_Sql_Find;
+    sql = sql.replaceAll('\n', '');
+    sql = sql.replaceAll('\t', '');
+    sql = sql.substring(sql.indexOf('SELECT') + 6,sql.indexOf('FROM')).trim();
+    List<String> fieldList = sql.split(',');
+    String mark = local2SfMapping[tableName] + MARK;
+    Map<String,String> map = {};
+    for(String key in fieldMapping.keys){
+      if(key.contains(mark)){
+        String value = fieldMapping[key];
+        map[value] = key.substring(key.indexOf(MARK) + 1);
+      }
+    }
+    List<String> resultList = [];
+    for(String field in fieldList) {
+      resultList.add(map[field.trim()]);
+    }
+    print(resultList.join(','));
+  }
+
+
   Future testLoadConfig(BuildContext context) async {
     SyncManager.start(SyncType.SYNC_CONFIG_SF, context: context, onSuccessSync: () {
       CustomerDialog.show(context, msg: 'Sync config success');
@@ -116,13 +140,34 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
     });
   }
 
+  void testParser(){
+    String values = "a289E000000y9YZQAY ▏SN-20200326000245 ▏2020-03-26 ▏Delivery ▏Rele ▏DMS ▏2020-03-26 10:30:22 ▏ ▏ ▏a299E000000ixpxQAA ▏0001 ▏BigTruck ▏ ▏0.00 ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏ ▏New ▏ ▏ ▏1 ▏SN-20200326000245 ▏ ▏true ▏ ▏ ▏";
+    String fields = "Id,ShipmentNo__c,Plan_Shipment_Date__c,ShipmentType__c,ReleaseStatus__c,ReleaseUser__c,ReleaseTime__c,ActionType__c,CheckinTime__c,TruckId__c,TrunkCode__c,TruckType__c,LoadingSequence__c,TotalProductQty__c,TotalItemAmount__c,Odometer__c,Checker__c,CheckerConfirm__c,CheckerConfirmTime__c,CheckerSignImg__c,DCheckerSignImg__c,Cashier__c,CashierConfirm__c,CashierSignImg__c,CashierConfirmTime__c,DCashierSignImg__c,Gatekeeper__c,GKSignImg__c,GKConfirmTime__c,GKConfirm__c,DGKSignImg__c,Status__c,iDelyTruck__c,iDelyDriver__c,SalesOrganization__c,ExternalId__c,GUID__c,IsActive__c,iDelyLastUpdateTime__c,iDelyLastUpdateUserCode__c,iDelyCreateUserCode__c";
+
+    String FIELD_SEPARATOR = ",";
+    String ROW_SEPARATOR = "▏";
+    List<String> valueList = values.split(ROW_SEPARATOR);
+    List<String> fieldList = fields.split(FIELD_SEPARATOR);
+    Map<String,String> map = {};
+
+    for(int i = 0;i < valueList.length;i++) {
+      map[fieldList[i]] = valueList[i];
+    }
+
+    for(String key in map.keys){
+      print('$key = ${map[key]}');
+    }
+
+  }
+
 
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
-    if(true){
-//      testLoadSync(context);
-    FileUtil.getFilePath('log');
-      return;
-    }
+//    if(true){
+////      testLoadSync(context);
+////    FileUtil.getFilePath('log');
+//    testParser();
+//      return;
+//    }
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');

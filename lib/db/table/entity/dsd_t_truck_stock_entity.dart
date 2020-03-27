@@ -13,7 +13,7 @@ class DSD_T_TruckStock_Entity {
   int pid;
   String Id;
   String GUID;
-  int TruckId;
+  String TruckId;
   String ShipmentNo;
   String ProductCode;
   String ProductUnit;

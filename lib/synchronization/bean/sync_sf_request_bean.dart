@@ -10,9 +10,9 @@ class SyncSfRequestBean {
     String groupNumber;
     String objectNames;
     String syncType;
-    String userId;
+    String driverId;
 
-    SyncSfRequestBean({this.deviceId, this.groupNumber, this.objectNames, this.syncType, this.userId});
+    SyncSfRequestBean({this.deviceId, this.groupNumber, this.objectNames, this.syncType, this.driverId});
 
     factory SyncSfRequestBean.fromJson(Map<String, dynamic> json) {
         return SyncSfRequestBean(
@@ -20,7 +20,7 @@ class SyncSfRequestBean {
             groupNumber: json['groupNumber'],
             objectNames: json['objectNames'],
             syncType: json['syncType'],
-            userId: json['userId'],
+            driverId: json['driverId'],
         );
     }
 
@@ -30,7 +30,7 @@ class SyncSfRequestBean {
         data['groupNumber'] = this.groupNumber;
         data['objectNames'] = this.objectNames;
         data['syncType'] = this.syncType;
-        data['userId'] = this.userId;
+        data['driverId'] = this.driverId;
         return data;
     }
 }

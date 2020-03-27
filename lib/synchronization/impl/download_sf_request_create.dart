@@ -1,3 +1,4 @@
+import 'package:dsd/application.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_sync_sf_download_model.dart';
 import 'package:dsd/synchronization/bean/sync_sf_request_bean.dart';
@@ -23,7 +24,7 @@ class DownloadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfRequest
 
     SyncSfRequestBean requestBean = SyncSfRequestBean();
     requestBean.deviceId = '';
-//    requestBean.userId = '';
+    requestBean.driverId = Application.user.userCode;
 //    requestBean.groupNumber = '';
     if(syncSfDownloadModel.syncType == SyncType.SYNC_INIT_SF){
       requestBean.syncType = '0';
