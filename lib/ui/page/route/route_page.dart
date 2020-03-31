@@ -261,9 +261,14 @@ class _RouteState extends State<RoutePage> {
                                     ),
                                     Icon(Icons.phone, size: 15),
                                     Padding(padding: EdgeInsets.only(left: 10),),
-                                    Text(
-                                      info?.phone?? '',
-                                      style: TextStyles.small,
+                                    GestureDetector(
+                                      child: Text(
+                                        info?.phone?? '',
+                                        style: TextStyles.small,
+                                      ),
+                                      onTap: (){
+                                        presenter.onClickPhone(context,info);
+                                      },
                                     ),
                                   ],
                                 ),

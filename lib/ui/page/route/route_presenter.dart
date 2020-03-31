@@ -32,6 +32,7 @@ import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:android_intent/android_intent.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'customer_info.dart';
 
@@ -283,7 +284,8 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   }
 
   void onClickNavigation(material.BuildContext context, CustomerInfo info) {
-    MapLaunchUtil.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
+//    MapLaunchUtil.launchQuery('1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA');
+    MapLaunchUtil.launchQuery(info.address);
 
   }
 
@@ -319,6 +321,16 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
     }
     showReasonDialog(context,info);
   }
+
+  Future<void> onClickPhone(material.BuildContext context, CustomerInfo info) async {
+    String url = 'tel:${info.phone}';
+    if (await canLaunch(url)) {
+    await launch(url);
+    } else {
+    throw 'Could not launch $url';
+    }
+  }
+
 
   Future showReasonDialog(material.BuildContext context,CustomerInfo info) async {
     List<KeyValueInfo> reasonList = await ReasonManager.getReasonData(CancelDelReasonExZF61.CATEGORY);

@@ -11,6 +11,7 @@ import 'package:dsd/db/table/entity/dsd_t_shipment_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
+import 'package:dsd/ui/dialog/list_blue_dialog.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
@@ -112,9 +113,9 @@ class PrintCheckoutSlipPresenter extends EventNotifier<PrintCheckoutSlipEvent> {
   }
 
   void showBlueDialog(BuildContext context){
-    LoadingDialog.show(context,msg: 'loading...');
-    BlueManager().scan((deviceList){
-      LoadingDialog.dismiss(context);
+//    LoadingDialog.show(context,msg: 'loading...');
+    BlueManager().scan(context,(deviceList){
+//      LoadingDialog.dismiss(context);
       List<KeyValueInfo> list = deviceList.map((device){
         return new KeyValueInfo()
           ..name = device.name
@@ -123,13 +124,15 @@ class PrintCheckoutSlipPresenter extends EventNotifier<PrintCheckoutSlipEvent> {
       }).toList();
 
       //添加弹出框消失回调方法
-      ListDialog.show(context,title: 'title',data: list,onSelect: (reason) async {
+      ListBlueDialog.show(context,title: 'title',data: list,onSelect: (reason) async {
         BluetoothDevice device = reason.data;
         if(Platform.isAndroid){
           BlueManager().sendAddress(device.id.toString());
         }else if(Platform.isIOS){
           BlueManager().sendAddress(device.name);
         }
+      },onClose: (){
+        BlueManager().cancel();
       });
     });
 
