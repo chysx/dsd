@@ -148,9 +148,9 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
       indexList = _getIndexList(tableName,fields,mShipmentItemFieldsByDownload);
       result = await _realParseTable(txn,mShipmentItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
 
-      indexList = _getIndexList(tableName,fields,tShipmentItemFieldsByDownload);
-      result = await _realParseTable(txn,tShipmentItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
-      await _deleteT(txn, tShipmentItem);
+//      indexList = _getIndexList(tableName,fields,tShipmentItemFieldsByDownload);
+//      result = await _realParseTable(txn,tShipmentItem,_getFieldListByIndexList(tableName,fields,indexList),_getRowsListByIndexList(rows,indexList));
+//      await _deleteT(txn, tShipmentItem);
 
     }else {
       result = await _realParseTable(txn,sf2LocalMapping[tableName],_getFieldNames(tableName,fields),rows);
@@ -192,6 +192,7 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
     try {
       if (parsePolicy.isAllDataAndAllInsert(tableName)) {
         String sql = "delete from " + tableName;
+        print(sql);
         await transaction.execute(sql);
         for (String row in rows) {
           tempRow = row;
@@ -422,9 +423,13 @@ class DownloadSfParser extends AbstractParser<Response<Map<String, dynamic>>> {
     String sql1 = 'delete from $tableName where CreateUser = ?';
     String sql2 = 'delete from $tableName where CreateUser = ?';
     String sql3 = 'delete from $tableName where CreateUser is null';
-    await transaction.rawDelete(sql1,['']);
-    await transaction.rawDelete(sql2,[' ']);
-    await transaction.rawDelete(sql3);
+    int result = 0;
+    result += await transaction.rawDelete(sql1,['']);
+    result += await transaction.rawDelete(sql2,[' ']);
+    result += await transaction.rawDelete(sql3);
+    if(result > 0){
+      print('delete $tableName success');
+    }
   }
 
 }

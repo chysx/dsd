@@ -106,7 +106,7 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
     SyncParameter syncParameter = new SyncParameter();
     syncParameter.putUploadUniqueIdValues([VisitModel().visit.VisitId]).putUploadName([VisitModel().visit.AccountNumber]);
 
-    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT, context: context,syncParameter: syncParameter, onSuccessSync: () {
+    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT_SF, context: context,syncParameter: syncParameter, onSuccessSync: () {
       VisitModel().visit.dirty = SyncDirtyStatus.SUCCESS;
       Navigator.of(context).pop();
     }, onFailSync: (e) async {

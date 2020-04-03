@@ -9,6 +9,7 @@ import 'package:dsd/common/dictionary.dart';
 ///  Date:         2019/9/16 14:26
 
 class BaseProductInfo {
+   String id;
    String code;
    String name;
    int plannedCs = 0;

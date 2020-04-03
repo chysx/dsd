@@ -16,19 +16,34 @@ class DSD_T_ShipmentItem_Entity {
   String HeaderId;
   String ProductCode;
   String ProductUnit;
+
   int PlanQty;
   int ActualQty;
   int DifferenceQty;
   String DifferenceReason;
+
+  int CheckOutActualQty;
+  int CheckOutDifferenceQty;
+  String CheckOutDifferenceReason;
+
+  int CheckInActualQty;
+  int CheckInDifferenceQty;
+  String CheckInDifferenceReason;
+
+
   String CreateUser;
   String CreateTime;
   String LastUpdateUser;
   String LastUpdateTime;
   String dirty;
 
-  DSD_T_ShipmentItem_Entity(this.pid,this.Id,this.GUID, this.HeaderId, this.ProductCode, this.ProductUnit, this.PlanQty, this.ActualQty,
-      this.DifferenceQty, this.DifferenceReason, this.CreateUser, this.CreateTime, this.LastUpdateUser,
-      this.LastUpdateTime, this.dirty);
+  DSD_T_ShipmentItem_Entity(this.pid, this.Id, this.GUID, this.HeaderId,
+      this.ProductCode, this.ProductUnit, this.PlanQty, this.ActualQty,
+      this.DifferenceQty, this.DifferenceReason,
+      this.CheckOutActualQty, this.CheckOutDifferenceQty,
+      this.CheckOutDifferenceReason, this.CheckInActualQty,
+      this.CheckInDifferenceQty, this.CheckInDifferenceReason, this.CreateUser,
+      this.CreateTime, this.LastUpdateUser, this.LastUpdateTime, this.dirty); //
 
   DSD_T_ShipmentItem_Entity.Empty();
 

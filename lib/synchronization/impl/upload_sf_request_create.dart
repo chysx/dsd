@@ -1,15 +1,10 @@
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/synchronization/base/abstract_request_create.dart';
 import 'package:dsd/synchronization/base/abstract_sync_sf_upload_model.dart';
-import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
-import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/synchronization/bean/sync_sf_up_request_bean.dart';
 import 'package:dsd/synchronization/sync/sync_config.dart';
 import 'package:dsd/synchronization/sync/sync_mapping.dart';
-import 'package:dsd/synchronization/sync/sync_parameter.dart';
-import 'package:dsd/synchronization/utils/sync_util.dart';
-import 'package:dsd/utils/file_util.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 
@@ -25,7 +20,7 @@ class UploadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfUpRequest
 
   @override
   Future<SyncSfUpRequestBean> create() async {
-    List<TableUploadBean> uploadBeanList = syncUploadModel.getTableUploadList();
+    List<TableUploadBean> uploadBeanList = syncSfUploadModel.getTableUploadList();
     Map<String, List<String>> tableRowsMap = await getTableRowsMap(uploadBeanList);
     List<Record> syncTableBeanList = createSyncTableBeanList(tableRowsMap);
     return await createSyncDataRequestBean(syncTableBeanList);
@@ -70,7 +65,7 @@ class UploadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfUpRequest
   }
 
   String createFields(String tableName) {
-    List<TableUploadBean> uploadBeanList = syncUploadModel.getTableUploadList();
+    List<TableUploadBean> uploadBeanList = syncSfUploadModel.getTableUploadList();
     TableUploadBean tableUploadBean = uploadBeanList.firstWhere((bean){
       return bean.name.toLowerCase() == tableName.toLowerCase();
     });
@@ -79,6 +74,11 @@ class UploadSfRequestCreate extends AbstractRequestCreate<Future<SyncSfUpRequest
     sql = sql.replaceAll('\t', '');
     sql = sql.substring(sql.indexOf('SELECT') + 6,sql.indexOf('FROM')).trim();
     List<String> fieldList = sql.split(',');
+    if(fieldList[0].contains('.')){
+      fieldList = fieldList.map((item){
+        return item.substring(item.indexOf('.') + 1);
+      }).toList();
+    }
     String mark = local2SfMapping[tableName] + MARK;
     Map<String,String> map = {};
     for(String key in fieldMapping.keys){

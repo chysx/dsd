@@ -52,7 +52,7 @@ class SyncSfUploadVisitModel extends AbstractSyncSfUploadModel {
     uploadBeanList.add(deliveryItem);
     uploadBeanList.add(stock);
     uploadBeanList.add(stockTracking);
-    uploadBeanList.add(mdAccount);
+//    uploadBeanList.add(mdAccount);
 
     return uploadBeanList;
   }

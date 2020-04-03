@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:dsd/application.dart';
 import 'package:dsd/common/sf_config.dart';
+import 'package:dsd/log/log4dart.dart';
 import 'package:dsd/synchronization/bean/sync_request_bean.dart';
 import 'package:dsd/synchronization/bean/sync_sf_request_bean.dart';
 import 'package:dsd/synchronization/bean/sync_sf_up_request_bean.dart';
@@ -73,11 +76,13 @@ class ApiService {
   }
 
   static Future<Response<Map<String, dynamic>>> getSFUploadData(SyncSfUpRequestBean sfUpRequestBean) {
-    String path = '/services/apexrest/DMSDownloadService';
+    String path = '/services/apexrest/DMSUploadService';
+    LoggerSuper().info('api', CodeUtil.jsonMap2String(sfUpRequestBean.toJson()));
     Map<String, dynamic> data = {
       "jsonData": CodeUtil.base64EncodeByMap(sfUpRequestBean.toJson()),
     };
     print('request = $data');
+    LoggerSuper().info('api', CodeUtil.jsonMap2String(data));
 
     return Application.httpService.post(path, data: data);
   }

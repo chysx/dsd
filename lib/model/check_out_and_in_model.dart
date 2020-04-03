@@ -6,6 +6,7 @@ import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_shipment_item_entity.dart';
 import 'package:dsd/model/stock_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:flustars/flustars.dart';
 import 'package:uuid/uuid.dart';
 
@@ -56,7 +57,7 @@ class CheckOutAndInModel {
     _shipmentNo = shipmentNo;
     mShipmentHeader = await Application.database.mShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, Valid.EXIST);
     shipmentHeader =
-    await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, _getActionType());
+    await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo);
     if (shipmentHeader != null) {
       shipmentItemList = await Application.database.tShipmentItemDao.findEntityByHeaderId(shipmentHeader.Id);
     }
@@ -77,15 +78,23 @@ class CheckOutAndInModel {
         if (info.actualCs != 0) {
           DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
 
+          add.Id = createIdBySf();
+          add.GUID = add.Id;
           add.HeaderId = shipmentHeader.Id;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.CS;
 
           add.PlanQty = info.plannedCs;
-          add.ActualQty = info.actualCs;
-          add.DifferenceQty = info.plannedCs - info.actualCs;
+          if(_getStockTrackingType() == StockTracking.CHKO){
+            add.CheckOutActualQty = info.actualCs;
+            add.CheckOutDifferenceQty = info.plannedCs - info.actualCs;
+            add.CheckOutDifferenceReason = info.reasonValue;
+          }else {
+            add.CheckInActualQty = info.actualCs;
+            add.CheckInDifferenceQty = info.plannedCs - info.actualCs;
+            add.CheckInDifferenceReason = info.reasonValue;
+          }
 
-          add.DifferenceReason = info.reasonValue;
           add.CreateUser = Application.user.userCode;
           add.CreateTime = notTime;
           add.dirty = SyncDirtyStatus.DEFAULT;
@@ -101,15 +110,24 @@ class CheckOutAndInModel {
         if (info.plannedCs != 0 || info.actualCs != 0) {
           DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
 
+          add.Id = info.id;
+          add.GUID = info.id;
           add.HeaderId = shipmentHeader.Id;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.CS;
 
           add.PlanQty = info.plannedCs;
-          add.ActualQty = info.actualCs;
-          add.DifferenceQty = info.plannedCs - info.actualCs;
 
-          add.DifferenceReason = info.reasonValue;
+          if(_getStockTrackingType() == StockTracking.CHKO){
+            add.CheckOutActualQty = info.actualCs;
+            add.CheckOutDifferenceQty = info.plannedCs - info.actualCs;
+            add.CheckOutDifferenceReason = info.reasonValue;
+          }else {
+            add.CheckInActualQty = info.actualCs;
+            add.CheckInDifferenceQty = info.plannedCs - info.actualCs;
+            add.CheckInDifferenceReason = info.reasonValue;
+          }
+
           add.CreateUser = Application.user.userCode;
           add.CreateTime = notTime;
           add.dirty = SyncDirtyStatus.DEFAULT;
@@ -122,15 +140,24 @@ class CheckOutAndInModel {
         if (info.plannedEa != 0 || info.actualEa != 0) {
           DSD_T_ShipmentItem_Entity add = new DSD_T_ShipmentItem_Entity.Empty();
 
+          add.Id = info.id;
+          add.GUID = info.id;
           add.HeaderId = shipmentHeader.Id;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.EA;
 
           add.PlanQty = info.plannedEa;
-          add.ActualQty = info.actualEa;
-          add.DifferenceQty = info.plannedEa - info.actualEa;
 
-          add.DifferenceReason = info.reasonValue;
+          if(_getStockTrackingType() == StockTracking.CHKO){
+            add.CheckOutActualQty = info.actualEa;
+            add.CheckOutDifferenceQty = info.plannedEa - info.actualEa;
+            add.CheckOutDifferenceReason = info.reasonValue;
+          }else {
+            add.CheckInActualQty = info.actualEa;
+            add.CheckInDifferenceQty = info.plannedEa - info.actualEa;
+            add.CheckInDifferenceReason = info.reasonValue;
+          }
+
           add.CreateUser = Application.user.userCode;
           add.CreateTime = notTime;
           add.dirty = SyncDirtyStatus.DEFAULT;
@@ -142,8 +169,8 @@ class CheckOutAndInModel {
   }
 
   Future saveShipmentHeader() async {
+    String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
     if (shipmentHeader == null) {
-      String notTime = DateUtil.getDateStrByDateTime(new DateTime.now());
       shipmentHeader = DSD_T_ShipmentHeader_Entity.Empty();
       shipmentHeader
         ..Id = mShipmentHeader.Id
@@ -152,7 +179,6 @@ class CheckOutAndInModel {
         ..ShipmentType = mShipmentHeader.ShipmentType
         ..ShipmentDate = DateUtil.getDateStrByTimeStr(notTime,format: DateFormat.YEAR_MONTH_DAY)
         ..ActionType = _getActionType()
-        ..StartTime = notTime
         ..WarehouseCode = mShipmentHeader.WarehouseCode
         ..Driver = Application.user.userCode
         ..TruckId = mShipmentHeader.TruckId
@@ -164,13 +190,20 @@ class CheckOutAndInModel {
         ..dirty = SyncDirtyStatus.DEFAULT;
 
       await Application.database.tShipmentHeaderDao.insertEntity(shipmentHeader);
+    }else{
+      shipmentHeader
+        ..ActionType = _getActionType()
+        ..dirty = SyncDirtyStatus.DEFAULT;
     }
   }
 
   Future updateShipmentHeader() async {
-    shipmentHeader
-      ..Status = _getShipmentStatus()
-      ..EndTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    shipmentHeader.Status = _getShipmentStatus();
+    if(_getShipmentStatus() == ShipmentStatus.CHKO){
+      shipmentHeader.StartTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    }else{
+      shipmentHeader.EndTime = DateUtil.getDateStrByDateTime(new DateTime.now());
+    }
     await Application.database.tShipmentHeaderDao.updateEntity(shipmentHeader);
   }
 
@@ -197,10 +230,18 @@ class CheckOutAndInModel {
 
       switch (item.ProductUnit) {
         case ProductUnit.CS:
-          stockMap[item.ProductCode].cs = item.ActualQty;
+          if(stockTrackingType == StockTracking.CHKO){
+            stockMap[item.ProductCode].cs = item.CheckOutActualQty;
+          }else{
+            stockMap[item.ProductCode].cs = item.CheckOutActualQty;
+          }
           break;
         case ProductUnit.EA:
-          stockMap[item.ProductCode].ea = item.ActualQty;
+          if(stockTrackingType == StockTracking.CHKO){
+            stockMap[item.ProductCode].ea = item.CheckOutActualQty;
+          }else{
+            stockMap[item.ProductCode].ea = item.CheckOutActualQty;
+          }
           break;
       }
     }

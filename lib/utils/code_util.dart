@@ -28,6 +28,14 @@ class CodeUtil{
   return digest;
   }
   /*
+  * Base64加密
+  */
+  static String jsonMap2String(Map<String,dynamic> data){
+//    var content = utf8.encode(jsonEncode(data));
+//    return content as String;
+    return jsonEncode(data);
+  }
+  /*
   * Base64解密
   */
   static String base64DecodeUtil(String data){

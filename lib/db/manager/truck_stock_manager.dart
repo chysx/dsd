@@ -4,6 +4,7 @@ import 'package:dsd/db/table/entity/dsd_t_truck_stock_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_truck_stock_tracking_entity.dart';
 import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:flustars/flustars.dart';
 import 'package:uuid/uuid.dart';
 
@@ -141,6 +142,8 @@ class TruckStockManager {
       await Application.database.tTruckStockDao.updateEntity(csTruckStock);
     } else {
       csTruckStock = new DSD_T_TruckStock_Entity.Empty();
+      csTruckStock.Id = createIdBySf();
+      csTruckStock.GUID = csTruckStock.Id;
       csTruckStock.TruckId = truckId;
       csTruckStock.ShipmentNo = shipmentNo;
       csTruckStock.ProductCode = productCode;
@@ -163,6 +166,8 @@ class TruckStockManager {
       await Application.database.tTruckStockDao.updateEntity(eaTruckStock);
     } else {
       eaTruckStock = new DSD_T_TruckStock_Entity.Empty();
+      eaTruckStock.Id = createIdBySf();
+      eaTruckStock.GUID = eaTruckStock.Id;
       eaTruckStock.TruckId = truckId;
       eaTruckStock.ShipmentNo = shipmentNo;
       eaTruckStock.ProductCode = productCode;
@@ -176,7 +181,8 @@ class TruckStockManager {
     }
 
     DSD_T_TruckStockTracking_Entity csAdd = new DSD_T_TruckStockTracking_Entity.Empty();
-    csAdd.Id = new Uuid().v1();
+    csAdd.Id = createIdBySf();
+    csAdd.GUID = csAdd.Id;
     csAdd.VisitId = visitId;
     csAdd.TruckId = truckId;
     csAdd.ShipmentNo = shipmentNo;
@@ -192,7 +198,8 @@ class TruckStockManager {
     await Application.database.tTruckStockTrackingDao.insertEntity(csAdd);
 
     DSD_T_TruckStockTracking_Entity eaAdd = new DSD_T_TruckStockTracking_Entity.Empty();
-    eaAdd.Id = new Uuid().v1();
+    eaAdd.Id = createIdBySf();
+    eaAdd.GUID = eaAdd.Id;
     eaAdd.VisitId = visitId;
     eaAdd.TruckId = truckId;
     eaAdd.ShipmentNo = shipmentNo;

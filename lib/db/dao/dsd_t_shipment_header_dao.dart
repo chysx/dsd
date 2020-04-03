@@ -15,8 +15,8 @@ abstract class DSD_T_ShipmentHeader_Dao {
   @Query('SELECT * FROM DSD_T_ShipmentHeader')
   Future<List<DSD_T_ShipmentHeader_Entity>> findAll();
 
-  @Query('SELECT * FROM DSD_T_ShipmentHeader WHERE ShipmentNo = :ShipmentNo AND ActionType = :ActionType')
-  Future<DSD_T_ShipmentHeader_Entity> findEntityByShipmentNo(String ShipmentNo,String ActionType);
+  @Query('SELECT * FROM DSD_T_ShipmentHeader WHERE ShipmentNo = :ShipmentNo')
+  Future<DSD_T_ShipmentHeader_Entity> findEntityByShipmentNo(String ShipmentNo);
 
   @insert
   Future<void> insertEntity(DSD_T_ShipmentHeader_Entity entity);

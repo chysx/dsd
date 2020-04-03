@@ -8,6 +8,7 @@ import 'package:dsd/synchronization/bean/sync_sf_up_request_bean.dart';
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 import 'package:dsd/synchronization/impl/upload_parser.dart';
 import 'package:dsd/synchronization/impl/upload_request_create.dart';
+import 'package:dsd/synchronization/impl/upload_sf_parser.dart';
 import 'package:dsd/synchronization/impl/upload_sf_request_create.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
@@ -35,7 +36,7 @@ abstract class AbstractSyncSfUploadModel extends AbstractSyncMode<Future<SyncSfU
   AbstractSyncSfUploadModel(SyncType syncType,
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
       : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync) {
-    parser = new UploadParser(this);
+    parser = new UploadSfParser(this);
     requestCreate = new UploadSfRequestCreate(this);
   }
 

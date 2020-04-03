@@ -30,6 +30,14 @@ class SyncInitSfModel extends AbstractSyncSfDownloadModel {
     tableList.add('sync_download_logic');
     tableList.add('sync_photo_upload');
     tableList.add('sync_upload');
+
+    tableList.add('DSD_T_ShipmentHeader');
+    tableList.add('DSD_T_ShipmentItem');
+    tableList.add('DSD_T_DeliveryHeader');
+    tableList.add('DSD_T_DeliveryItem');
+    tableList.add('DSD_T_Visit');
+    tableList.add('DSD_T_TruckStock');
+    tableList.add('DSD_T_TruckStockTracking');
     return tableList;
   }
 

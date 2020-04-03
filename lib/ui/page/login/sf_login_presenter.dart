@@ -2,10 +2,13 @@ import 'package:dsd/application.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
+import 'package:dsd/log/log4dart.dart';
 import 'package:dsd/net/http_config.dart';
 import 'package:dsd/net/http_service.dart';
 import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/synchronization/sql/checkin_model_sql_find.dart';
+import 'package:dsd/synchronization/sql/checkout_model_sql_find.dart';
+import 'package:dsd/synchronization/sql/visit_model_sql_find.dart';
 import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
@@ -17,6 +20,7 @@ import 'package:dsd/ui/page/login/sf_login_response_bean.dart';
 import 'package:dsd/ui/page/login/sf_token_response_bean.dart';
 import 'package:dsd/ui/page/settings/setting_info.dart';
 import 'package:dsd/ui/page/settings/settings_presenter.dart';
+import 'package:dsd/utils/code_util.dart';
 import 'package:dsd/utils/device_info.dart';
 import 'package:dsd/utils/file_util.dart';
 import 'package:dsd/utils/string_util.dart';
@@ -102,12 +106,17 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
   }
 
   void testCreateFields() {
-    String tableName = 'DSD_T_ShipmentHeader';
-    String sql = CheckInModelSqlFind.CHECKIN_DSD_T_ShipmentHeader_Sql_Find;
+    String tableName = 'MD_Account';
+    String sql = VisitModelSqlFind.VISIT_MD_Account_Sql_Find;
     sql = sql.replaceAll('\n', '');
     sql = sql.replaceAll('\t', '');
     sql = sql.substring(sql.indexOf('SELECT') + 6,sql.indexOf('FROM')).trim();
     List<String> fieldList = sql.split(',');
+    if(fieldList[0].contains('.')){
+      fieldList = fieldList.map((item){
+        return item.substring(item.indexOf('.') + 1);
+      }).toList();
+    }
     String mark = local2SfMapping[tableName] + MARK;
     Map<String,String> map = {};
     for(String key in fieldMapping.keys){
@@ -121,6 +130,10 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
       resultList.add(map[field.trim()]);
     }
     print(resultList.join(','));
+
+    for(int i = 0;i < resultList.length;i++){
+      print('${fieldList[i]}:                  ${resultList[i]}');
+    }
   }
 
 
@@ -163,9 +176,10 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
 
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
 //    if(true){
-////      testLoadSync(context);
+//      testCreateFields();
+////    testLoadSync(context);
 ////    FileUtil.getFilePath('log');
-//    testParser();
+////    testParser();
 //      return;
 //    }
     print(loginInputInfo.toString());
@@ -243,6 +257,7 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
   }
 
   Future onClickSetting(BuildContext context) async {
+    LoggerSuper().info('api', 'zhangguopeng');
     Map<String, dynamic> bundle = {};
     var result = await Navigator.pushNamed(
         context, PageName.settings.toString(),

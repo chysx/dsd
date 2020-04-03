@@ -1,3 +1,4 @@
+import 'package:dsd/common/business_const.dart';
 import 'package:dsd/common/constant.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/check_out_and_in_model.dart';
@@ -44,7 +45,7 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
 
   bool isComplete(){
 //    return CheckInModel().shipmentItemList.length > 0;
-    return CheckInModel().shipmentHeader?.ActionType != null;
+    return CheckInModel().shipmentHeader?.ActionType == ActionType.CheckIn;
   }
 
   String getIsCompleteText() {
@@ -91,7 +92,7 @@ class CheckInPresenter extends EventNotifier<CheckInEvent> {
     SyncParameter syncParameter = new SyncParameter();
     syncParameter.putUploadUniqueIdValues([shipmentNo]).putUploadName([shipmentNo]);
 
-    SyncManager.start(SyncType.SYNC_UPLOAD_CHECKIN, context: context,syncParameter: syncParameter, onSuccessSync: () {
+    SyncManager.start(SyncType.SYNC_UPLOAD_CHECKIN_SF, context: context,syncParameter: syncParameter, onSuccessSync: () {
       Navigator.of(context).pop();
     }, onFailSync: (e) async {
       CustomerDialog.show(context, msg: 'upload fail', onConfirm: () {

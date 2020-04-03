@@ -77,7 +77,7 @@ class PrintCheckoutSlipPresenter extends EventNotifier<PrintCheckoutSlipEvent> {
     Map<String, BaseProductInfo> hashMap = {};
     for (DSD_T_ShipmentItem_Entity tItem in CheckOutModel().shipmentItemList) {
 //      if(tItem.IsReturn == Equpmen.TRUE) continue;
-      if (tItem.ActualQty == 0) continue;
+      if (tItem.CheckOutActualQty == 0) continue;
 
       String code = tItem.ProductCode;
       BaseProductInfo info = hashMap[code];
@@ -90,9 +90,9 @@ class PrintCheckoutSlipPresenter extends EventNotifier<PrintCheckoutSlipEvent> {
 
       if (tItem.ProductCode == info.code) {
         if (tItem.ProductUnit == ProductUnit.CS) {
-          info.actualCs = tItem.ActualQty;
+          info.actualCs = tItem.CheckOutActualQty;
         } else if (tItem.ProductUnit == ProductUnit.EA) {
-          info.actualEa = tItem.ActualQty;
+          info.actualEa = tItem.CheckOutActualQty;
         }
       }
 

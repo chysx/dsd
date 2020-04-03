@@ -1,6 +1,7 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:uuid/uuid.dart';
@@ -48,7 +49,10 @@ class VisitManager {
   static DSD_T_Visit_Entity createVisit(String shipmentNo, String accountNumber, String reasonValue) {
     String nowTime = DateUtil.getDateStrByDateTime(DateTime.now());
     DSD_T_Visit_Entity entity = DSD_T_Visit_Entity.Empty();
+    String guid = createIdBySf();
     entity
+      ..Id = guid
+      ..GUID = guid
       ..VisitId = new Uuid().v1()
       ..StartTime = nowTime
       ..ShipmentNo = shipmentNo

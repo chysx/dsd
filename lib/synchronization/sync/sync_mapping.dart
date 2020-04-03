@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
 ///
@@ -6,6 +8,10 @@
 ///  Date:         2020-03-10 14:10
 
 String MARK = ':';
+
+String createIdBySf() {
+  return 'GUID' + new Uuid().v1();
+}
 
 String deliveryHeader = 'ebMobile__Delivery__c';
 String deliveryItem = 'DeliveryItem__c';
@@ -98,6 +104,7 @@ List<String> tDeliveryHeaderFieldsByDownload = [
   'Tax2',
   'CancelReason',
   'DeliveryNote',
+  'CreateUser',
   'CreateTime',
   'Rebook',
   'PickupEmpties__c',
@@ -140,6 +147,7 @@ List<String> tDeliveryItemFieldsByDownload = [
   'NetPrice',
   'Deposit',
   'IsReturn',
+  'CreateUser',
   'CreateTime',
   'IsFree',
   'ItemSequence',
@@ -182,6 +190,7 @@ List<String> tShipmentHeaderFieldsByDownload = [
   'GUID',
   'ShipmentNo',
   'ShipmentDate',
+  'ShipmentType',
   'ActionType',
   'StartTime',
   'EndTime',
@@ -207,6 +216,7 @@ List<String> tShipmentHeaderFieldsByDownload = [
   'TotalAmount',
   'TotalWeight',
   'WeightUnit',
+  'CreateUser',
   'CreateTime',
   'ScanResult',
   'Manually',
@@ -230,6 +240,7 @@ List<String> tShipmentItemFieldsByDownload = [
   'ActualQty',
   'DifferenceQty',
   'DifferenceReason',
+  'CreateUser',
   'CreateTime',
 ];
 
@@ -264,9 +275,6 @@ Map<String,String> local2SfMapping = {
   'DSD_T_ShipmentHeader': 'Shipment__c',
   'DSD_T_ShipmentItem': 'ShipmentLine__c',
   'DSD_T_Visit': 'ebMobile__Call__c',
-  'DSD_T_TruckStock': 'DSD_T_TruckStock',
-  'DSD_T_TruckStockTracking': 'DSD_T_TruckStockTracking'
-
 };
 
 String deliveryHeaderMark = 'ebMobile__Delivery__c$MARK';
@@ -331,7 +339,7 @@ Map<String,String> fieldMapping = {
 
   //  DSD_T_DeliveryHeader
 
-  '${deliveryHeaderMark}VisitId__c': 'VisitId',
+  '${deliveryHeaderMark}iDelyVisitId__c': 'VisitId',
   '${deliveryHeaderMark}CustomerSignStatus__c': 'CustomerSignStatus',
   '${deliveryHeaderMark}CustomerSignDate__c': 'CustomerSignDate',
   '${deliveryHeaderMark}CustomerSignImg__c': 'CustomerSignImg',
@@ -397,7 +405,6 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}Plan_Shipment_Date__c': 'ShipmentDate',
   '${shipmentHeaderMark}ShipmentType__c': 'ShipmentType',
   '${shipmentHeaderMark}TruckId__c': 'TruckId',
-  /*'': 'ShipmentType',*/
 //  '': 'Route',
 //  '': 'Description',
   '${shipmentHeaderMark}ReleaseStatus__c': 'ReleaseStatus',
@@ -419,9 +426,10 @@ Map<String,String> fieldMapping = {
   //  DSD_T_ShipmentHeader
 
 
+  '${shipmentHeaderMark}Status__c': 'Status',
   '${shipmentHeaderMark}ActionType__c': 'ActionType',
-  '${shipmentHeaderMark}CheckinTime__c': 'StartTime',
-//  '': 'EndTime',
+  '${shipmentHeaderMark}CheckoutTime__c': 'StartTime',
+  '${shipmentHeaderMark}CheckinTime__c': 'EndTime',
   '${shipmentHeaderMark}Odometer__c': 'Odometer',
   '${shipmentHeaderMark}Checker__c': 'Checker',
   '${shipmentHeaderMark}CheckerConfirm__c': 'CheckerConfirm',
@@ -430,6 +438,7 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}DCheckerSignImg__c': 'DCheckerSignImg',
   '${shipmentHeaderMark}Cashier__c': 'Cashier',
   '${shipmentHeaderMark}CashierConfirm__c': 'CashierConfirm',
+  '${shipmentHeaderMark}CashierConfirmTime__c': 'CashierConfirmTime',
   '${shipmentHeaderMark}CashierSignImg__c': 'CashierSignImg',
   '${shipmentHeaderMark}DCashierSignImg__c': 'DCashierSignImg',
   '${shipmentHeaderMark}Gatekeeper__c': 'Gatekeeper',
@@ -437,7 +446,6 @@ Map<String,String> fieldMapping = {
   '${shipmentHeaderMark}GKConfirmTime__c': 'GKConfirmTime',
   '${shipmentHeaderMark}GKSignImg__c': 'GKSignImg',
   '${shipmentHeaderMark}DGKSignImg__c': 'DGKSignImg',
-  '${shipmentHeaderMark}Status__c': 'Status',
   '${shipmentHeaderMark}iDelyDriver__c': 'Driver',
 //  '${shipmentHeaderMark}iDelyTruck__c': 'TruckId',
 //  '': 'TotalAmount',
@@ -464,7 +472,9 @@ Map<String,String> fieldMapping = {
   //  DSD_T_ShipmentItem
 
   '${shipmentItemMark}ShipmentId__c': 'HeaderId',
-  '${shipmentItemMark}ActualQty__c': 'ActualQty',
+//  '${shipmentItemMark}ActualQty__c': 'ActualQty',
+  '${shipmentItemMark}ShippedQuantity__c': 'CheckOutActualQty',
+  '${shipmentItemMark}ReceiveQuantity__c': 'CheckInActualQty',
   '${shipmentItemMark}DifferenceQty__c': 'DifferenceQty',
   '${shipmentItemMark}DifferenceReason__c': 'DifferenceReason',
 
@@ -514,7 +524,6 @@ Map<String,String> fieldMapping = {
 
   '${visitMark}Id': 'Id',
   '${visitMark}ebMobile__GUID__c': 'GUID',
-  '${visitMark}ebMobile__ExternalID__c': 'VisitId',
   '${visitMark}ShipmentNo__c': 'ShipmentNo',
   '${visitMark}ebMobile__TimeInOutlet__c': 'StartTime',
   '${visitMark}ebMobile__TimeOutOutlet__c': 'EndTime',
@@ -537,6 +546,10 @@ Map<String,String> fieldMapping = {
   '${accountMark}RouteJumping__c': 'ebMobile__RouteJumping__c',
   '${accountMark}ebMobile__GeoCode__Longitude__s': 'Geo_Longitude',
   '${accountMark}ebMobile__GeoCode__Latitude__s': 'Geo_Latitude',
+
+  '${accountMark}AccountNumber': 'AccountNumber',
+  '${accountMark}NoteToDriver__c': 'NoteToDriver__c',
+//  '${accountMark}Usercode': 'Usercode',
 
 //  MD_Contact
 

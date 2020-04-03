@@ -22,6 +22,10 @@ class SyncSfUpdateModel extends AbstractSyncSfDownloadModel {
 
   @override
   bool isAllDataAndAllInsert(String tableName) {
+    if(tableName.toLowerCase() == 'MD_Account'.toLowerCase() ||
+        tableName.toLowerCase() == 'MD_Contact'.toLowerCase()){
+      return true;
+    }
     return false;
   }
 
@@ -42,15 +46,15 @@ class SyncSfUpdateModel extends AbstractSyncSfDownloadModel {
   static Map<String,List<String>> updateMap = {
     "DSD_M_ShipmentHeader": ["Id"],
     "DSD_M_ShipmentItem": ["Id"],
-    "DSD_T_ShipmentHeader": ["Id"],
-    "DSD_T_ShipmentItem": ["Id"],
     "DSD_M_DeliveryHeader": ["Id"],
     "DSD_M_DeliveryItem": ["Id"],
-    "DSD_T_DeliveryHeader": ["Id"],
-    "DSD_T_DeliveryItem": ["Id"],
-    "DSD_T_Visit": ["Id"],
-    "DSD_T_TruckStock": ["Id"],
-    "DSD_T_TruckStockTracking": ["Id"]
+    "DSD_T_ShipmentHeader": ["GUID"],
+    "DSD_T_ShipmentItem": ["GUID"],
+    "DSD_T_DeliveryHeader": ["GUID"],
+    "DSD_T_DeliveryItem": ["GUID"],
+    "DSD_T_Visit": ["VisitId"],
+    "DSD_T_TruckStock": ["GUID"],
+    "DSD_T_TruckStockTracking": ["GUID"]
   };
 
 
