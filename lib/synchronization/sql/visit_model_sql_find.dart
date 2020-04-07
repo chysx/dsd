@@ -10,7 +10,6 @@ class VisitModelSqlFind {
   ''' 
   		SELECT Id,
   		 GUID,
-  		 VisitId,
 		   ShipmentNo,
 		   StartTime,
 		   EndTime,
@@ -22,7 +21,7 @@ class VisitModelSqlFind {
 		   CreateUser,
 		   CreateTime
 		FROM DSD_T_Visit
-		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
+		WHERE Id UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
 	
   ''';
 
@@ -123,6 +122,7 @@ class VisitModelSqlFind {
 		SELECT Id,
 		   GUID,
 		   TruckId,
+		   VisitId,
 		   ShipmentNo,
 		   TrackingTime,
 		   ProductCode,

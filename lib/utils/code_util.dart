@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dsd/common/constant.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:flutter/widgets.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
@@ -71,5 +73,10 @@ class CodeUtil{
       width:100,fit: BoxFit.fitWidth,
       gaplessPlayback:true, //防止重绘
     );
+  }
+
+  static Future<Image> base642Image22(String base64Txt) async {
+    var decodeTxt = base64.decode(base64Txt);
+    FileUtil.saveFileData(decodeTxt, Constant.WORK_IMG, 'test.jpg');
   }
 }

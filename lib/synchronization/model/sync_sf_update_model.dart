@@ -1,4 +1,6 @@
-import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
+import 'package:dsd/application.dart';
+import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
+import 'package:dsd/db/table/sync_upload_entity.dart';
 import 'package:dsd/synchronization/base/abstract_sync_sf_download_model.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
@@ -29,6 +31,22 @@ class SyncSfUpdateModel extends AbstractSyncSfDownloadModel {
     return false;
   }
 
+  @override
+  Future onSuccess() async {
+    super.onSuccess();
+    List<SyncUploadEntity> syncUploadEntityList = await Application.database.syncUploadDao.findEntityByType(SyncType.SYNC_UPLOAD_VISIT_SF.toString());
+    List<SyncUploadEntity> resultList = [];
+    for(SyncUploadEntity entity in syncUploadEntityList){
+      DSD_T_Visit_Entity visit = await Application.database.tVisitDao.findEntityByGuid(entity.uniqueIdValues);
+      if(visit != null){
+        entity.uniqueIdValues = visit.Id;
+        resultList.add(entity);
+      }
+    }
+    await Application.database.syncUploadDao.deleteEntity(resultList);
+    await Application.database.syncUploadDao.insertEntityList(resultList);
+  }
+
 //  static Map<String,List<String>> updateMap = {
 //    "DSD_M_ShipmentHeader": ["ShipmentNo"],
 //    "DSD_M_ShipmentItem": ["ShipmentNo", "ProductCode", "ProductUnit"],
@@ -52,7 +70,7 @@ class SyncSfUpdateModel extends AbstractSyncSfDownloadModel {
     "DSD_T_ShipmentItem": ["GUID"],
     "DSD_T_DeliveryHeader": ["GUID"],
     "DSD_T_DeliveryItem": ["GUID"],
-    "DSD_T_Visit": ["VisitId"],
+    "DSD_T_Visit": ["GUID"],
     "DSD_T_TruckStock": ["GUID"],
     "DSD_T_TruckStockTracking": ["GUID"]
   };

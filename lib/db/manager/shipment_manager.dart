@@ -34,8 +34,8 @@ class ShipmentManager {
         INNER JOIN
             dsd_t_shipmentheader AS t2          
                 ON t1.shipmentno = t2.shipmentno             
-                AND t2.actiontype = 'CHKO'             
-                AND t2.status = 'CHKO'        
+                AND (t2.actiontype = 'CHKO' OR t2.actiontype = 'CHKI')         
+                AND t2.status = 'CHKO'      
         LEFT JOIN
             md_dictionary AS t3          
                 ON t2.status = t3.VALUE             

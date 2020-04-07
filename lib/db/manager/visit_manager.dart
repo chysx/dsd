@@ -38,7 +38,7 @@ class VisitManager {
   }
 
   static Future insertOrUpdateVisit(DSD_T_Visit_Entity visit) async {
-    DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityByVisitId(visit.VisitId);
+    DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityById(visit.Id);
     if (entity == null) {
       await Application.database.tVisitDao.insertEntity(visit);
     } else {
@@ -53,7 +53,6 @@ class VisitManager {
     entity
       ..Id = guid
       ..GUID = guid
-      ..VisitId = new Uuid().v1()
       ..StartTime = nowTime
       ..ShipmentNo = shipmentNo
       ..EndTime = nowTime

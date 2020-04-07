@@ -1,5 +1,6 @@
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/synchronization/base/abstract_sync_mode.dart';
+import 'package:dsd/synchronization/sync/sync_status.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/synchronization/utils/sync_manager_util.dart';
@@ -94,6 +95,10 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
         return item.syncMode;
       }).toList();
     }
+
+    syncModeList = syncModeList.where((item){
+      return item.syncStatus == SyncStatus.SYNC_FAIL;
+    });
 
     if(syncModeList.length <= 0){
       Fluttertoast.showToast(msg: "No data to be uploaded.");

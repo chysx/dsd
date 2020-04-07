@@ -194,6 +194,7 @@ class CheckOutAndInModel {
       shipmentHeader
         ..ActionType = _getActionType()
         ..dirty = SyncDirtyStatus.DEFAULT;
+      await Application.database.tShipmentHeaderDao.updateEntity(shipmentHeader);
     }
   }
 

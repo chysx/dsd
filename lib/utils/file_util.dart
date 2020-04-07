@@ -25,6 +25,8 @@ class FileUtil {
 
     Application.logger.i('dstDir = $dstDir');
 
+    if(dstDir != null) DirectoryUtil.createDirSync(dstDir);
+
     return dstDir;
 
   }

@@ -1,4 +1,5 @@
 import 'package:dsd/application.dart';
+import 'package:dsd/common/constant.dart';
 import 'package:dsd/db/manager/app_config_manager.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
@@ -173,13 +174,24 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
 
   }
 
+  Future<void> testImageBase64() async {
+    String dir = FileUtil.getFilePath(Constant.WORK_IMG);
+    String result = await CodeUtil.image2Base64(dir + '/image.jpg');
+    LoggerSuper().info('image:', result);
+
+    print(result);
+
+    await CodeUtil.base642Image22(result);
+  }
+
 
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
 //    if(true){
-//      testCreateFields();
+////      testCreateFields();
 ////    testLoadSync(context);
 ////    FileUtil.getFilePath('log');
 ////    testParser();
+//      testImageBase64();
 //      return;
 //    }
     print(loginInputInfo.toString());
@@ -257,7 +269,8 @@ class SfLoginPresenter extends EventNotifier<LoginEvent> {
   }
 
   Future onClickSetting(BuildContext context) async {
-    LoggerSuper().info('api', 'zhangguopeng');
+    FileUtil.getFilePath('log');
+    FileUtil.getFilePath(Constant.WORK_IMG);
     Map<String, dynamic> bundle = {};
     var result = await Navigator.pushNamed(
         context, PageName.settings.toString(),

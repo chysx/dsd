@@ -151,7 +151,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
 
   void cacheData() {
     DeliveryModel().cacheDeliveryHeader(
-        visitId: VisitModel().visit.VisitId,
+        visitId: VisitModel().visit.Id,
         shipmentNo: shipmentNo,
         accountNumber: accountNumber,
         deliveryType: deliveryType,

@@ -1,3 +1,5 @@
+import 'package:dsd/application.dart';
+import 'package:dsd/db/table/entity/dsd_t_shipment_header_entity.dart';
 import 'package:dsd/synchronization/base/abstract_sync_sf_upload_model.dart';
 import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
@@ -47,4 +49,16 @@ class SyncSfUploadCheckInModel extends AbstractSyncSfUploadModel {
 
     return uploadBeanList;
   }
+
+  @override
+  Future onSuccess() async {
+    super.onSuccess();
+    for(String shipmentNo in getUploadUniqueIdValues()){
+      DSD_T_ShipmentHeader_Entity shipmentHeader =  await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo);
+      if(shipmentHeader != null){
+        await Application.database.tShipmentItemDao.deleteByHeaderId(shipmentHeader.Id);
+      }
+    }
+  }
+
 }
