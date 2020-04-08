@@ -41,6 +41,11 @@ abstract class AbstractSyncSfUploadModel extends AbstractSyncMode<Future<SyncSfU
   }
 
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
+    if(syncType == SyncType.SYNC_UPLOAD_PHOTO_SF){
+      return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
+        return Observable.fromFuture(ApiService.getSFUploadPhotoData(syncRequestBean));
+      });
+    }
     return Observable.fromFuture(requestCreate.create()).flatMap((syncRequestBean) {
       return Observable.fromFuture(ApiService.getSFUploadData(syncRequestBean));
     });

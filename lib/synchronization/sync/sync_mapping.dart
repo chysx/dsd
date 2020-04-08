@@ -275,6 +275,7 @@ Map<String,String> local2SfMapping = {
   'DSD_T_ShipmentHeader': 'Shipment__c',
   'DSD_T_ShipmentItem': 'ShipmentLine__c',
   'DSD_T_Visit': 'ebMobile__Call__c',
+  'ContentVersion': 'ContentVersion',
 };
 
 String deliveryHeaderMark = 'ebMobile__Delivery__c$MARK';
@@ -291,6 +292,7 @@ String systemConfigMark = 'ebMobile__Configuration__c$MARK';
 String dictionaryMark = 'Dictionary__c$MARK';
 String truckStockMark = 'TruckStock__c$MARK';
 String truckTrackMark = 'TruckStockTracking__c$MARK';
+String cvMark = 'ContentVersion$MARK';
 
 
 Map<String,String> fieldMapping = {
@@ -539,6 +541,14 @@ Map<String,String> fieldMapping = {
   '${visitMark}iDelyCreateTime__c': 'CreateTime',
   '${visitMark}iDelyLastUpdateUserCode__c': 'LastUpdateUser',
   '${visitMark}iDelyLastUpdateTime__c': 'LastUpdateTime',
+
+  //  ContentVersion
+
+  '${cvMark}Id': 'Id',
+  '${cvMark}Title': 'Title',
+  '${cvMark}PathOnClient': 'PathOnClient',
+  '${cvMark}ParentId__c': 'ParentId__c',
+  '${cvMark}VersionData': 'VersionData',
 
   //  MD_Account
 

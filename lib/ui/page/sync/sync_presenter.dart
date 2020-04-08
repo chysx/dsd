@@ -24,6 +24,7 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
   List<SyncInfo> syncCheckOutList = [];
   List<SyncInfo> syncCheckInList = [];
   List<SyncInfo> syncVisitList = [];
+  List<SyncInfo> syncPhotoList = [];
 
   @override
   void onEvent(SyncEvent event, [dynamic data]) async {
@@ -40,6 +41,7 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
     syncCheckOutList = await SyncManagerUtil.getSyncInfoList(SyncType.SYNC_UPLOAD_CHECKOUT_SF);
     syncCheckInList = await SyncManagerUtil.getSyncInfoList(SyncType.SYNC_UPLOAD_CHECKIN_SF);
     syncVisitList = await SyncManagerUtil.getSyncInfoList(SyncType.SYNC_UPLOAD_VISIT_SF);
+    syncPhotoList = await SyncManagerUtil.getSyncInfoList(SyncType.SYNC_UPLOAD_PHOTO_SF);
   }
 
   Future loadConfig(BuildContext context, SyncType syncType) async {
@@ -94,11 +96,15 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
       syncModeList = syncCheckInList.map((item) {
         return item.syncMode;
       }).toList();
+    } else if (index == 3) {
+      syncModeList = syncPhotoList.map((item) {
+        return item.syncMode;
+      }).toList();
     }
 
     syncModeList = syncModeList.where((item){
       return item.syncStatus == SyncStatus.SYNC_FAIL;
-    });
+    }).toList();
 
     if(syncModeList.length <= 0){
       Fluttertoast.showToast(msg: "No data to be uploaded.");

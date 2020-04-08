@@ -87,4 +87,16 @@ class ApiService {
     return Application.httpService.post(path, data: data);
   }
 
+  static Future<Response<Map<String, dynamic>>> getSFUploadPhotoData(SyncSfUpRequestBean sfUpRequestBean) {
+    String path = '/services/apexrest/DMSFileSynService';
+    LoggerSuper().info('api', CodeUtil.jsonMap2String(sfUpRequestBean.toJson()));
+    Map<String, dynamic> data = {
+      "jsonData": CodeUtil.base64EncodeByMap(sfUpRequestBean.toJson()),
+    };
+    print('request = $data');
+    LoggerSuper().info('api', CodeUtil.jsonMap2String(data));
+
+    return Application.httpService.post(path, data: data);
+  }
+
 }

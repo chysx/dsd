@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:dsd/common/constant.dart';
@@ -9,7 +7,6 @@ import 'package:dsd/res/styles.dart';
 import 'package:dsd/ui/page/sync/sync_info.dart';
 import 'package:dsd/ui/page/sync/sync_presenter.dart';
 import 'package:dsd/ui/widget/drawer_widget.dart';
-import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +27,8 @@ class SyncPage extends StatefulWidget {
 
 class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
   TabController tabController;
-  final List<Tab> myTabs = <Tab>[Tab(text: 'CheckOut'), Tab(text: 'Visit'), Tab(text: 'CheckIn')];
+  final List<Tab> myTabs = <Tab>[Tab(text: 'CheckOut'), Tab(text: 'Visit'),
+    Tab(text: 'CheckIn'), Tab(text: 'Photo')];
 
   @override
   void initState() {
@@ -175,6 +173,48 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
     );
   }
 
+  Widget createPhoto(SyncPresenter presenter) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: ListView.separated(
+            separatorBuilder: (context, index) {
+              return Divider(
+                height: 2,
+              );
+            },
+            itemCount: presenter.syncPhotoList.length,
+            itemBuilder: (context, index) {
+              SyncInfo info = presenter.syncPhotoList[index];
+              return Padding(
+                padding: EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        child: Text(
+                          info.name,
+                          style: TextStyles.normal,
+                        )),
+                    Expanded(
+                        child: Text(
+                          info.getStatusMsg(),
+                          style: TextStyles.normal,
+                        )),
+                    Expanded(
+                        child: Text(
+                          info.time,
+                          style: TextStyles.normal,
+                        ))
+                  ],
+                ),
+              );
+            },
+          ),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -196,6 +236,7 @@ class _SyncState extends State<SyncPage> with SingleTickerProviderStateMixin {
                   createCheckOut(presenter),
                   createVisit(presenter),
                   createCheckIn(presenter),
+                  createPhoto(presenter),
                 ],
               ),
             ),

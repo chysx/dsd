@@ -13,6 +13,7 @@ import 'package:dsd/synchronization/sync_manager.dart';
 import 'package:dsd/ui/dialog/customer_dialog.dart';
 import 'package:dsd/ui/page/visit_summary/visit_summary_info.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -100,6 +101,7 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
 
     await VisitModel().updateVisit();
     uploadData(context);
+    uploadPhotoData(context);
   }
 
   void uploadData(BuildContext context) {
@@ -116,6 +118,18 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
       }, onCancel: () {
         Navigator.of(context).pop();
       });
+    });
+  }
+
+  void uploadPhotoData(BuildContext context) {
+    SyncParameter syncParameter = new SyncParameter();
+    syncParameter.putUploadUniqueIdValues([VisitModel().visit.Id]).putUploadName([VisitModel().visit.AccountNumber]);
+
+    SyncManager.start(SyncType.SYNC_UPLOAD_PHOTO_SF, context: context,syncParameter: syncParameter,
+        onSuccessSync: () {
+          Fluttertoast.showToast(msg: 'photo upload success');
+    }, onFailSync: (e) {
+        Fluttertoast.showToast(msg: 'photo upload fail');
     });
   }
 

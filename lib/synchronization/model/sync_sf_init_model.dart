@@ -38,6 +38,7 @@ class SyncInitSfModel extends AbstractSyncSfDownloadModel {
     tableList.add('DSD_T_Visit');
     tableList.add('DSD_T_TruckStock');
     tableList.add('DSD_T_TruckStockTracking');
+    tableList.add('ContentVersion');
     return tableList;
   }
 

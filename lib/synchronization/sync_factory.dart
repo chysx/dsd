@@ -13,6 +13,7 @@ import 'model/sync_init_model.dart';
 import 'model/sync_sf_config_model.dart';
 import 'model/sync_sf_init_model.dart';
 import 'model/sync_sf_update_model.dart';
+import 'model/sync_sf_upload_photo_model.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -60,6 +61,9 @@ class SyncFactory {
         break;
       case SyncType.SYNC_UPLOAD_VISIT_SF:
         syncMode = new SyncSfUploadVisitModel(syncType);
+        break;
+      case SyncType.SYNC_UPLOAD_PHOTO_SF:
+        syncMode = new SyncSfUploadPhotoModel(syncType);
         break;
       default:
         break;

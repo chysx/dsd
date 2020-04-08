@@ -1,14 +1,20 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:dsd/application.dart';
 import 'package:dsd/business/delivery_util.dart';
 import 'package:dsd/business/product_util.dart';
+import 'package:dsd/business/signature/signature_util.dart';
 import 'package:dsd/common/constant.dart';
+import 'package:dsd/db/table/entity/content_version.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/model/base_product_info.dart';
 import 'package:dsd/model/delivery_model.dart';
+import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/ui/dialog/list_dialog.dart';
 import 'package:dsd/ui/dialog/loading_dialog.dart';
 import 'package:dsd/ui/dialog/model/key_value_info.dart';
@@ -39,6 +45,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   String customerName;
   String deliveryNo;
 
+  String deliveryId;
   String address;
   String orderNo;
   String phone;
@@ -71,6 +78,7 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
 //    phone = DeliveryModel().mDeliveryHeader.DeliveryPhone;
     phone = '123456789';
     data = DateUtil.getDateStrByDateTime(DateTime.now());
+    deliveryId = DeliveryModel().mDeliveryHeader.Id;
   }
 
   Future fillProductData() async {
@@ -131,6 +139,22 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
     return null;
   }
 
+  Future<Uint8List> getPrintPng(GlobalKey rootWidgetKey) async {
+    try {
+      RenderRepaintBoundary boundary =
+      rootWidgetKey.currentContext.findRenderObject();
+      var image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData = await image.toByteData(format: ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+      return pngBytes;//这个对象就是图片数据
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+
+
   Uint8List getCustomerSign() {
 //    return FileUtil.readFileData(Constant.WORK_IMG, 'signature.png');
     return null;
@@ -139,6 +163,22 @@ class PrintDeliverySlipPresenter extends EventNotifier<PrintDeliverySlipEvent> {
   Uint8List getDriverSign() {
 //    return FileUtil.readFileData(Constant.WORK_IMG, 'signature2.png');
     return null;
+  }
+
+  Future saveImageData(GlobalKey rootWidgetKey) async {
+    Uint8List data = await getPrintPng(rootWidgetKey);
+    ContentVersionEntity entity = await Application.database.cvDao.findEntityByDeliveryId(deliveryId);
+    if(entity == null){
+      ContentVersionEntity entity = new ContentVersionEntity.Empty();
+      entity.Id = createIdBySf();
+      entity.ParentId__c = deliveryId;
+      entity.Title = SignatureUtil.createPrintName();
+      entity.PathOnClient = entity.Title + '.png';
+      entity.VersionData = base64Encode(data);
+      entity.dirty = SyncDirtyStatus.DEFAULT;
+
+      await Application.database.cvDao.insertEntity(entity);
+    }
   }
 
   @override
