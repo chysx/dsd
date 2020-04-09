@@ -38,8 +38,8 @@ abstract class DSD_T_ShipmentItem_Dao {
   @Query('DELETE FROM DSD_T_ShipmentItem WHERE HeaderId = :HeaderId')
   Future<void> deleteByHeaderId(String HeaderId);
 
-  @Query('DELETE FROM DSD_T_ShipmentItem WHERE ShipmentNo = :ShipmentNo AND ActionType = :ActionType')
-  Future<void> deleteByShipmentNo(String ShipmentNo,String ActionType);
+  @Query('DELETE FROM DSD_T_ShipmentItem WHERE ShipmentNo = :ShipmentNo')
+  Future<void> deleteByShipmentNo(String ShipmentNo);
 
   @Query('SELECT * FROM DSD_T_ShipmentItem WHERE HeaderId = :HeaderId')
   Future<List<DSD_T_ShipmentItem_Entity>> findEntityByHeaderId(String HeaderId);

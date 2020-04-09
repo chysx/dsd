@@ -303,7 +303,7 @@ class RouteManager {
      } else {//未做过配送任务
        DSD_T_Visit_Entity visitEntity = VisitManager.createVisit(shipmentNo, accountNumber, reasonValue);
        await Application.database.tVisitDao.insertEntity(visitEntity);
-       visitId = visitEntity.VisitId;
+       visitId = visitEntity.Id;
 
        for (DSD_M_DeliveryHeader_Entity entity in mDeliveryHeaderList) {
          DSD_T_DeliveryHeader_Entity tHeader = new DSD_T_DeliveryHeader_Entity.Empty();

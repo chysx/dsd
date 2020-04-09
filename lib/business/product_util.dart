@@ -25,6 +25,7 @@ class ProductUtil {
       if (info == null) {
         info = new BaseProductInfo();
         hashMap[code] = info;
+        info.id = tItem.Id;
         info.code = code;
         info.name = (await Application.productMap)[code];
         info.isInMDelivery = isInM;
@@ -59,6 +60,7 @@ class ProductUtil {
       if (info == null) {
         info = new BaseProductInfo();
         hashMap[code] = info;
+        info.id = mItem.Id;
         info.code = code;
         info.name = (await Application.productMap)[code];
         info.isInMDelivery = isInM;

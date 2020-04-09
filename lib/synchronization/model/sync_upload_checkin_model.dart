@@ -2,8 +2,6 @@ import 'package:dsd/synchronization/base/abstract_sync_upload_model.dart';
 import 'package:dsd/synchronization/bean/table_uploade_bean.dart';
 import 'package:dsd/synchronization/sql/checkin_model_sql_find.dart';
 import 'package:dsd/synchronization/sql/checkin_model_sql_update.dart';
-import 'package:dsd/synchronization/sql/visit_model_sql_find.dart';
-import 'package:dsd/synchronization/sql/visit_model_sql_update.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';

@@ -30,7 +30,7 @@ abstract class DSD_T_TruckStock_Dao {
   Future<int> updateEntity(DSD_T_TruckStock_Entity entity);
 
   @Query('SELECT * FROM DSD_T_TruckStock WHERE truckId = :truckId AND shipmentNo = :shipmentNo AND productCode = :productCode AND productUnit = :productUnit ')
-  Future<DSD_T_TruckStock_Entity> findEntityByCon(int truckId,String shipmentNo,String productCode,String productUnit);
+  Future<DSD_T_TruckStock_Entity> findEntityByCon(String truckId,String shipmentNo,String productCode,String productUnit);
 
   @Query('SELECT * FROM DSD_T_TruckStock WHERE shipmentNo = :shipmentNo')
   Future<List<DSD_T_TruckStock_Entity>> findEntityByShipment(String shipmentNo);

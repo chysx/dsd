@@ -97,7 +97,23 @@ class LoginPresenter extends EventNotifier<LoginEvent> {
     Application.user.passWord = appConfigEntity.password;
   }
 
+  void testSyncInit(BuildContext context) {
+    SyncManager.start(SyncType.SYNC_INIT_SF, context: context,
+        onSuccessSync: () {
+      CustomerDialog.show(context, msg: 'Sync success');
+    }, onFailSync: (e) async {
+      CustomerDialog.show(context, msg: 'Sync fail');
+    });
+  }
+
   Future login(BuildContext context, LoginInputInfo loginInputInfo) async {
+
+    if(true){
+      FileUtil.getFilePath('log');
+      testSyncInit(context);
+      return;
+    }
+
     print(loginInputInfo.toString());
     LoginStatus loginStatus = checkLoginInput(loginInputInfo);
     print('*******************status = ${loginStatus.toString()}');

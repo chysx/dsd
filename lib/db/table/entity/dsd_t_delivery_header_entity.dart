@@ -10,7 +10,9 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_T_DeliveryHeader")
 class DSD_T_DeliveryHeader_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
+  String GUID;
   String DeliveryNo;
   String VisitId;
   String ShipmentNo;
@@ -54,7 +56,7 @@ class DSD_T_DeliveryHeader_Entity {
   String dirty;
 
 
-  DSD_T_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.VisitId, this.ShipmentNo, this.DeliveryType,
+  DSD_T_DeliveryHeader_Entity(this.pid,this.Id,this.GUID, this.DeliveryNo, this.VisitId, this.ShipmentNo, this.DeliveryType,
       this.DeliveryStatus, this.AccountNumber, this.OrderNo, this.InvoiceNo, this.PONumber, this.OrderDate,
       this.ActualDeliveryDate, this.Currency, this.CustomerSignStatus, this.CustomerSignDate, this.CustomerSignImg,
       this.DriverSignStatus, this.DriverSignDate, this.DriverSignImg, this.StartTime, this.EndTime, this.BasePrice,

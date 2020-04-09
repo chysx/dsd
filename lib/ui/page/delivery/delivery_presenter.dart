@@ -17,6 +17,7 @@ import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/ui/page/profile/note_info.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -150,11 +151,11 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
 
   void cacheData() {
     DeliveryModel().cacheDeliveryHeader(
-        visitId: VisitModel().visit.VisitId,
+        visitId: VisitModel().visit.Id,
         shipmentNo: shipmentNo,
         accountNumber: accountNumber,
         deliveryType: deliveryType,
-        deliveryStatus: getDeliveryStatus());
+        deliveryStatus: getDeliveryStatus(),);
     DeliveryModel().cacheDeliveryItemList(productList, productUnitValue,
         emptyList: emptyProductList);
   }

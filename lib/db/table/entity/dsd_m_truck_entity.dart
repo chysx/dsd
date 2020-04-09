@@ -10,7 +10,8 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_M_Truck")
 class DSD_M_Truck_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String TruckCode;
   String Type;
   double Capacity;
@@ -21,7 +22,7 @@ class DSD_M_Truck_Entity {
   String SalesOff;
   String Status;
 
-  DSD_M_Truck_Entity(this.id, this.TruckCode, this.Type, this.Capacity, this.Volume, this.VolumeUnit, this.CompanyCode,
+  DSD_M_Truck_Entity(this.pid,this.Id, this.TruckCode, this.Type, this.Capacity, this.Volume, this.VolumeUnit, this.CompanyCode,
       this.SalesOrg, this.SalesOff, this.Status);
 
   DSD_M_Truck_Entity.Empty();

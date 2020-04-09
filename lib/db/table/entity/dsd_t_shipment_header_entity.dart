@@ -12,6 +12,7 @@ class DSD_T_ShipmentHeader_Entity {
   @PrimaryKey(autoGenerate: true)
   int pid;
   String Id;
+  String GUID;
   String ShipmentNo;
   String ShipmentDate;
   String ShipmentType;
@@ -37,7 +38,7 @@ class DSD_T_ShipmentHeader_Entity {
   String WarehouseCode;
   String Status;
   String Driver;
-  int TruckId;
+  String TruckId;
   String TotalAmount;
   String TotalWeight;
   String WeightUnit;
@@ -49,7 +50,7 @@ class DSD_T_ShipmentHeader_Entity {
   String Manually;
   String dirty;
 
-  DSD_T_ShipmentHeader_Entity(this.pid, this.Id, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.ActionType,
+  DSD_T_ShipmentHeader_Entity(this.pid, this.Id,this.GUID, this.ShipmentNo, this.ShipmentDate, this.ShipmentType, this.ActionType,
       this.StartTime, this.EndTime, this.Odometer, this.Checker, this.CheckerConfirm, this.CheckerConfirmTime,
       this.CheckerSignImg, this.DCheckerSignImg, this.Cashier, this.CashierConfirm, this.CashierConfirmTime,
       this.CashierSignImg, this.DCashierSignImg, this.Gatekeeper, this.GKConfirm, this.GKConfirmTime, this.GKSignImg,

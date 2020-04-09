@@ -8,10 +8,10 @@
 /// 对应数据库中的Valid字段
 class Valid {
   /// 存在
-  static const String EXIST = "True";
+  static const String EXIST = "true";
 
   /// 不存在
-  static const String NOT_EXIST = "False";
+  static const String NOT_EXIST = "false";
 }
 
 ///
@@ -27,11 +27,11 @@ class Show {
 
   /// 显示
 
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   /// 隐藏
 
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 ///
@@ -40,11 +40,11 @@ class Show {
 class IsReturn {
   /// 显示
 
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   /// 隐藏
 
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 ///
@@ -54,12 +54,12 @@ class Empty {
   ///
   /// 空瓶产品
   ///
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   ///
   /// 非空瓶产品
   ///
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 class ProductUnit {

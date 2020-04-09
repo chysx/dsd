@@ -9,7 +9,7 @@ class VisitModelSqlUpdate {
   static const String VISIT_DSD_T_Visit_Sql_Update =
   ''' 
 		UPDATE DSD_T_Visit SET dirty = ?
-		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK
+		WHERE Id UPLOAD_UNIQUE_ID_VALUES_MARK
 	
   ''';
 

@@ -19,7 +19,7 @@ import 'package:dsd/ui/page/delivery_summary/delivery_summary_presenter.dart';
 import 'package:dsd/ui/page/document/document_page.dart';
 import 'package:dsd/ui/page/document/document_presenter.dart';
 import 'package:dsd/ui/page/login/login_page.dart';
-import 'package:dsd/ui/page/login/login_presenter.dart';
+import 'package:dsd/ui/page/login/sf_login_presenter.dart';
 import 'package:dsd/ui/page/print/checkout_slip/print_checkout_slip_page.dart';
 import 'package:dsd/ui/page/print/checkout_slip/print_checkout_slip_presenter.dart';
 import 'package:dsd/ui/page/print/print_delivery_slip_page.dart';
@@ -63,7 +63,7 @@ PageBuilder rootHandler = PageBuilder(builder: (bundle) {
   return MultiProvider(
     providers: [
       ChangeNotifierProvider(
-          builder: (context) => new LoginPresenter()
+          builder: (context) => new SfLoginPresenter()
             ..onEvent(LoginEvent.InitData)),
     ],
     child: LoginPage(),

@@ -9,6 +9,7 @@ import 'package:dsd/db/dao/sync_photo_upload_dao.dart';
 import 'package:dsd/db/dao/sync_upload_dao.dart';
 import 'package:dsd/db/table/app_log_entity.dart';
 import 'package:dsd/db/table/entity/app_config_entity.dart';
+import 'package:dsd/db/table/entity/content_version.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_item_entity.dart';
 import 'package:dsd/db/table/entity/dsd_m_shipment_header_entity.dart';
@@ -35,6 +36,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'dao/app_config_dao.dart';
+import 'dao/content_version_dao.dart';
 import 'dao/dsd_m_delivery_item_dao.dart';
 import 'dao/dsd_m_shipment_header_dao.dart';
 import 'dao/dsd_m_shipment_item_dao.dart';
@@ -84,7 +86,8 @@ part 'database.g.dart'; // the generated code will be there
   MD_Contact_Entity,
   MD_Dictionary_Entity,
   MD_Person_Entity,
-  MD_Product_Entity
+  MD_Product_Entity,
+  ContentVersionEntity,
 ])
 abstract class AppDatabase extends FloorDatabase {
   AppLogDao get appLogDao;
@@ -110,6 +113,7 @@ abstract class AppDatabase extends FloorDatabase {
   MD_Dictionary_Dao dictionaryDao;
   MD_Person_Dao personDao;
   MD_Product_Dao productDao;
+  ContentVersionDao cvDao;
 
 }
 

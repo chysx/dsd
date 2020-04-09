@@ -34,14 +34,14 @@ class ShipmentManager {
         INNER JOIN
             dsd_t_shipmentheader AS t2          
                 ON t1.shipmentno = t2.shipmentno             
-                AND t2.actiontype = 'CHKO'             
-                AND t2.status = 'CHKO'        
+                AND (t2.actiontype = 'CHKO' OR t2.actiontype = 'CHKI')         
+                AND t2.status = 'CHKO'      
         LEFT JOIN
             md_dictionary AS t3          
                 ON t2.status = t3.VALUE             
                 AND t3.category = 'ShipmentStatus'
         WHERE
-            t1.Valid = 'True'
+            t1.Valid = 'true'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -83,7 +83,7 @@ class ShipmentManager {
                 on m.shipmentno = t.shipmentno          
         WHERE
             t.status is null 
-            and m.Valid = 'True'
+            and m.Valid = 'true'
      ''';
     SqlUtil.log(sql);
     List<ShipmentInfo> result = [];
@@ -129,7 +129,7 @@ class ShipmentManager {
                 AND t3.category = 'ShipmentStatus' 
         WHERE
             t2.EndTime > ?
-            AND t1.Valid = 'True'
+            AND t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -181,7 +181,7 @@ class ShipmentManager {
                 AND t3.category = 'ShipmentStatus' 
         WHERE
             t2.EndTime < ? 
-            AND t1.Valid = 'True'
+            AND t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql, [date]);
@@ -215,28 +215,9 @@ class ShipmentManager {
 
     List<ShipmentInfo> checkOutByAllList = await getShipmentHeaderByCheckOut();
     List<ShipmentInfo> checkInByTodayList = await getShipmentHeaderByCheckInByToday();
-    List<ShipmentInfo> checkInByLastList = await getShipmentHeaderByCheckInByLast();
 
-    //将当天以前已经CheckIn的shipment过滤掉
-    checkOutByAllList.removeWhere((item) {
-      for (ShipmentInfo info in checkInByLastList) {
-        return item.no == info.no;
-      }
-      return false;
-    });
-
-    //同时做了checkout和checkIn的shipment的状态改为checkIn的状态
-    for (ShipmentInfo checkOutItem in checkOutByAllList) {
-      for (ShipmentInfo checkInItem in checkInByTodayList) {
-        if (checkOutItem.no == checkInItem.no) {
-          if (checkInItem.status.isNotEmpty) {
-            checkOutItem.status = checkInItem.status;
-            checkOutItem.description = checkInItem.description;
-          }
-        }
-      }
-    }
     resultList.addAll(checkOutByAllList);
+    resultList.addAll(checkInByTodayList);
     return resultList;
   }
 
@@ -283,7 +264,7 @@ class ShipmentManager {
                 ON t1.shipmentno = t2.shipmentno                    
                 AND t2.status = 'CHKO'        
         WHERE
-            t1.Valid = 'True'
+            t1.Valid = 'true'
      ''';
     String date = DateUtil.getDateStrByDateTime(DateTime.now(), format: DateFormat.YEAR_MONTH_DAY);
     SqlUtil.log(sql);
@@ -328,7 +309,9 @@ class ShipmentManager {
             T1.PlanQty, 
             T2.Name,
             T3.Description,
-            T2.ebMobile__Pack__c        
+            T2.ebMobile__Pack__c,
+            T1.Id
+  
         FROM
             DSD_M_ShipmentItem AS T1    
         INNER JOIN 
@@ -358,6 +341,7 @@ class ShipmentManager {
         info.code = code;
         info.name = values[4];
         info.desc = values[5];
+        info.id = values[7];
       }
       if(ProductUnit.CS == unit){
         info.plannedCs = int.tryParse(values[3]);
@@ -370,6 +354,61 @@ class ShipmentManager {
     return result;
   }
 
+//  static Future<List<BaseProductInfo>> getShipmentItemProductStockByNo(String shipmentNo) async {
+//    String sql = '''
+//            SELECT
+//            DISTINCT
+//            T4.ShipmentNo,
+//            T4.ProductCode,
+//            T4.ProductUnit,
+//            T2.Name,
+//            T4.StockQty,
+//            T4.SaleableQty
+//        FROM
+//            DSD_T_TruckStock AS T4
+//        LEFT JOIN
+//            DSD_T_ShipmentItem AS T1
+//              ON T1.ProductCode = T4.ProductCode
+//              AND T1.ProductUnit = T4.ProductUnit
+//        LEFT JOIN
+//            DSD_T_ShipmentHeader AS T5
+//              ON T1.HeaderID = T5.ID
+//              and T5.ShipmentNo = T4.ShipmentNo
+//        LEFT JOIN
+//            MD_Product AS T2
+//              ON T4.ProductCode = T2.ProductCode
+//        WHERE
+//            T4.ShipmentNo = ?
+//            AND T2.ebMobile__IsEmpty__c != ?
+//        ORDER BY T4.StockQty DESC,T4.SaleableQty DESC
+//     ''';
+//
+//    SqlUtil.log(sql, [shipmentNo,Empty.TRUE]);
+//    Map<String,BaseProductInfo> mapData = {};
+//    var db = Application.database.database;
+//    List<Map<String, dynamic>> list = await db.rawQuery(sql, [shipmentNo,Empty.TRUE]);
+//    for (Map<String, dynamic> map in list) {
+//      List values = map.values.toList();
+//      String code = values[1];
+//      String unit = values[2];
+//      BaseProductInfo info = mapData[code];
+//      if(info == null) {
+//        info = new BaseProductInfo();
+//        mapData[code] = info;
+//        info.code = code;
+//        info.name = values[3];
+//      }
+//      if(ProductUnit.CS == unit){
+//        info.plannedCs = values[4];
+//      }else if(ProductUnit.EA == unit){
+//        info.plannedEa = values[4];
+//      }
+//    }
+//    List<BaseProductInfo> result = [];
+//    result.addAll(mapData.values);
+//    return result;
+//  }
+
   static Future<List<BaseProductInfo>> getShipmentItemProductStockByNo(String shipmentNo) async {
     String sql = ''' 
             SELECT 
@@ -379,17 +418,13 @@ class ShipmentManager {
             T4.ProductUnit,
             T2.Name, 
             T4.StockQty,
-            T4.SaleableQty    
+            T4.SaleableQty,    
+            T1.Id    
         FROM
             DSD_T_TruckStock AS T4    
         LEFT JOIN 
-            DSD_T_ShipmentItem AS T1 
-              ON T1.ProductCode = T4.ProductCode     
-              AND T1.ProductUnit = T4.ProductUnit 
-        LEFT JOIN 
-            DSD_T_ShipmentHeader AS T5 
-              ON T1.HeaderID = T5.ID  
-              and T5.ShipmentNo = T4.ShipmentNo   
+            DSD_M_ShipmentItem AS T1 
+            ON T1.ProductCode = T4.ProductCode
         LEFT JOIN 
             MD_Product AS T2 
               ON T4.ProductCode = T2.ProductCode  
@@ -413,6 +448,7 @@ class ShipmentManager {
         mapData[code] = info;
         info.code = code;
         info.name = values[3];
+        info.id = values[6];
       }
       if(ProductUnit.CS == unit){
         info.plannedCs = values[4];
@@ -424,6 +460,7 @@ class ShipmentManager {
     result.addAll(mapData.values);
     return result;
   }
+
 
   static Future<List<BaseProductInfo>> getEmptyProductByShipmentNo(String shipmentNo) async {
     String sql = ''' 

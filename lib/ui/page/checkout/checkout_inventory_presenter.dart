@@ -92,11 +92,13 @@ class CheckoutInventoryPresenter extends EventNotifier<CheckOutInventoryEvent> {
     for(BaseProductInfo info in productList){
       for (DSD_T_ShipmentItem_Entity tItem in tList) {
         if (info.code == tItem.ProductCode && tItem.ProductUnit == ProductUnit.CS) {
-          info.actualCs = tItem.ActualQty;
-          info.reasonValue = tItem.DifferenceReason;
+          info.actualCs = tItem.CheckOutActualQty;
+          info.reasonValue = tItem.CheckOutDifferenceReason;
+
         }else if (info.code == tItem.ProductCode && tItem.ProductUnit == ProductUnit.EA) {
-          info.actualEa = tItem.ActualQty;
-          info.reasonValue = tItem.DifferenceReason;
+          info.actualEa = tItem.CheckOutActualQty;
+          info.reasonValue = tItem.CheckOutDifferenceReason;
+
         }
       }
     }

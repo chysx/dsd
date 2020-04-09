@@ -7,7 +7,9 @@ import 'package:dsd/db/table/entity/dsd_t_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/dsd_t_delivery_item_entity.dart';
 import 'package:dsd/model/stock_info.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:flustars/flustars.dart';
+import 'package:uuid/uuid.dart';
 
 import '../application.dart';
 import 'base_product_info.dart';
@@ -86,7 +88,8 @@ class DeliveryModel {
   }
 
   void cacheDeliveryHeader(
-      {String visitId, String shipmentNo, String accountNumber, String deliveryType, String deliveryStatus, String startTime}) {
+      {String visitId, String shipmentNo, String accountNumber, String deliveryType,
+        String deliveryStatus, String startTime}) {
     if (visitId != null) {
       deliveryHeader.VisitId = visitId;
     }
@@ -104,6 +107,10 @@ class DeliveryModel {
     }
     if (startTime != null) {
       deliveryHeader.StartTime = startTime;
+    }
+    if (deliveryHeader.Id == null) {
+      deliveryHeader.Id = mDeliveryHeader.Id;
+      deliveryHeader.GUID = deliveryHeader.Id;
     }
   }
 
@@ -136,6 +143,8 @@ class DeliveryModel {
       if (info.actualCs != 0) {
         DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
 
+        add.Id = createIdBySf();
+        add.GUID = add.Id;
         add.DeliveryNo = _deliveryNo;
         add.ProductCode = info.code;
         add.ProductUnit = ProductUnit.CS;
@@ -165,6 +174,8 @@ class DeliveryModel {
         if (info.plannedCs != 0 || info.actualCs != 0) {
           DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
 
+          add.Id = info.id;
+          add.GUID = add.Id;
           add.DeliveryNo = _deliveryNo;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.CS;
@@ -192,6 +203,8 @@ class DeliveryModel {
         if (info.plannedEa != 0 || info.actualEa != 0) {
           DSD_T_DeliveryItem_Entity add = new DSD_T_DeliveryItem_Entity.Empty();
 
+          add.Id = info.id;
+          add.GUID = add.Id;
           add.DeliveryNo = _deliveryNo;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.EA;
@@ -241,7 +254,7 @@ class DeliveryModel {
     List<DSD_T_DeliveryItem_Entity> tDeliveryItems =
     await Application.database.tDeliveryItemDao.findEntityByDeliveryNo(deliveryNo);
 
-    int truckId = shipmentHeader?.TruckId ?? 0;
+    String truckId = shipmentHeader?.TruckId;
     Map<String, StockInfo> stocks = {};
     for (DSD_T_DeliveryItem_Entity deliveryItem in tDeliveryItems) {
       String code = deliveryItem.ProductCode;

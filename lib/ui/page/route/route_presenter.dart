@@ -297,8 +297,8 @@ class RoutePresenter extends EventNotifier<RouteEvent> {
   Future<bool> isDoCheckIn(material.BuildContext context, String shipmentNo) async {
     //判断当前shipmentno是否做过checkin
     DSD_T_ShipmentHeader_Entity tShipmentHeader =
-        await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo, ActionType.CheckIn);
-    if (tShipmentHeader != null) {
+        await Application.database.tShipmentHeaderDao.findEntityByShipmentNo(shipmentNo,);
+    if (tShipmentHeader != null && tShipmentHeader.ActionType == ActionType.CheckIn) {
       CustomerDialog.show(context, msg: IntlUtil.getString(context, Ids.tasklist_verification_no_visit));
       return true;
     }

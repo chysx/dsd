@@ -20,11 +20,13 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListState extends State<TaskListPage> {
+  String emptyMrk = '';
+
   Widget getDesc(TaskInfo info) {
     return StringUtil.isEmpty(info.description)
         ? Container()
         : Text(
-            info.description,
+            info.description ?? emptyMrk,
             style: TextStyles.small,
           );
   }
@@ -34,7 +36,7 @@ class _TaskListState extends State<TaskListPage> {
     return StringUtil.isEmpty(info.orderNo)
         ? Container()
         : Text(
-      'Order No: ${info.orderNo}',
+      'Order No: ${info.orderNo ?? emptyMrk}',
       style: TextStyles.small,
     );
   }
@@ -96,7 +98,7 @@ class _TaskListState extends State<TaskListPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      info.name,
+                                      info.name ?? emptyMrk,
                                       style: TextStyles.normal,
                                     ),
                                     getDesc(info),
@@ -109,7 +111,7 @@ class _TaskListState extends State<TaskListPage> {
                                 getMust(info),
                                 Spacer(),
                                 Text(
-                                  info.status,
+                                  info.status ?? emptyMrk,
                                   style: TextStyles.normal,
                                 ),
                                 Icon(

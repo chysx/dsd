@@ -1,6 +1,7 @@
 import 'package:dsd/application.dart';
 import 'package:dsd/db/table/entity/dsd_t_visit_entity.dart';
 import 'package:dsd/synchronization/sync/sync_dirty_status.dart';
+import 'package:dsd/synchronization/sync/sync_mapping.dart';
 import 'package:dsd/utils/string_util.dart';
 import 'package:flustars/flustars.dart';
 import 'package:uuid/uuid.dart';
@@ -37,7 +38,7 @@ class VisitManager {
   }
 
   static Future insertOrUpdateVisit(DSD_T_Visit_Entity visit) async {
-    DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityByVisitId(visit.VisitId);
+    DSD_T_Visit_Entity entity = await Application.database.tVisitDao.findEntityById(visit.Id);
     if (entity == null) {
       await Application.database.tVisitDao.insertEntity(visit);
     } else {
@@ -48,14 +49,17 @@ class VisitManager {
   static DSD_T_Visit_Entity createVisit(String shipmentNo, String accountNumber, String reasonValue) {
     String nowTime = DateUtil.getDateStrByDateTime(DateTime.now());
     DSD_T_Visit_Entity entity = DSD_T_Visit_Entity.Empty();
+    String guid = createIdBySf();
     entity
-      ..VisitId = new Uuid().v1()
+      ..Id = guid
+      ..GUID = guid
       ..StartTime = nowTime
       ..ShipmentNo = shipmentNo
       ..EndTime = nowTime
       ..UserCode = Application.user.userCode
       ..AccountNumber = accountNumber
       ..CancelReason = reasonValue
+      ..CallType = 'Delivery'
       ..CreateUser = Application.user.userCode
       ..CreateTime = nowTime
       ..LastUpdateUser = Application.user.userCode

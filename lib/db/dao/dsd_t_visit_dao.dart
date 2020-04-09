@@ -14,8 +14,11 @@ abstract class DSD_T_Visit_Dao {
   @Query('SELECT * FROM DSD_T_Visit')
   Future<List<DSD_T_Visit_Entity>> findAll();
 
-  @Query('SELECT * FROM DSD_T_Visit WHERE VisitId = :VisitId')
-  Future<DSD_T_Visit_Entity> findEntityByVisitId(String VisitId);
+  @Query('SELECT * FROM DSD_T_Visit WHERE Id = :Id')
+  Future<DSD_T_Visit_Entity> findEntityById(String Id);
+
+  @Query('SELECT * FROM DSD_T_Visit WHERE guid = :guid')
+  Future<DSD_T_Visit_Entity> findEntityByGuid(String guid);
 
   @insert
   Future<void> insertEntity(DSD_T_Visit_Entity entity);

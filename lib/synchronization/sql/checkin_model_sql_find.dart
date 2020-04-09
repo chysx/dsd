@@ -9,8 +9,8 @@ class CheckInModelSqlFind {
   static const String CHECKIN_DSD_T_ShipmentHeader_Sql_Find =
   ''' 
 SELECT Id,
+       GUID,
 		   ShipmentNo,
-		   ShipmentDate,
 		   ActionType,
 		   StartTime,
 		   EndTime,
@@ -37,6 +37,7 @@ SELECT Id,
 		   TotalAmount,
        TotalWeight,
 		   WeightUnit,
+		   CreateUser,
 		   CreateTime,
 		   ScanResult,
 		   Manually
@@ -45,15 +46,18 @@ SELECT Id,
 	
   ''';
 
+//  T1.CheckInDifferenceQty,
+//  T1.CheckInDifferenceReason,
   static const String CHECKIN_DSD_T_ShipmentItem_Sql_Find =
   ''' 
-		SELECT T1.HeaderId,
+		SELECT T1.Id,
+			 T1.GUID,
+		   T1.HeaderId,
 		   T1.ProductCode,
 		   T1.ProductUnit,
 		   T1.PlanQty,
-		   T1.ActualQty,
-		   T1.DifferenceQty,
-		   T1.DifferenceReason,
+		   T1.CheckInActualQty,
+		   T1.CreateUser,
 		   T1.CreateTime
 		FROM DSD_T_ShipmentItem AS T1
 		INNER JOIN DSD_T_ShipmentHeader AS T2 ON T1.HeaderId = T2.Id
@@ -63,12 +67,15 @@ SELECT Id,
 
   static const String CHECKIN_DSD_T_TruckStock_Sql_Find =
   ''' 
-		SELECT TruckId,
+		SELECT Id,
+			 GUID,
+		   TruckId,
 		   ShipmentNo,
 		   ProductCode,
 		   ProductUnit,
 		   StockQty,
 		   SaleableQty,
+		   CreateUser,
 		   CreateTime
 		FROM DSD_T_TruckStock
 		WHERE ShipmentNo UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
@@ -78,6 +85,7 @@ SELECT Id,
   static const String CHECKIN_DSD_T_TruckStockTracking_Sql_Find =
   ''' 
 		SELECT Id,
+			 GUID,
 		   TruckId,
 		   ShipmentNo,
 		   TrackingTime,
@@ -87,6 +95,7 @@ SELECT Id,
 		   ChangeQuantity,
 		   FromQty,
 		   ToQty,
+		   CreateUser,
 		   CreateTime
 		FROM DSD_T_TruckStockTracking
 		WHERE ShipmentNo UPLOAD_UNIQUE_ID_VALUES_MARK AND ChangeAction = 'CHKI' AND dirty != '1' AND dirty != '2'

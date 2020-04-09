@@ -10,7 +10,8 @@ import 'package:floor/floor.dart';
 @Entity(tableName: "DSD_M_DeliveryHeader")
 class DSD_M_DeliveryHeader_Entity {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String DeliveryNo;
   String ShipmentNo;
   String DeliveryType;
@@ -52,7 +53,7 @@ class DSD_M_DeliveryHeader_Entity {
   String FinishTime__c;
 
 
-  DSD_M_DeliveryHeader_Entity(this.id, this.DeliveryNo, this.ShipmentNo, this.DeliveryType, this.DeliveryStatus,
+  DSD_M_DeliveryHeader_Entity(this.pid,this.Id, this.DeliveryNo, this.ShipmentNo, this.DeliveryType, this.DeliveryStatus,
       this.AccountNumber, this.OrderNo, this.InvoiceNo, this.PONumber, this.OrderDate, this.PlanDeliveryDate,
       this.SalesRep, this.CompanyCode, this.SalesOrg, this.SalesOff, this.PaymentType, this.Currency,
       this.PlanDeliveryQty, this.DeliveryAddress, this.Contact, this.Telephone, this.BasePrice, this.Tax, this.Tax2,
@@ -64,7 +65,8 @@ class DSD_M_DeliveryHeader_Entity {
   static Map<String, dynamic> toJson(
       DSD_M_DeliveryHeader_Entity instance) =>
       <String, dynamic>{
-        'id': instance.id,
+        'pid': instance.pid,
+        'Id': instance.Id,
         'DeliveryNo': instance.DeliveryNo,
         'ShipmentNo': instance.ShipmentNo,
         'DeliveryType': instance.DeliveryType,

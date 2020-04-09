@@ -2,12 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:dsd/db/table/entity/md_product_entity.dart';
 import 'package:dsd/log/log_util.dart';
 import 'package:dsd/ui/page/login/user.dart';
+import 'package:dsd/utils/file_util.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flustars/flustars.dart';
 import 'package:logger/logger.dart';
 
+import 'common/constant.dart';
 import 'db/database.dart';
 import 'db/table/entity/app_config_entity.dart';
+import 'log/log4dart/Logger.dart';
 import 'net/http_service.dart';
 import 'utils/device_info.dart';
 import 'package:event_bus/event_bus.dart';
@@ -53,6 +56,31 @@ class Application {
       _productMap[entity.ProductCode] = entity.Name;
     }
     return _productMap;
+  }
+
+  static configLog4Dart() {
+    var config = {
+      'appenders': [
+        {
+          'type': 'CONSOLE',
+          'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
+          'format': '%d %i %t %l %m',
+          'level': 'ALL'
+        },
+        {
+          'type': 'FILE',
+          'dateFormat' : 'yyyy-MM-dd HH:mm:ss',
+          'format': '%d %i %t %l %m',
+          'level': 'ALL',
+          'filePattern': 'log',
+          'fileExtension': 'txt',
+          'path': '${FileUtil.getFilePath(Constant.WORK_LOG)}',
+          'rotationCycle': 'DAY'
+        },
+      ]
+    };
+
+    LoggerSuper().init(config);
   }
 
 }

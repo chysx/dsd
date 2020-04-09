@@ -15,6 +15,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(new Duration(seconds: 3),(){
       Application.initDataBase();
+      Application.configLog4Dart();
       Map<String,dynamic> bundle = {};
       Navigator.pushReplacementNamed(context, PageName.root.toString(),arguments: bundle);
 

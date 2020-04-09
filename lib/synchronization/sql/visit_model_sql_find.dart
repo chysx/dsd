@@ -8,7 +8,8 @@
 class VisitModelSqlFind {
   static const String VISIT_DSD_T_Visit_Sql_Find =
   ''' 
-  		SELECT VisitId,
+  		SELECT Id,
+  		 GUID,
 		   ShipmentNo,
 		   StartTime,
 		   EndTime,
@@ -17,15 +18,17 @@ class VisitModelSqlFind {
 		   Longitude,
 		   Latitude,
 		   NoScanReason,
+		   CreateUser,
 		   CreateTime
 		FROM DSD_T_Visit
-		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
+		WHERE Id UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
 	
   ''';
 
   static const String VISIT_DSD_T_DeliveryHeader_Sql_Find =
   ''' 
-  SELECT
+  SELECT Id,
+       GUID,
 		   DeliveryNo,
 		   VisitId,
 		   ShipmentNo,
@@ -56,6 +59,7 @@ class VisitModelSqlFind {
 		   CancelTime,
 		   CancelReason,
 		   DeliveryNote,
+		   CreateUser,
 		   CreateTime,
 		   Rebook,
 		   Tax2,
@@ -68,7 +72,9 @@ class VisitModelSqlFind {
 
   static const String VISIT_DSD_T_DeliveryItem_Sql_Find =
   ''' 
-  SELECT T1.DeliveryNo,
+  SELECT T1.Id,
+       T1.GUID,
+       T1.DeliveryNo,
 		   T1.ProductCode,
 		   T1.ProductUnit,
 		   T1.PlanQty,
@@ -81,6 +87,7 @@ class VisitModelSqlFind {
 		   T1.NetPrice,
 		   T1.Deposit,
 		   T1.IsReturn,
+		   T1.CreateUser,
 		   T1.CreateTime,
 		   T1.IsFree,
 		   T1.ItemSequence,
@@ -95,12 +102,15 @@ class VisitModelSqlFind {
 
   static const String VISIT_DSD_T_TruckStock_Sql_Find =
   ''' 
-  		SELECT TruckId,
+  		SELECT Id,
+  		 GUID,
+  		 TruckId,
 		   ShipmentNo,
 		   ProductCode,
 		   ProductUnit,
 		   StockQty,
 		   SaleableQty,
+		   CreateUser,
 		   CreateTime
 		FROM DSD_T_TruckStock
 		WHERE dirty != '1' AND dirty != '2'
@@ -110,7 +120,9 @@ class VisitModelSqlFind {
   static const String VISIT_DSD_T_TruckStockTracking_Sql_Find =
   ''' 
 		SELECT Id,
+		   GUID,
 		   TruckId,
+		   VisitId,
 		   ShipmentNo,
 		   TrackingTime,
 		   ProductCode,
@@ -119,6 +131,7 @@ class VisitModelSqlFind {
 		   ChangeQuantity,
 		   FromQty,
 		   ToQty,
+		   CreateUser,
 		   CreateTime
 		FROM DSD_T_TruckStockTracking
 		WHERE VisitId UPLOAD_UNIQUE_ID_VALUES_MARK AND dirty != '1' AND dirty != '2'
@@ -127,7 +140,7 @@ class VisitModelSqlFind {
 
   static const String VISIT_MD_Account_Sql_Find =
   ''' 
-		SELECT
+		SELECT T1.Id,
 		   T1.AccountNumber,
 		   T1.NoteToDriver__c,
 		   Geo_Longitude,

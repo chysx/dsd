@@ -19,7 +19,7 @@ class SyncManager {
   static void start(SyncType syncType,
       {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync, BuildContext context}) {
     if (context != null) {
-      if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+      if(syncType != SyncType.SYNC_UPLOAD_PHOTO || syncType != SyncType.SYNC_UPLOAD_PHOTO_SF){
         LoadingDialog.show(context);
       }
     }
@@ -33,7 +33,7 @@ class SyncManager {
         print("onSuccessSync");
 
         if (context != null) {
-          if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+          if(syncType != SyncType.SYNC_UPLOAD_PHOTO || syncType != SyncType.SYNC_UPLOAD_PHOTO_SF){
             LoadingDialog.dismiss(context);
           }
         }
@@ -44,7 +44,7 @@ class SyncManager {
         print("onFailSync");
 
         if (context != null) {
-          if(syncType != SyncType.SYNC_UPLOAD_PHOTO){
+          if(syncType != SyncType.SYNC_UPLOAD_PHOTO || syncType != SyncType.SYNC_UPLOAD_PHOTO_SF){
             LoadingDialog.dismiss(context);
           }
         }

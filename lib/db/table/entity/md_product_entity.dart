@@ -9,9 +9,9 @@ import 'package:floor/floor.dart';
 
 @Entity(tableName: "MD_Product")
 class MD_Product_Entity {
-
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int pid;
+  String Id;
   String ProductCode;
   String Name;
   String Description;
@@ -79,7 +79,7 @@ class MD_Product_Entity {
   String ArabicProductDescription;
 
 
-  MD_Product_Entity(this.id,this.ProductCode,this.Name,this.Description,this.Family,this.IsActive,this.CreatedBy,
+  MD_Product_Entity(this.pid,this.Id,this.ProductCode,this.Name,this.Description,this.Family,this.IsActive,this.CreatedBy,
       this.DisplayUrl,this.ExternalDataSource,this.ExternalId,this.LastModifiedBy,this.QuantityUnitOfMeasure,this.ebMobile__BaseUOM__c,
       this.ebMobile__BeverageCategory__c,this.ebMobile__BeverageProduct__c,this.ebMobile__BeverageType__c,this.ebMobile__Brand__c,
       this.ebMobile__CarbonationIndicator__c,this.ebMobile__Category__c,this.ebMobile__Category1__c,this.ebMobile__Category2__c,

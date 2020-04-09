@@ -44,7 +44,8 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
   }
 
   bool isComplete() {
-    return CheckOutModel().shipmentItemList.length > 0;
+//    return CheckOutModel().shipmentItemList.length > 0;
+    return CheckOutModel().shipmentHeader?.ActionType != null;
   }
 
   String getIsCompleteText() {
@@ -85,7 +86,8 @@ class CheckoutPresenter extends EventNotifier<CheckOutEvent> {
     SyncParameter syncParameter = new SyncParameter();
     syncParameter.putUploadUniqueIdValues([shipmentNo]).putUploadName([shipmentNo]);
 
-    SyncManager.start(SyncType.SYNC_UPLOAD_CHECKOUT, context: context,syncParameter: syncParameter, onSuccessSync: () {
+    SyncManager.start(SyncType.SYNC_UPLOAD_CHECKOUT_SF, context: context,syncParameter: syncParameter,
+        onSuccessSync: () {
       Navigator.of(context).pop();
     }, onFailSync: (e) async {
       CustomerDialog.show(context, msg: 'upload fail', onConfirm: () {

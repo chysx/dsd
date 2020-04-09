@@ -7,6 +7,7 @@
 
 class SyncConfig {
   static const String FIELD_SEPARATOR = ",";
-  static const ROW_SEPARATOR = "▏";
+//  static const ROW_SEPARATOR = "▏";
+  static const ROW_SEPARATOR = " ▏";
   static const String PRIMARY_KEY_SEPARATOR = ";";
 }

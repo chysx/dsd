@@ -2,13 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:dsd/db/database.dart';
 import 'package:dsd/synchronization/sync/sync_call_back.dart';
 import 'package:dsd/synchronization/sync/sync_parameter.dart';
-import 'package:dsd/utils/device_info.dart';
 import 'package:dsd/synchronization/base/abstract_sync_download_model.dart';
-import 'package:dsd/synchronization/bean/table_key_bean.dart';
 import 'package:dsd/synchronization/sync/sync_type.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:sqflite/sqlite_api.dart' as sqlite_api;
+import 'package:dsd/utils/device_info.dart';
+import 'package:dsd/synchronization/bean/table_key_bean.dart';
 
 /// Copyright  Shanghai eBest Information Technology Co. Ltd  2019
 ///  All rights reserved.
@@ -20,6 +20,7 @@ import 'package:sqflite/sqlite_api.dart' as sqlite_api;
 class SyncInitModel extends AbstractSyncDownloadModel {
   SyncInitModel(SyncType syncType, {SyncParameter syncParameter, OnSuccessSync onSuccessSync, OnFailSync onFailSync})
       : super(syncType, syncParameter: syncParameter, onSuccessSync: onSuccessSync, onFailSync: onFailSync);
+
 
   @override
   Future<Observable<Response<Map<String, dynamic>>>> prepare() async {
@@ -39,7 +40,7 @@ class SyncInitModel extends AbstractSyncDownloadModel {
     sqflite.DatabaseExecutor sqfliteDb = DbHelper().database.database;
     sqlite_api.Database database = sqfliteDb as sqlite_api.Database;
     List<Map<String, dynamic>> list =
-        await database.rawQuery("select name from sqlite_master where type = 'table' and name not like '%metadata%'");
+    await database.rawQuery("select name from sqlite_master where type = 'table' and name not like '%metadata%'");
     await database.transaction((txn) async {
       List<String> tableNameNotClear = getTableNameNotClear();
       for (Map<String, dynamic> map in list) {
@@ -107,4 +108,5 @@ class SyncInitModel extends AbstractSyncDownloadModel {
     tableKeyBeanList.add(new TableKeyBean("DSD_T_DeliveryItem", ["DeliveryNo", "ProductCode", "ProductUnit","ItemSequence"]));
     return tableKeyBeanList;
   }
+
 }
