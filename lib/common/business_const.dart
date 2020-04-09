@@ -27,11 +27,11 @@ class Show {
 
   /// 显示
 
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   /// 隐藏
 
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 ///
@@ -40,11 +40,11 @@ class Show {
 class IsReturn {
   /// 显示
 
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   /// 隐藏
 
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 ///
@@ -54,12 +54,12 @@ class Empty {
   ///
   /// 空瓶产品
   ///
-  static const String TRUE = "True";
+  static const String TRUE = "true";
 
   ///
   /// 非空瓶产品
   ///
-  static const String FALSE = "False";
+  static const String FALSE = "false";
 }
 
 class ProductUnit {

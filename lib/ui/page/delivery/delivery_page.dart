@@ -85,7 +85,8 @@ class DeliveryPage extends StatelessWidget {
         TextAlign.center,
         TextAlign.center,
       ],
-      isCheck: false,
+      isCheck: true,
+      isFixed: true,
       onChange: (value) {
 //        presenter.onEvent(DeliveryEvent.SelectOrCancelAll, value);
       },

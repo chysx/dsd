@@ -19,8 +19,10 @@ class ListHeaderWidget extends StatefulWidget {
   final bool isCheck;
   final bool isBold;
   final Function(bool) onChange;
+  final bool isFixed;
 
-  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns, this.isCheck, this.isBold = false, this.onChange, Key key})
+  ListHeaderWidget({this.names, this.supNames, this.weights, this.aligns,
+    this.isCheck, this.isBold = false, this.onChange,this.isFixed = false, Key key})
       : super(key: key);
 
   @override
@@ -87,10 +89,12 @@ class _ListHeaderState extends State<ListHeaderWidget> {
             child: Checkbox(
               value: isCheck,
               onChanged: (value) {
-                setState(() {
-                  isCheck = value;
-                });
-                if (widget.onChange != null) widget.onChange(value);
+                if(!widget.isFixed){
+                  setState(() {
+                    isCheck = value;
+                  });
+                  if (widget.onChange != null) widget.onChange(value);
+                }
               },
             ),
           ));
