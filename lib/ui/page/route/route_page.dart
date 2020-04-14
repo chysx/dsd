@@ -255,9 +255,14 @@ class _RouteState extends State<RoutePage> {
                                   children: <Widget>[
                                     Icon(Icons.phone_iphone, size: 15),
                                     Padding(padding: EdgeInsets.only(left: 10),),
-                                    Text(
-                                      info?.tel?? '',
-                                      style: TextStyles.small,
+                                    GestureDetector(
+                                      child: Text(
+                                        info?.tel?? '',
+                                        style: TextStyles.small,
+                                      ),
+                                      onTap: (){
+                                        presenter.onClickTel(context,info);
+                                      },
                                     ),
                                     Icon(Icons.phone, size: 15),
                                     Padding(padding: EdgeInsets.only(left: 10),),

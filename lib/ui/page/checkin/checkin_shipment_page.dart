@@ -114,7 +114,7 @@ class _CheckInShipmentState extends State<CheckInShipmentPage> {
                     children: <Widget>[
                       Expanded(
                         flex: 1,
-                        child: Text(info.no,style: TextStyles.normal,textAlign: TextAlign.center,),
+                        child: Text(info.no,style: TextStyles.normal,textAlign: TextAlign.left,),
                       ),
                       Expanded(
                         flex: 1,

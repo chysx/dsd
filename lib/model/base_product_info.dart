@@ -10,6 +10,7 @@ import 'package:dsd/common/dictionary.dart';
 
 class BaseProductInfo {
    String id;
+   String productId;
    String code;
    String name;
    int plannedCs = 0;

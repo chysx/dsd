@@ -74,7 +74,10 @@ class VisitModelSqlFind {
   ''' 
   SELECT T1.Id,
        T1.GUID,
+       T1.DeliveryID,
        T1.DeliveryNo,
+		   T1.ProductId,
+		   T1.ExternalId,
 		   T1.ProductCode,
 		   T1.ProductUnit,
 		   T1.PlanQty,

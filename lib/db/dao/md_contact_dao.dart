@@ -14,6 +14,9 @@ abstract class MD_Contact_Dao {
   @Query('SELECT * FROM MD_Contact')
   Future<List<MD_Contact_Entity>> findAll();
 
+  @Query('SELECT * FROM MD_Contact WHERE accountnumber__c = :accountNumber')
+  Future<MD_Contact_Entity> findEntityByAccountNumber(String accountNumber);
+
   @insert
   Future<void> insertEntity(MD_Contact_Entity entity);
 

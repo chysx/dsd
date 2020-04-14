@@ -34,6 +34,8 @@ class DeliveryStatus {
   static const String HOLD = "H";
   static const String CANCEL = "C";
   static const String SALES = "S";
+  static final String PENDING_ER = "ER";
+
 
   static const String DEFALUT_DELIVERY_VALUE = "";
   static const String DEFALUT_VANSALES_VALUE = "";
@@ -44,6 +46,7 @@ class DeliveryStatus {
   static const String HOLD_VALUE = "4";
   static const String CANCEL_VALUE = "5";
   static const String SALES_VALUE = "6";
+  static final String PENDING_ER_VALUE = "8";
 
   static String getDeliveryStatusDescription(String value) {
     if (value == null) return "";
@@ -93,6 +96,7 @@ class TaskDeliveryStatus {
   static const String NotComplete = "Not Complete";
   static const String Complete = "Complete";
   static const String PartialDelivered = "Partial Delivered";
+  static const String Pending_ER = "Pending ER";
   static const String TotalDelivered = "Total Delivered";
   static const String Rebook = "Rebook";
   static const String Hold = "Hold";

@@ -16,6 +16,7 @@ import 'package:dsd/model/truck_stock_product_info.dart';
 import 'package:dsd/model/visit_model.dart';
 import 'package:dsd/route/page_builder.dart';
 import 'package:dsd/ui/page/profile/note_info.dart';
+import 'package:flustars/flustars.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -128,6 +129,7 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
         await Application.database.productDao.findEntityByEmpty(Empty.TRUE);
     for (MD_Product_Entity product in list) {
       BaseProductInfo info = new BaseProductInfo();
+      info.productId = product.Id;
       info.code = product.ProductCode;
       info.name = product.Name;
       emptyProductList.add(info);
@@ -150,14 +152,33 @@ class DeliveryPresenter extends EventNotifier<DeliveryEvent> {
   }
 
   void cacheData() {
+    String deliveryStatus = getDeliveryStatus();
+    String emptyRefund;
+    if(isInputEmpty()){
+      emptyRefund = "true";
+    }else{
+      emptyRefund = "false";
+    }
+    if(emptyRefund == "true"){
+      deliveryStatus = DeliveryStatus.PENDING_ER_VALUE;
+    }
     DeliveryModel().cacheDeliveryHeader(
         visitId: VisitModel().visit.Id,
         shipmentNo: shipmentNo,
         accountNumber: accountNumber,
         deliveryType: deliveryType,
-        deliveryStatus: getDeliveryStatus(),);
+        deliveryStatus: deliveryStatus,
+        startTime: DateUtil.getDateStrByDateTime(new DateTime.now()),
+        emptyRefund: emptyRefund
+    );
     DeliveryModel().cacheDeliveryItemList(productList, productUnitValue,
         emptyList: emptyProductList);
+  }
+
+  bool isInputEmpty() {
+    return emptyProductList.any((item){
+      return item.actualCs != 0;
+    });
   }
 
   ///

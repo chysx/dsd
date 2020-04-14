@@ -69,6 +69,59 @@ class MD_Contact_Entity {
       this.ebMobile__Primary__c, this.ebMobile__RecordAction__c, this.CCSM_SAP_Contact_ID__c, this.ebMobile__Spouse__c,
       this.ebMobile__Title__c, this.ebMobile__Twitter__c);
 
+
+  static Map<String, dynamic> toJson(
+      MD_Contact_Entity instance) =>
+      <String, dynamic>{
+        'pid': instance.pid,
+        'ID': instance.ID,
+        'AssistantName': instance.AssistantName,
+        'AssistantPhone': instance.AssistantPhone,
+        'Birthdate': instance.Birthdate,
+        'Owner': instance.Owner,
+        'CreatedBy': instance.CreatedBy,
+        'Jigsaw': instance.Jigsaw,
+        'Department': instance.Department,
+        'Description': instance.Description,
+        'DoNotCall': instance.DoNotCall,
+        'Email': instance.Email,
+        'HasOptedOutOfEmail': instance.HasOptedOutOfEmail,
+        'Fax': instance.Fax,
+        'HasOptedOutOfFax': instance.HasOptedOutOfFax,
+        'HomePhone': instance.HomePhone,
+        'LastModifiedBy': instance.LastModifiedBy,
+        'LastCURequestDate': instance.LastCURequestDate,
+        'LastCUUpdateDate': instance.LastCUUpdateDate,
+        'LeadSource': instance.LeadSource,
+        'MailingAddress': instance.MailingAddress,
+        'MobilePhone': instance.MobilePhone,
+        'Name': instance.Name,
+        'Salutation': instance.Salutation,
+        'FirstName': instance.FirstName,
+        'LastName': instance.LastName,
+        'OtherAddress': instance.OtherAddress,
+        'OtherPhone': instance.OtherPhone,
+        'Phone': instance.Phone,
+        'ReportsTo': instance.ReportsTo,
+        'Title': instance.Title,
+        'AccountNumber__c': instance.AccountNumber__c,
+        'ebMobile__IsActive__c': instance.ebMobile__IsActive__c,
+        'ebMobile__Anniversary__c': instance.ebMobile__Anniversary__c,
+        'ebMobile__CustomerOnboarding__c': instance.ebMobile__CustomerOnboarding__c,
+        'ebMobile__ExternalID__c': instance.ebMobile__ExternalID__c,
+        'ebMobile__Facebook__c': instance.ebMobile__Facebook__c,
+        'ebMobile__GUID__c': instance.ebMobile__GUID__c,
+        'ebMobile__Hobbies__c': instance.ebMobile__Hobbies__c,
+        'ebMobile__Married__c': instance.ebMobile__Married__c,
+        'ebMobile__OnboardingUser__c': instance.ebMobile__OnboardingUser__c,
+        'ebMobile__Primary__c': instance.ebMobile__Primary__c,
+        'ebMobile__RecordAction__c': instance.ebMobile__RecordAction__c,
+        'CCSM_SAP_Contact_ID__c': instance.CCSM_SAP_Contact_ID__c,
+        'ebMobile__Spouse__c': instance.ebMobile__Spouse__c,
+        'ebMobile__Title__c': instance.ebMobile__Title__c,
+        'ebMobile__Twitter__c': instance.ebMobile__Twitter__c,
+      };
+
   MD_Contact_Entity.Empty();
 
 }

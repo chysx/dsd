@@ -267,6 +267,7 @@ class TaskListPresenter extends EventNotifier<TaskListEvent> {
     switch (info.status) {
       case TaskDeliveryStatus.TotalDelivered:
       case TaskDeliveryStatus.PartialDelivered:
+      case TaskDeliveryStatus.Pending_ER:
       case TaskDeliveryStatus.Rebook:
       case TaskDeliveryStatus.Cancel:
         readOnly = ReadyOnly.TRUE;

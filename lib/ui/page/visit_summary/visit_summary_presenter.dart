@@ -108,7 +108,8 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
     SyncParameter syncParameter = new SyncParameter();
     syncParameter.putUploadUniqueIdValues([VisitModel().visit.Id]).putUploadName([VisitModel().visit.AccountNumber]);
 
-    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT_SF, context: context,syncParameter: syncParameter, onSuccessSync: () {
+    SyncManager.start(SyncType.SYNC_UPLOAD_VISIT_SF, context: context,syncParameter: syncParameter,
+        onSuccessSync: () {
       VisitModel().visit.dirty = SyncDirtyStatus.SUCCESS;
       Navigator.of(context).pop();
     }, onFailSync: (e) async {
@@ -127,9 +128,9 @@ class VisitSummaryPresenter extends EventNotifier<VisitSummaryEvent> {
 
     SyncManager.start(SyncType.SYNC_UPLOAD_PHOTO_SF, context: context,syncParameter: syncParameter,
         onSuccessSync: () {
-          Fluttertoast.showToast(msg: 'photo upload success');
+//          Fluttertoast.showToast(msg: 'photo upload success');
     }, onFailSync: (e) {
-        Fluttertoast.showToast(msg: 'photo upload fail');
+//        Fluttertoast.showToast(msg: 'photo upload fail');
     });
   }
 

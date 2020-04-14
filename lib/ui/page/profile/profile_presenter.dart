@@ -6,6 +6,7 @@ import 'package:dsd/db/manager/dictionary_manager.dart';
 import 'package:dsd/db/manager/md_account_manager.dart';
 import 'package:dsd/db/table/entity/dsd_m_delivery_header_entity.dart';
 import 'package:dsd/db/table/entity/md_account_entity.dart';
+import 'package:dsd/db/table/entity/md_contact_entity.dart';
 import 'package:dsd/db/table/entity/md_dictionary_entity.dart';
 import 'package:dsd/event/EventNotifier.dart';
 import 'package:dsd/ui/page/profile/note_info.dart';
@@ -61,6 +62,10 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
 
     MD_Account_Entity account = await Application.database.accountDao
         .findEntityByAccountNumber(accountNumber);
+
+    MD_Contact_Entity contact = await Application.database.contactDao
+        .findEntityByAccountNumber(accountNumber);
+
     List<DSD_M_DeliveryHeader_Entity> deliveryHeaderList = await Application
         .database.mDeliveryHeaderDao
         .findEntityByCon(shipmentNo, accountNumber);
@@ -70,7 +75,7 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
     for (MD_Dictionary_Entity entity in dictionaryList) {
       if (entity.Value.contains(AccountMasterFields.STORE_INFO) &&
           entity.Value != AccountMasterFields.STORE_INFO) {
-        profileStoreList.add(await fillStore(entity, account, deliveryHeader));
+        profileStoreList.add(await fillStore(entity, account, deliveryHeader,contact));
       } else if (entity.Value.contains(AccountMasterFields.CONTACT_INFO) &&
           entity.Value != AccountMasterFields.CONTACT_INFO) {
 //        profileContactList.add(await fillStore(entity,account));
@@ -101,7 +106,8 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
   Future<MapEntry<String, String>> fillStore(
       MD_Dictionary_Entity entity,
       MD_Account_Entity account,
-      DSD_M_DeliveryHeader_Entity deliveryHeader) async {
+      DSD_M_DeliveryHeader_Entity deliveryHeader,
+      MD_Contact_Entity contact) async {
     String key = entity.Description;
     String value;
     List<String> valueList = entity.Value.split(mark);
@@ -114,6 +120,10 @@ class ProfilePresenter extends EventNotifier<ProfileEvent> {
     } else if (table == 'DSD_M_DeliveryHeader' && deliveryHeader != null) {
       Map<String, dynamic> map =
           DSD_M_DeliveryHeader_Entity.toJson(deliveryHeader);
+      value = map[field];
+    } else if (table == 'MD_Contact' && contact != null) {
+      Map<String, dynamic> map =
+      MD_Contact_Entity.toJson(contact);
       value = map[field];
     }
     return MapEntry(key, value);

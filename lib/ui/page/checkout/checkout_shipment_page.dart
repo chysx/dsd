@@ -74,7 +74,7 @@ class CheckoutShipmentPage extends StatelessWidget {
                               flex: 1,
                               child: Text(
                                 info.shipmentDate ?? '',
-                                textAlign: TextAlign.left,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Expanded(

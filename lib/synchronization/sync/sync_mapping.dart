@@ -389,6 +389,8 @@ Map<String,String> fieldMapping = {
   //  DSD_T_DeliveryItem
 
 
+  '${deliveryItemMark}ProductID__c': 'ProductId',
+  '${deliveryItemMark}ExternalId__c': 'ExternalId',
   '${deliveryItemMark}ActualDeliveryQty__c': 'ActualQty',
   '${deliveryItemMark}DifferenceQty__c': 'DifferenceQty',
   '${deliveryItemMark}Reason__c': 'Reason',

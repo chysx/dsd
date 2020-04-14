@@ -52,7 +52,7 @@ class RouteManager {
             t.name,
             j1.deliveryaddress,
             j2.name as name1,
-            j1.Telephone,
+            j2.phone,
             j2.mobilephone,
             t.Geo_Latitude,
             t.Geo_Longitude,
@@ -197,6 +197,10 @@ class RouteManager {
      if (tTreeSetInM.contains(DeliveryStatus.PARTIAL_DELIVERED_VALUE)) {
        return DeliveryStatus.PARTIAL_DELIVERED;
      }
+      //如果只有一个配送任务并且是PENDING_ER_VALUE状态，则该门店的Status为PENDING_ER_VALUE状态
+      if (tTreeSetInM.contains(DeliveryStatus.PENDING_ER_VALUE)) {
+        return DeliveryStatus.PENDING_ER;
+      }
      //所有配送任务中，只要有一个状态是PARTIAL_DELIVERED状态，则该门店的Status为PARTIAL_DELIVERED状态
      if (tCountInM == mCount && tTreeSetInM.length == 1 && tTreeSet.contains(DeliveryStatus.TOTAL_DELIVERED_VALUE)) {
        return DeliveryStatus.TOTAL_DELIVERED;

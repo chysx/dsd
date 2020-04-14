@@ -103,7 +103,8 @@ class SyncPresenter extends EventNotifier<SyncEvent> {
     }
 
     syncModeList = syncModeList.where((item){
-      return item.syncStatus == SyncStatus.SYNC_FAIL;
+      return item.syncStatus == SyncStatus.SYNC_FAIL ||
+          item.syncStatus == SyncStatus.SYNC_INIT ;
     }).toList();
 
     if(syncModeList.length <= 0){

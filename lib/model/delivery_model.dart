@@ -89,7 +89,7 @@ class DeliveryModel {
 
   void cacheDeliveryHeader(
       {String visitId, String shipmentNo, String accountNumber, String deliveryType,
-        String deliveryStatus, String startTime}) {
+        String deliveryStatus, String startTime,String emptyRefund}) {
     if (visitId != null) {
       deliveryHeader.VisitId = visitId;
     }
@@ -107,6 +107,9 @@ class DeliveryModel {
     }
     if (startTime != null) {
       deliveryHeader.StartTime = startTime;
+    }
+    if (emptyRefund != null) {
+      deliveryHeader.EmptyRefund__c = emptyRefund;
     }
     if (deliveryHeader.Id == null) {
       deliveryHeader.Id = mDeliveryHeader.Id;
@@ -145,7 +148,10 @@ class DeliveryModel {
 
         add.Id = createIdBySf();
         add.GUID = add.Id;
+        add.DeliveryID = mDeliveryHeader.Id;
         add.DeliveryNo = _deliveryNo;
+        add.ProductId = info.productId;
+        add.ExternalId = _deliveryNo + info.code + ProductUnit.CS + IsReturn.TRUE;
         add.ProductCode = info.code;
         add.ProductUnit = ProductUnit.CS;
         add.PlanQty = info.plannedCs.toString();
@@ -176,6 +182,7 @@ class DeliveryModel {
 
           add.Id = info.id;
           add.GUID = add.Id;
+          add.DeliveryID = mDeliveryHeader.Id;
           add.DeliveryNo = _deliveryNo;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.CS;
@@ -205,6 +212,7 @@ class DeliveryModel {
 
           add.Id = info.id;
           add.GUID = add.Id;
+          add.DeliveryID = mDeliveryHeader.Id;
           add.DeliveryNo = _deliveryNo;
           add.ProductCode = info.code;
           add.ProductUnit = ProductUnit.EA;
